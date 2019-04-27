@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Proyecto-2019">
+        <wb-resource deploy-path="/" source-path="/EarContent" tag="defaultRootSource"/>
+        <dependent-module archiveName="Proyecto-2019EJB.jar" deploy-path="/" handle="module:/resource/Proyecto-2019EJB/Proyecto-2019EJB">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Proyecto-2019Web.war" deploy-path="/" handle="module:/resource/Proyecto-2019Web/Proyecto-2019Web">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Proyecto-2019Connector.rar" deploy-path="/" handle="module:/resource/Proyecto-2019Connector/Proyecto-2019Connector">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>
