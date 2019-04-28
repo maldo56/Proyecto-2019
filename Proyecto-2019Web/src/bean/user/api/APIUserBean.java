@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import bean.business.UserCtrlBeanLocal;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
+import obj.dto.DtoParm;
 import obj.dto.DtoUsuario;
 import obj.dto.DtoAdmin;
 
@@ -71,6 +72,15 @@ public class APIUserBean {
     	    	
     	
     	return buissnes.createMovimiento(movimiento);
+    }
+    
+    @POST
+    @Path("/parametro/abm/{operation}")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Boolean ABMParametro(@PathParam("operation") char operation, @QueryParam("parm") DtoParm parm) {
+    	
+    	return buissnes.ABMParametro(operation, parm);
     }
     
     @GET

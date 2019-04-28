@@ -10,6 +10,10 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/Library.jar"/>
+	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/postgis-jdbc-1.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/geolatte-geom-1.4.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/hibernate-spatial-5.4.2.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/jts-core-1.16.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

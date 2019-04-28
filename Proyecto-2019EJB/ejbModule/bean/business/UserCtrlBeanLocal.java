@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
+import obj.dto.DtoParm;
 import obj.dto.DtoUsuario;
 import obj.dto.DtoAdmin;
 
@@ -17,8 +18,9 @@ public interface UserCtrlBeanLocal {
 	DtoUsuario login(String username, String password);
 	
 	Boolean ABMClient(char operation, DtoClient client);
-	Boolean ABMAdmin(char operation, DtoAdmin admin);//String username, String password, String email, Boolean isSuperuser);
+	Boolean ABMAdmin(char operation, DtoAdmin admin);
 	Boolean createMovimiento(DtoMovimiento movimiento);
+	Boolean ABMParametro(char operation, DtoParm parm);
 	
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente);

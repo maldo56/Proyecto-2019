@@ -2,6 +2,7 @@ package obj.entity;
 
 import javax.persistence.Entity;
 
+
 @Entity
 public class cliente extends usuario {
 
@@ -11,6 +12,10 @@ public class cliente extends usuario {
 	private String cellphone;
 	private Double saldo;
 	
+//	@Column(columnDefinition="Point")
+//	private Point punto;
+	
+//	private Spatial pu;
 	
 	public cliente() {}
 	
@@ -63,5 +68,13 @@ public class cliente extends usuario {
 	public void setSaldo(Double saldo) {
 		this.saldo = saldo;
 	}
+
+//	public Point getPunto() {
+//		return punto;
+//	}
+//
+//	public void setPunto(Point punto) {
+//		this.punto = punto;
+//	}
 	
 }

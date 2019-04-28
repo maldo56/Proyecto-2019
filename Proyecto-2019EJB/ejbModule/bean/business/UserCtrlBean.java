@@ -10,6 +10,7 @@ import bean.database.PostgresUserBeanLocal;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
+import obj.dto.DtoParm;
 import obj.dto.DtoUsuario;
 
 
@@ -49,6 +50,9 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	return database.createMovimiento(movimiento);
     }
     
+    public Boolean ABMParametro(char operation, DtoParm parm) {
+    	return database.ABMParametro(operation, parm);
+    }
     
     //-------------------------------  GET  ----------------------------------------------------//
     

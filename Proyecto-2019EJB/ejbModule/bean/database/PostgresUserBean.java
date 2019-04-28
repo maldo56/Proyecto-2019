@@ -16,10 +16,12 @@ import javax.persistence.Query;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
+import obj.dto.DtoParm;
 import obj.dto.DtoUsuario;
 import obj.entity.administrador;
 import obj.entity.cliente;
 import obj.entity.movimiento;
+import obj.entity.parametro;
 import obj.entity.scooter;
 import obj.entity.usuario;
 
@@ -110,7 +112,7 @@ public class PostgresUserBean implements PostgresUserBeanLocal {
 			e.printStackTrace();
 			
 			return false;
-		}		
+		}	
     }
     
     public Boolean ABMClient(char operation, DtoClient client) {
@@ -134,6 +136,7 @@ public class PostgresUserBean implements PostgresUserBeanLocal {
 				entity.setSaldo(client.getSaldo());
 				
 				em.persist(entity);
+				
 			} else if( operation == 'B' ) {
 				entity = em.find(cliente.class, client.getUsername());
 				
@@ -244,6 +247,54 @@ public class PostgresUserBean implements PostgresUserBeanLocal {
 				
 				entity = em.find(scooter.class, guid);
 				entity.setIsAvailable(Boolean.valueOf(value));
+			}
+
+			em.getTransaction().commit();
+
+			return true;
+			
+		} catch (Exception e) {
+			e.getMessage();
+			e.printStackTrace();
+			
+			return false;
+		}
+    }
+    
+    public Boolean ABMParametro(char operation, DtoParm parm) {
+    	
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyecto");
+		EntityManager em = emf.createEntityManager();
+
+		parametro entity;
+		
+		try {
+			em.getTransaction().begin();
+			
+			if ( operation == 'A' ) {
+				entity = new parametro();
+				entity.setCode(parm.getCode());
+				entity.setUnit(parm.getUnit());
+				entity.setValue(parm.getValue());
+				
+				em.persist(entity);
+			} else if( operation == 'B' ) {
+				entity = em.find(parametro.class, parm.getCode());
+				
+				if ( entity != null ) {
+					em.remove(entity);
+				}
+					
+			}else if( operation == 'M' ) {
+				
+				entity = em.find(parametro.class, parm.getCode());
+				entity.setUnit(parm.getUnit());
+				entity.setValue(parm.getValue());
+				
+			} else {
+				em.getTransaction().rollback();
+				
+				return false;
 			}
 
 			em.getTransaction().commit();
