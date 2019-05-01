@@ -7,7 +7,6 @@ import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-import org.postgis.Point;
 
 public class DtoClient extends DtoUsuario {
 
@@ -19,8 +18,6 @@ public class DtoClient extends DtoUsuario {
 	private String urlphoto;
 	private String cellphone;
 	private Double saldo;
-	
-	private Point punto;
 	
 	public DtoClient() {}
 

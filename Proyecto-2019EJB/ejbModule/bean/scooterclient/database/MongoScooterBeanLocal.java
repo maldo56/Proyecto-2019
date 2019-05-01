@@ -6,4 +6,5 @@ import javax.ejb.Local;
 public interface MongoScooterBeanLocal {
 
 	String add(String user);
+	Boolean mongo();
 }

@@ -3,6 +3,12 @@ package bean.scooterclient.database;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
 
 /**
  * Session Bean implementation class MongoScooterBean
@@ -28,6 +34,24 @@ public class MongoScooterBean implements MongoScooterBeanLocal {
     	
     	
     	return "Mongo! " + user;
+    }
+    
+    public Boolean mongo() {
+    	
+    
+    		
+    	MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+    	MongoDatabase database = mongoClient.getDatabase("mydb");
+    	MongoCollection<Document> collection = database.getCollection("test");
+    	
+    	
+            Document d = new Document().append("id", "Id")
+               .append("Campo1", "Algo");
+               
+            collection.insertOne(d);
+         
+    	
+    	return true;
     }
     
 

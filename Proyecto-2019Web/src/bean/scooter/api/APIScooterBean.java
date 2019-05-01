@@ -50,4 +50,13 @@ public class APIScooterBean {
     	return business.M(campo, guid, value);
     }
     
+    @POST
+    @Path("/mongo")
+    @Consumes( {"application/json"} )
+	@Produces( {"application/json"} )
+	public Boolean mongo() {
+
+    	return business.mongo();
+    }
+    
 }

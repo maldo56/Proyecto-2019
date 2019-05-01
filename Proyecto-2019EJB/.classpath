@@ -18,5 +18,8 @@
 	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/hibernate-spatial-5.4.2.Final.jar"/>
 	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/jts-core-1.16.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/bson-3.4.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/mongodb-driver-3.4.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/lib/mongodb-driver-core-3.4.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

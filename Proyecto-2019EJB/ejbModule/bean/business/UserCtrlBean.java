@@ -6,7 +6,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
-import bean.database.PostgresUserBeanLocal;
+import bean.database.PostgresBeanLocal;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
@@ -21,8 +21,8 @@ import obj.dto.DtoUsuario;
 @LocalBean
 public class UserCtrlBean implements UserCtrlBeanLocal {
 
-	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/PostgresUserBean!bean.database.PostgresUserBeanLocal")
-	private PostgresUserBeanLocal database;
+	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/PostgresBean!bean.database.PostgresBeanLocal")
+	private PostgresBeanLocal database;
 	
     public UserCtrlBean() {
         // TODO Auto-generated constructor stub
