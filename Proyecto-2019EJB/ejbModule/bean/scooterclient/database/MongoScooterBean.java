@@ -10,7 +10,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 
-/**
+/**probaste subir la clase al wildfly 
+ * 
+ * Agarra todas las librerias del web derecho 
+ * no se que le pasa
+ * 
  * Session Bean implementation class MongoScooterBean
  */
 @Stateless

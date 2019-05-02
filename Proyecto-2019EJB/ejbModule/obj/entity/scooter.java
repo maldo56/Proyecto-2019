@@ -2,8 +2,13 @@ package obj.entity;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
+import org.postgis.Geometry;
+import org.postgis.Point;
+
 
 @Entity
 public class scooter {
@@ -13,6 +18,9 @@ public class scooter {
 	private Double bateryLevel;
 	private Boolean isRented;
 	private Boolean isAvailable;
+	
+	@Column( columnDefinition="geometry" )
+	private Geometry location;
 	
 	public scooter() {
 		UUID uuid = UUID.randomUUID();
@@ -58,5 +66,12 @@ public class scooter {
 	public void setIsAvailable(Boolean isAvailable) {
 		this.isAvailable = isAvailable;
 	}
-	
+
+	public Point getLocation() {
+		return (Point) location;
+	}
+
+	public void setLocation(Point location) {
+		this.location = location;
+	}
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_7.xsd" version="7">
+  <display-name>Proyecto-2019</display-name>
+  
+  <module>
+    <ejb>Proyecto-2019EJB.jar</ejb>
+    
+  </module>
+  <module>
+    <web>
+      <web-uri>Proyecto-2019Web.war</web-uri>
+      <context-root>Proyecto-2019Web</context-root>
+    </web>
+  </module>
+  <module>
+    <connector>Proyecto-2019Connector.rar</connector>
+  </module>
+  
+  <library-directory>lib</library-directory>
+</application>

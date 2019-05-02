@@ -1,6 +1,5 @@
 package bean.user.api;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ejb.EJB;

@@ -1,17 +1,22 @@
 package bean.database;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionManagement;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.UserTransaction;
+
+import org.postgis.Point;
 
 import obj.dto.DtoAdmin;
 import obj.dto.DtoClient;
@@ -29,11 +34,17 @@ import javax.ejb.TransactionManagementType;
 import javax.ejb.TransactionAttributeType;
 
 
-@Singleton
+@Stateless
 @Startup
 @TransactionManagement(TransactionManagementType.BEAN)
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class PostgresBean implements PostgresBeanLocal {
+	
+	@PersistenceContext(unitName = "proyecto")
+    private EntityManager em;
+	
+	@Resource
+	UserTransaction transaction;
 	
     public PostgresBean() {
         // TODO Auto-generated constructor stub
@@ -81,19 +92,22 @@ public class PostgresBean implements PostgresBeanLocal {
   //--------------------------------  ABM  --------------------------------------------------------------//
     
     public Boolean ABScooter(char operation, String guid) {
-    	
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyecto");
-		EntityManager em = emf.createEntityManager();
 
 		scooter entity;
 		
 		try {
-			em.getTransaction().begin();
+			transaction.begin();
 			
 			if ( operation == 'A' ) {
 				entity = new scooter();
 				
+				Point location = new Point();
+				location.setX(4);
+				location.setY(7);
+				entity.setLocation(location);
+				
 				em.persist(entity);
+				
 			} else if( operation == 'B' ) {
 				entity = em.find(scooter.class, guid);
 				
@@ -103,7 +117,7 @@ public class PostgresBean implements PostgresBeanLocal {
 					
 			}
 
-			em.getTransaction().commit();
+			transaction.commit();
 
 			return true;
 			
