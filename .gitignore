@@ -1,0 +1,15 @@
+*.class
+Proyecto-2019\.settings\
+Proyecto-2019EJB\build\
+Proyecto-2019EJB\.settings\
+Proyecto-2019EJB\.classpath
+Proyecto-2019EJB\.project
+Proyecto-2019Web\build\
+Proyecto-2019Web\.settings\
+Proyecto-2019Web\.classpath
+Proyecto-2019Web\.proyect
+Proyecto-2019Connector\build\
+Proyecto-2019Connector\.settings\
+Proyecto-2019Connector\.classpath
+Proyecto-2019Connector\.proyect
+.proyect
