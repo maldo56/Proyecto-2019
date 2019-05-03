@@ -104,7 +104,7 @@ public class PostgresBean implements PostgresBeanLocal {
 				Point location = new Point();
 				location.setX(4);
 				location.setY(7);
-				entity.setLocation(location);
+//				entity.setLocation(location);
 				
 				em.persist(entity);
 				

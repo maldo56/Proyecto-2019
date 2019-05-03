@@ -5,7 +5,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import bean.database.PostgresBeanLocal;
-import bean.scooterclient.database.MongoScooterBeanLocal;
+import bean.scooterclient.database.MongoBeanLocal;
 import obj.dto.DtoScooter;
 
 /**
@@ -19,8 +19,8 @@ public class ScooterBean implements ScooterBeanLocal {
 	private PostgresBeanLocal postgres;
 	
 	
-	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/MongoScooterBean!bean.scooterclient.database.MongoScooterBeanLocal")
-	private MongoScooterBeanLocal mongo;
+	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/MongoBean!bean.scooterclient.database.MongoBeanLocal")
+	private MongoBeanLocal mongo;
 	
     public ScooterBean() {
         // TODO Auto-generated constructor stub

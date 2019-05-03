@@ -5,7 +5,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import org.postgis.Geometry;
 
-@Generated(value="Dali", date="2019-05-01T23:24:43.050-0300")
+@Generated(value="Dali", date="2019-05-02T21:00:25.226-0300")
 @StaticMetamodel(scooter.class)
 public class scooter_ {
 	public static volatile SingularAttribute<scooter, String> guid;
