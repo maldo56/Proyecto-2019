@@ -11,6 +11,7 @@ import javax.json.Json;
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -26,7 +27,7 @@ import javax.websocket.Session;
  */
 @Stateless
 @LocalBean
-@ServerEndpoint("/servicios")
+@ServerEndpoint(value = "/servicios", configurator = MyServerEndpointConfigurator.class)
 public class APIServiciosBean {
 
 	private Set<Session> sessions = new HashSet<>();
@@ -36,8 +37,11 @@ public class APIServiciosBean {
 	
 	
 	@OnOpen
-    public void open(Session session) {
+    public void open(Session session, EndpointConfig endpointConfig) {
         System.out.println("WebSocket: Nueva sesion abierta ==> " + session.getId());
+        
+        String userAgent = (String) endpointConfig.getUserProperties().get("user-agent");
+        System.out.println("UserAgent: " + userAgent);
         
         sessions.add(session);
     }
