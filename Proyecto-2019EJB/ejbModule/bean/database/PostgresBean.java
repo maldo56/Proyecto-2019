@@ -366,14 +366,18 @@ public class PostgresBean implements PostgresBeanLocal {
 		try {
 			
 			cliente = em.find(obj.entity.cliente.class, alquiler.getCliente());
-			scooter = em.find(obj.entity.scooter.class, alquiler.getGuidscooter());
 			parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
 			
 			entity.setCliente(cliente);
-			entity.setScooter(scooter);
 			entity.setTarifa(Float.valueOf(parametro.getValue().trim()).floatValue());
 			
 			transaction.begin();
+			
+			scooter = em.find(obj.entity.scooter.class, alquiler.getGuidscooter());
+			scooter.setIsRented(true);
+			
+			entity.setScooter(scooter);
+			
 			em.persist(entity);
 			transaction.commit();
 
@@ -406,6 +410,8 @@ public class PostgresBean implements PostgresBeanLocal {
 			diferencia = dateFinal.getTime() - dateInicio.getTime();
 			
 			entity.setDuration(new Time(diferencia));
+			
+			entity.getScooter().setIsRented(false);
 
 			transaction.commit();
 
