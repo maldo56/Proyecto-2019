@@ -59,4 +59,8 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     public List<DtoMovimiento> obtenerMovimientos(String cliente) {
     	return database.obtenerMovimientos(cliente);
     }
+    
+    public DtoParm obtenerParametro(String key) {
+    	return database.obtenerParametro(key);
+    }
 }

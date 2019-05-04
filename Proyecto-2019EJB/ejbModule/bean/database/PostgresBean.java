@@ -396,6 +396,7 @@ public class PostgresBean implements PostgresBeanLocal {
     public Boolean terminarAlquiler(DtoAlquiler alquiler) {
     	
     	alquiler entity;
+    	scooter scooter;
     	Date dateInicio;
     	Date dateFinal = new Date();
     	
@@ -403,16 +404,19 @@ public class PostgresBean implements PostgresBeanLocal {
     	
 		try {
 			transaction.begin();
+			
+			scooter = em.find(scooter.class, alquiler.getGuidscooter());
+			scooter.setIsRented(false);
 				
 			entity = em.find(alquiler.class, alquiler.getGuid());
-			dateInicio = entity.getTimestamp();
 			
+			dateInicio = entity.getTimestamp();
 			diferencia = dateFinal.getTime() - dateInicio.getTime();
 			
 			entity.setDuration(new Time(diferencia));
 			
-			entity.getScooter().setIsRented(false);
-
+			
+			
 			transaction.commit();
 
 			return true;
@@ -469,6 +473,22 @@ public class PostgresBean implements PostgresBeanLocal {
     	return movimientos;
     }
     
-    
+    public DtoParm obtenerParametro(String key) {
+    	
+    	try {
+    		parametro entity = em.find(parametro.class, key);
+    		
+    		DtoParm param = new DtoParm();
+    		param.setCode(entity.getCode());
+    		param.setUnit(entity.getUnit());
+    		param.setValue(entity.getValue());
+    		
+    		return param;
+    	} catch ( Exception e ) {
+    		System.out.println(e.getMessage());
+    	}
+    	 
+    	return null;
+    }
     
 }

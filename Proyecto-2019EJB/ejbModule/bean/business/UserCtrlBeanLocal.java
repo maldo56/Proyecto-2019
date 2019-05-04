@@ -24,4 +24,7 @@ public interface UserCtrlBeanLocal {
 	
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente);
+	DtoParm obtenerParametro(String key);
+	
+	
 }

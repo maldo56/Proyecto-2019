@@ -110,5 +110,14 @@ public class APIUserBean {
     	return buissnes.obtenerMovimientos(client);
     }
     
+    @GET
+    @Path("/parametro")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public DtoParm obtenerParametro(@QueryParam("key") String key) {
+    	
+    	
+    	return buissnes.obtenerParametro(key);
+    }
     
 }
