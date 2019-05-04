@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import obj.dto.DtoAdmin;
+import obj.dto.DtoAlquiler;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
@@ -24,7 +25,9 @@ public interface PostgresBeanLocal {
 	Boolean ABMAdmin(char operation, DtoAdmin client);
 	Boolean ABMParametro(char operation, DtoParm parm);
 	Boolean createMovimiento(DtoMovimiento movimiento);
+	Boolean altaAlquiler(DtoAlquiler alquiler);
 	
+	Boolean terminarAlquiler(DtoAlquiler alquiler);
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente);
 	

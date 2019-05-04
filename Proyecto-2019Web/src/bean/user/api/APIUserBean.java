@@ -77,10 +77,23 @@ public class APIUserBean {
     @Path("/parametro/abm/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean ABMParametro(@PathParam("operation") char operation, @QueryParam("parm") DtoParm parm) {
+    public Boolean ABMParametro(@PathParam("operation") char operation, @QueryParam("parametro") DtoParm parm) {
     	
     	return buissnes.ABMParametro(operation, parm);
     }
+    
+    @POST
+    @Path("/alquiler/{operation}")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Boolean empezarAlquiler(@PathParam("operation") char operation, @QueryParam("alquiler") DtoParm parm) {
+    	
+    	return buissnes.ABMParametro(operation, parm);
+    }
+    
+    
+    
+    //--------------------------------------  GET  ---------------------------------------------------------//
     
     @GET
     @Path("/movimientos")

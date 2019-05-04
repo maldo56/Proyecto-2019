@@ -1,5 +1,8 @@
 package bean.database;
 
+import java.util.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +19,17 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 
+import org.postgis.Geometry;
 import org.postgis.Point;
 
 import obj.dto.DtoAdmin;
+import obj.dto.DtoAlquiler;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
 import obj.dto.DtoUsuario;
 import obj.entity.administrador;
+import obj.entity.alquiler;
 import obj.entity.cliente;
 import obj.entity.movimiento;
 import obj.entity.parametro;
@@ -106,7 +112,9 @@ public class PostgresBean implements PostgresBeanLocal {
 				location.setY(7);
 //				entity.setLocation(location);
 				
+				
 				em.persist(entity);
+				
 				
 			} else if( operation == 'B' ) {
 				entity = em.find(scooter.class, guid);
@@ -130,13 +138,11 @@ public class PostgresBean implements PostgresBeanLocal {
     }
     
     public Boolean ABMClient(char operation, DtoClient client) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyecto");
-		EntityManager em = emf.createEntityManager();
 
 		cliente entity;
 		
 		try {
-			em.getTransaction().begin();
+			transaction.begin();
 			
 			if ( operation == 'A' ) {
 				entity = new cliente();
@@ -171,12 +177,12 @@ public class PostgresBean implements PostgresBeanLocal {
 				entity.setSaldo(client.getSaldo());
 				
 			} else {
-				em.getTransaction().rollback();
+				transaction.rollback();
 				
 				return false;
 			}
 			
-			em.getTransaction().commit();
+			transaction.commit();
 
 			return true;
 			
@@ -189,13 +195,11 @@ public class PostgresBean implements PostgresBeanLocal {
     }
 
     public Boolean ABMAdmin(char operation, DtoAdmin admin) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyecto");
-		EntityManager em = emf.createEntityManager();
 
 		administrador entity;
 		
 		try {
-			em.getTransaction().begin();
+			transaction.begin();
 			
 			if ( operation == 'A' ) {
 				entity = new administrador();
@@ -221,13 +225,12 @@ public class PostgresBean implements PostgresBeanLocal {
 				entity.setIsSuperuser(admin.getIsSuperuser());
 				
 			} else {
-				em.getTransaction().rollback();
 				
 				return false;
 			}
 			
-			em.getTransaction().commit();
-
+			transaction.commit();
+			
 			return true;
 			
 		} catch (Exception e) {
@@ -239,13 +242,11 @@ public class PostgresBean implements PostgresBeanLocal {
     }
     
     public Boolean MScooter(String campo, String guid, String value) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyecto");
-		EntityManager em = emf.createEntityManager();
-
+    	
 		scooter entity;
 		
 		try {
-			em.getTransaction().begin();
+			transaction.begin();
 			
 			if ( campo.equals("bateryLevel") ) {
 				
@@ -263,7 +264,7 @@ public class PostgresBean implements PostgresBeanLocal {
 				entity.setIsAvailable(Boolean.valueOf(value));
 			}
 
-			em.getTransaction().commit();
+			transaction.commit();
 
 			return true;
 			
@@ -277,13 +278,10 @@ public class PostgresBean implements PostgresBeanLocal {
     
     public Boolean ABMParametro(char operation, DtoParm parm) {
     	
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyecto");
-		EntityManager em = emf.createEntityManager();
-
 		parametro entity;
 		
 		try {
-			em.getTransaction().begin();
+			transaction.begin();
 			
 			if ( operation == 'A' ) {
 				entity = new parametro();
@@ -306,12 +304,12 @@ public class PostgresBean implements PostgresBeanLocal {
 				entity.setValue(parm.getValue());
 				
 			} else {
-				em.getTransaction().rollback();
+				transaction.rollback();
 				
 				return false;
 			}
 
-			em.getTransaction().commit();
+			transaction.commit();
 
 			return true;
 			
@@ -324,9 +322,7 @@ public class PostgresBean implements PostgresBeanLocal {
     }
     
     public Boolean createMovimiento(DtoMovimiento movimiento) {
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyecto");
-		EntityManager em = emf.createEntityManager();
-
+    	
 		movimiento entity = new movimiento();
 		entity.setTimestamp(movimiento.getTimestamp());
 		entity.setPaypalguid(movimiento.getPaypalguid());
@@ -334,7 +330,7 @@ public class PostgresBean implements PostgresBeanLocal {
 		entity.setMount(movimiento.getMount());
 		
 		try {
-			em.getTransaction().begin();
+			transaction.begin();
 			
 			cliente cliente = em.find(cliente.class, movimiento.getUsername());
 			
@@ -343,7 +339,7 @@ public class PostgresBean implements PostgresBeanLocal {
 				em.persist(entity);
 			}
 			
-			em.getTransaction().commit();
+			transaction.commit();
 
 			return true;
 			
@@ -355,13 +351,78 @@ public class PostgresBean implements PostgresBeanLocal {
 		}
     }
     
+    public Boolean altaAlquiler(DtoAlquiler alquiler) {
+    	
+    	alquiler entity = new alquiler();
+    	
+    	entity.setTimestamp(alquiler.getTimestamp());
+    	entity.setPrice(alquiler.getPrice());
+    	
+    	
+    	cliente cliente = null;
+    	scooter scooter = null;
+    	parametro parametro = null;
+    	
+		try {
+			
+			cliente = em.find(obj.entity.cliente.class, alquiler.getCliente());
+			scooter = em.find(obj.entity.scooter.class, alquiler.getGuidscooter());
+			parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
+			
+			entity.setCliente(cliente);
+			entity.setScooter(scooter);
+			entity.setTarifa(Float.valueOf(parametro.getValue().trim()).floatValue());
+			
+			transaction.begin();
+			em.persist(entity);
+			transaction.commit();
+
+			return true;
+			
+		} catch (Exception e) {
+			e.getMessage();
+			e.printStackTrace();
+			
+			return false;
+		}
+    	
+    	
+    }
+    
+    public Boolean terminarAlquiler(DtoAlquiler alquiler) {
+    	
+    	alquiler entity;
+    	Date dateInicio;
+    	Date dateFinal = new Date();
+    	
+    	long diferencia;
+    	
+		try {
+			transaction.begin();
+				
+			entity = em.find(alquiler.class, alquiler.getGuid());
+			dateInicio = entity.getTimestamp();
+			
+			diferencia = dateFinal.getTime() - dateInicio.getTime();
+			
+			entity.setDuration(new Time(diferencia));
+
+			transaction.commit();
+
+			return true;
+			
+		} catch (Exception e) {
+			e.getMessage();
+			e.printStackTrace();
+			
+			return false;
+		}
+		
+    }
     
     //--------------------------------  GET  --------------------------------------------------------------//
     
     public List<DtoMovimiento> obtenerMovimientos(String cliente) {
-    	
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyecto");
-		EntityManager em = emf.createEntityManager();
 
 		List<DtoMovimiento> movimientos = new ArrayList<DtoMovimiento>();
 		

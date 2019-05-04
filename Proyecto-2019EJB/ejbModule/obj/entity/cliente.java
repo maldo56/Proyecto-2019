@@ -1,11 +1,18 @@
 package obj.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 
 
 @Entity
-public class cliente extends usuario {
+public class cliente extends usuario implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6936952624555065730L;
+	
 	private String name;
 	private String surname;
 	private String urlphoto;

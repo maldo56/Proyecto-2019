@@ -10,7 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import bean.business.ScooterBeanLocal;
+import bean.business.ScooterCtrlBeanLocal;
 
 /**
  * Session Bean implementation class ScooterBean
@@ -23,8 +23,8 @@ import bean.business.ScooterBeanLocal;
 public class APIScooterBean {
 
 
-	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ScooterBean!bean.business.ScooterBeanLocal")
-	private ScooterBeanLocal business;
+	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ScooterCtrlBean!bean.business.ScooterCtrlBeanLocal")
+	private ScooterCtrlBeanLocal business;
 	
 	
     public APIScooterBean() {
