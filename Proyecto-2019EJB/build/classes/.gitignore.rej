@@ -1,0 +1,6 @@
+diff a/Proyecto-2019EJB/build/classes/.gitignore b/Proyecto-2019EJB/build/classes/.gitignore	(rejected hunks)
+@@ -0,4 +0 @@
+-/obj/
+ /bean/
+-/META-INF/
+-/servicios/
