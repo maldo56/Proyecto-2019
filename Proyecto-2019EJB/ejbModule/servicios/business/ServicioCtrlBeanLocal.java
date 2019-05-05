@@ -5,5 +5,5 @@ import javax.ejb.Local;
 @Local
 public interface ServicioCtrlBeanLocal {
 
-	void addPoint(String scooterGuid, float x, float y);
+	void addPoint(String scooterGuid, String alquilerGuid, float x, float y);
 }

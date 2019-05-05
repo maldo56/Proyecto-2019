@@ -29,6 +29,7 @@ import bean.scooterclient.database.MongoBeanLocal;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoAlquiler;
 import obj.dto.DtoClient;
+import obj.dto.DtoLocation;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
 import obj.dto.DtoScooter;
@@ -40,6 +41,7 @@ import obj.entity.movimiento;
 import obj.entity.parametro;
 import obj.entity.scooter;
 import obj.entity.usuario;
+import utils.Utils;
 
 import javax.ejb.TransactionManagementType;
 import javax.ejb.TransactionAttributeType;
@@ -402,7 +404,7 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     }
     
-    public Boolean terminarAlquiler(DtoAlquiler alquiler) {
+    public Boolean terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones) {
     	
     	alquiler entity;
     	scooter scooter;
@@ -413,6 +415,10 @@ public class PostgresBean implements PostgresBeanLocal {
     	long diferencia;
     	
     	Time time;
+    	
+    	String kml = Utils.kmlLinestring(ubicaciones);
+    	
+    	System.out.println(kml);
     	
 		try {
 			
@@ -440,6 +446,13 @@ public class PostgresBean implements PostgresBeanLocal {
 			
 			transaction.commit();
 
+			
+			
+			transaction.begin();
+			
+			em.createNativeQuery("UPDATE alquiler p SET recorrido = ST_GeomFromText('" + kml + "', 4326) WHERE guid = \'" + alquiler.getGuid() + "\'").executeUpdate();
+			
+			transaction.commit();
 			return true;
 			
 		} catch (Exception e) {

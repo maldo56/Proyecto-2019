@@ -53,6 +53,7 @@ public class APIServiciosBean {
         try {
         	
         	String scooterGuid = "";
+        	String alquilerGuid = "";
         	float x;
         	float y;
         	
@@ -61,7 +62,7 @@ public class APIServiciosBean {
 			
 			
 			scooterGuid = object.getString("guid");
-			
+			alquilerGuid = object.getString("alquilerGuid");
 			
 			JsonNumber aux = object.getJsonNumber("x");
 			x = (float) aux.doubleValue();
@@ -69,7 +70,7 @@ public class APIServiciosBean {
 			aux = object.getJsonNumber("y");
 			y = (float) aux.doubleValue();
 			
-        	buissnes.addPoint(scooterGuid, x, y);
+        	buissnes.addPoint(scooterGuid, alquilerGuid, x, y);
 			
 			
 //        	session.getBasicRemote().sendText("" + count);

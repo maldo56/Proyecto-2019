@@ -20,8 +20,8 @@ public class ServicioCtrlBean implements ServicioCtrlBeanLocal {
         // TODO Auto-generated constructor stub
     }
 
-    public void addPoint(String scooterGuid, float x, float y) {
+    public void addPoint(String scooterGuid, String alquilerGuid, float x, float y) {
     	
-    	mongo.servicioAddPunto(scooterGuid, x, y);
+    	mongo.servicioAddPunto(scooterGuid,alquilerGuid, x, y);
     }
 }

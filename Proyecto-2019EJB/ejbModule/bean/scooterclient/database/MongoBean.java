@@ -1,13 +1,22 @@
 package bean.scooterclient.database;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+
+import obj.dto.DtoLocation;
 
 
 /**probaste subir la clase al wildfly 
@@ -59,19 +68,50 @@ public class MongoBean implements MongoBeanLocal {
     }
     
 
-    public void servicioAddPunto(String guid, float x, float y) {
+    public void servicioAddPunto(String guid, String alquilerGuid, float x, float y) {
     	
     	MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
     	MongoDatabase database = mongoClient.getDatabase("Proyecto-2019");
     	MongoCollection<Document> collection = database.getCollection("ScootersUbicaciones");
     	
-    	
         Document d = new Document()
-	           .append("ScooterGuid", guid)
-	           .append("x", x)
-	           .append("y", y);
+	           .append("scooterGuid", guid)
+	           .append("alquilerGuid", alquilerGuid)
+	           .append("lat", x)
+	           .append("lng", y);
            
         collection.insertOne(d);
             
+    }
+
+    public List<DtoLocation> obtenerPuntos(String alquilerGuid) {
+    	
+    	MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+    	MongoDatabase database = mongoClient.getDatabase("Proyecto-2019");
+    	MongoCollection<Document> collection = database.getCollection("ScootersUbicaciones");
+    	
+    	BasicDBObject inQuery = new BasicDBObject();
+    	inQuery.put("alquilerGuid", alquilerGuid);
+    	
+    	FindIterable<Document> puntos = collection.find(inQuery);
+    	MongoCursor<Document> it = puntos.iterator();
+    	
+    	List<DtoLocation> list = new ArrayList<DtoLocation>();
+    	DtoLocation location;
+    	Document document;
+    	
+    	while ( it.hasNext() ) {
+    		document = it.next();
+    		
+    		location = new DtoLocation();
+    		location.setAlquilerGuid(document.getString("alquilerGuid"));
+    		location.setScooterGuid(document.getString("scooterGuid"));
+    		location.setLat(document.getDouble("lat").floatValue());
+    		location.setLng(document.getDouble("lng").floatValue());
+    		
+    		list.add(location);
+    	}
+    	
+    	return list;
     }
 }

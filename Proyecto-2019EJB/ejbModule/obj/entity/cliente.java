@@ -19,10 +19,6 @@ public class cliente extends usuario implements Serializable {
 	private String cellphone;
 	private float saldo;
 	
-//	@Column(columnDefinition="Point")
-//	private Point punto;
-	
-//	private Spatial pu;
 	
 	public cliente() {}
 	

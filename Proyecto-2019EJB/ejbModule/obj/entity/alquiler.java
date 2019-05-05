@@ -29,6 +29,7 @@ public class alquiler {
 	@OneToOne
 	private movimiento movimiento;
 	
+	
 	public alquiler() {
 		UUID uuid = UUID.randomUUID();
 		this.guid = uuid.toString();

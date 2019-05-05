@@ -7,7 +7,9 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import bean.database.PostgresBeanLocal;
+import bean.scooterclient.database.MongoBeanLocal;
 import obj.dto.DtoAlquiler;
+import obj.dto.DtoLocation;
 
 
 @Stateless
@@ -16,6 +18,9 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
 
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/PostgresBean!bean.database.PostgresBeanLocal")
 	private PostgresBeanLocal database;
+	
+	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/MongoBean!bean.scooterclient.database.MongoBeanLocal")
+	private MongoBeanLocal mongo;
 	
     
     public AlquilerCtrlBean() {
@@ -30,7 +35,9 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
         	
     	} else if ( operation == 'T' ) {
     		
-    		database.terminarAlquiler(alquiler);
+    		List<DtoLocation> ubicaciones = mongo.obtenerPuntos(alquiler.getGuid());
+    		
+    		database.terminarAlquiler(alquiler, ubicaciones);
     	}
     	
     	
