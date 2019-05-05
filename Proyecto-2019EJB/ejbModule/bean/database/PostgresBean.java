@@ -3,6 +3,8 @@ package bean.database;
 import java.util.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -359,8 +361,11 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     	alquiler entity = new alquiler();
     	
-    	entity.setTimestamp(alquiler.getTimestamp());
-    	entity.setPrice(alquiler.getPrice());
+    	Date date= new Date();
+		long time = date.getTime();
+    	
+    	entity.setTimestamp(new Timestamp(time));
+    	entity.setPrice(-1);
     	
     	
     	cliente cliente = null;
@@ -401,25 +406,37 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     	alquiler entity;
     	scooter scooter;
-    	Date dateInicio;
-    	Date dateFinal = new Date();
+    	parametro parametro;
+    	Time dateInicio;
+    	Time dateFinal = java.sql.Time.valueOf(LocalTime.now());
     	
     	long diferencia;
     	
+    	Time time;
+    	
 		try {
+			
+			parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
 			transaction.begin();
 			
 			scooter = em.find(scooter.class, alquiler.getGuidscooter());
 			scooter.setIsRented(false);
-				
+			
 			entity = em.find(alquiler.class, alquiler.getGuid());
 			
-			dateInicio = entity.getTimestamp();
+			dateInicio = new Time(entity.getTimestamp().getHours(), entity.getTimestamp().getMinutes(), entity.getTimestamp().getSeconds());
 			diferencia = dateFinal.getTime() - dateInicio.getTime();
+			time = new Time(diferencia);
 			
-			entity.setDuration(new Time(diferencia));
+			if ( dateInicio.getMinutes() >  dateFinal.getMinutes()) {
+				time.setHours( (dateFinal.getHours() -  dateInicio.getHours() - 1) );
+			} else {
+				time.setHours( (dateFinal.getHours() -  dateInicio.getHours()) );
+			}
 			
+			entity.setDuration( time );
 			
+			entity.setPrice( (diferencia/1000) * ( Float.valueOf(parametro.getValue().trim()).floatValue() ) );
 			
 			transaction.commit();
 

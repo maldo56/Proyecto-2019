@@ -27,7 +27,12 @@ public class DtoAlquiler {
 	
 	
 	public DtoAlquiler() {
+		this.duration = java.sql.Time.valueOf(LocalTime.now());
 		
+		
+		Date date= new Date();
+		long time = date.getTime();
+		this.timestamp = new Timestamp(time);
 	}
 
 	public DtoAlquiler(String parm) {
@@ -64,11 +69,16 @@ public class DtoAlquiler {
 			String cliente) {
 		super();
 		this.guid = guid;
-		this.timestamp = timestamp;
-		this.duration = duration;
 		this.price = price;
 		this.guidscooter = guidscooter;
 		this.cliente = cliente;
+		
+		this.duration = java.sql.Time.valueOf(LocalTime.now());
+		
+		
+		Date date= new Date();
+		long time = date.getTime();
+		this.timestamp = new Timestamp(time);
 	}
 
 
