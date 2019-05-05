@@ -60,7 +60,15 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	return database.obtenerMovimientos(cliente);
     }
     
+    public DtoClient obtenerCliente(String username) {
+    	return database.obtenerCliente(username);
+    }
+    
     public DtoParm obtenerParametro(String key) {
     	return database.obtenerParametro(key);
+    }
+    
+    public Float obtenerTiempoDisponible(String username) {
+    	return database.obtenerTiempoDisponible(username);
     }
 }

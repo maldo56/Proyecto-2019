@@ -21,7 +21,7 @@ public class DtoAlquiler {
 	private String guid;
 	private Timestamp timestamp;
 	private Time duration;
-	private Float price;
+	private float price;
 	private String guidscooter;
 	private String cliente;
 	
@@ -60,7 +60,7 @@ public class DtoAlquiler {
 		}
 	}
 
-	public DtoAlquiler(String guid, Timestamp timestamp, Time duration, Float price, String guidscooter,
+	public DtoAlquiler(String guid, Timestamp timestamp, Time duration, float price, String guidscooter,
 			String cliente) {
 		super();
 		this.guid = guid;
@@ -103,12 +103,12 @@ public class DtoAlquiler {
 	}
 
 
-	public Float getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
 
-	public void setPrice(Float price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 

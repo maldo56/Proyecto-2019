@@ -17,12 +17,12 @@ public class DtoClient extends DtoUsuario {
 	private String surname;
 	private String urlphoto;
 	private String cellphone;
-	private Double saldo;
+	private float saldo;
 	
 	public DtoClient() {}
 
 	public DtoClient(String username, String password, String email, String name, String surname, String urlphoto,
-			String cellphone, Double saldo) {
+			String cellphone, float saldo) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -51,7 +51,7 @@ public class DtoClient extends DtoUsuario {
 			this.cellphone = object.getString("cellphone");
 			
 			JsonNumber aux = object.getJsonNumber("saldo");
-			this.saldo = aux.doubleValue();
+			this.saldo = (float) aux.doubleValue();
 			
 			jsonReader.close();
 		} catch(Exception e) {
@@ -115,11 +115,11 @@ public class DtoClient extends DtoUsuario {
 		this.cellphone = cellphone;
 	}
 
-	public Double getSaldo() {
+	public float getSaldo() {
 		return saldo;
 	}
 
-	public void setSaldo(Double saldo) {
+	public void setSaldo(float saldo) {
 		this.saldo = saldo;
 	}
 	

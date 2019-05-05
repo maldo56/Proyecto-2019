@@ -9,7 +9,8 @@ import javax.json.JsonReader;
 
 public class DtoScooter {
 
-	private Double bateryLevel;
+	private String guid;
+	private float bateryLevel;
 	private Boolean isRented;
 	private Boolean isAvailable;
 	
@@ -25,7 +26,7 @@ public class DtoScooter {
 			JsonObject object = jsonReader.readObject();
 			
 			JsonNumber aux = object.getJsonNumber("bateryLevel");
-			this.bateryLevel = aux.doubleValue();
+			this.bateryLevel = (float) aux.doubleValue();
 			
 			this.isRented = object.getBoolean("isRented");
 			this.isAvailable = object.getBoolean("isAvailable");
@@ -36,7 +37,7 @@ public class DtoScooter {
 		}
 	}
 
-	public DtoScooter(Double bateryLevel, Boolean isRented, Boolean isAvailable) {
+	public DtoScooter(float bateryLevel, Boolean isRented, Boolean isAvailable) {
 		super();
 		this.bateryLevel = bateryLevel;
 		this.isRented = isRented;
@@ -44,11 +45,20 @@ public class DtoScooter {
 	}
 	
 
-	public Double getBateryLevel() {
+
+	public String getGuid() {
+		return guid;
+	}
+
+	public void setGuid(String guid) {
+		this.guid = guid;
+	}
+
+	public float getBateryLevel() {
 		return bateryLevel;
 	}
 
-	public void setBateryLevel(Double bateryLevel) {
+	public void setBateryLevel(float bateryLevel) {
 		this.bateryLevel = bateryLevel;
 	}
 

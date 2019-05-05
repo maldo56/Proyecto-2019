@@ -17,7 +17,7 @@ public class cliente extends usuario implements Serializable {
 	private String surname;
 	private String urlphoto;
 	private String cellphone;
-	private Double saldo;
+	private float saldo;
 	
 //	@Column(columnDefinition="Point")
 //	private Point punto;
@@ -26,7 +26,7 @@ public class cliente extends usuario implements Serializable {
 	
 	public cliente() {}
 	
-	public cliente(String username, String password, String email, String name, String surname, String urlphoto, String cellphone, Double saldo) {
+	public cliente(String username, String password, String email, String name, String surname, String urlphoto, String cellphone, float saldo) {
 		super(username, password, email);
 		this.name = name;
 		this.surname = surname;
@@ -68,11 +68,11 @@ public class cliente extends usuario implements Serializable {
 		this.cellphone = cellphone;
 	}
 
-	public Double getSaldo() {
+	public float getSaldo() {
 		return saldo;
 	}
 
-	public void setSaldo(Double saldo) {
+	public void setSaldo(float saldo) {
 		this.saldo = saldo;
 	}
 

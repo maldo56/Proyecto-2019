@@ -14,7 +14,7 @@ public class movimiento {
 	@Id
 	private String guid;
 	private Timestamp timestamp;
-	private Double mount;
+	private float mount;
 	private String paypalguid;
 	private String moneda;
 	
@@ -26,7 +26,7 @@ public class movimiento {
 		this.guid = uuid.toString();
 	}
 
-	public movimiento(Timestamp timestamp, Double mount, String paypalguid, String moneda) {
+	public movimiento(Timestamp timestamp, float mount, String paypalguid, String moneda) {
 		super();
 		UUID uuid = UUID.randomUUID();
 		this.guid = uuid.toString();
@@ -46,11 +46,11 @@ public class movimiento {
 		this.timestamp = timestamp;
 	}
 
-	public Double getMount() {
+	public float getMount() {
 		return mount;
 	}
 
-	public void setMount(Double mount) {
+	public void setMount(float mount) {
 		this.mount = mount;
 	}
 

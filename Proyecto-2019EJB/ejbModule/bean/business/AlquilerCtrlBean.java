@@ -1,5 +1,7 @@
 package bean.business;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -33,5 +35,9 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
     	
     	
     	return true;
+    }
+    
+    public List<DtoAlquiler> obtenerAlquileres(String username) {
+    	return database.obtenerAlquileres(username);
     }
 }

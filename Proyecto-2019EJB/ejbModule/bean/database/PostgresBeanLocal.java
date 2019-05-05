@@ -30,6 +30,10 @@ public interface PostgresBeanLocal {
 	Boolean terminarAlquiler(DtoAlquiler alquiler);
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente);
+	DtoClient obtenerCliente(String username);
 	DtoParm obtenerParametro(String key);
+	List<DtoAlquiler> obtenerAlquileres(String username);
+	List<DtoScooter> scootersDisponibles();
+	float obtenerTiempoDisponible(String username);
 	
 }

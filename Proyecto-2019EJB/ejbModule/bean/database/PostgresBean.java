@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.Stateless;
@@ -22,11 +23,13 @@ import javax.transaction.UserTransaction;
 import org.postgis.Geometry;
 import org.postgis.Point;
 
+import bean.scooterclient.database.MongoBeanLocal;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoAlquiler;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
+import obj.dto.DtoScooter;
 import obj.dto.DtoUsuario;
 import obj.entity.administrador;
 import obj.entity.alquiler;
@@ -45,6 +48,7 @@ import javax.ejb.TransactionAttributeType;
 @TransactionManagement(TransactionManagementType.BEAN)
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class PostgresBean implements PostgresBeanLocal {
+	
 	
 	@PersistenceContext(unitName = "proyecto")
     private EntityManager em;
@@ -251,7 +255,7 @@ public class PostgresBean implements PostgresBeanLocal {
 			if ( campo.equals("bateryLevel") ) {
 				
 				entity = em.find(scooter.class, guid);
-				entity.setBateryLevel(Double.parseDouble(value));
+				entity.setBateryLevel(Float.valueOf(value.trim()).floatValue());
 				
 			} else if( campo.equals("isRented") ) {
 				
@@ -473,6 +477,29 @@ public class PostgresBean implements PostgresBeanLocal {
     	return movimientos;
     }
     
+    public DtoClient obtenerCliente(String username) {
+    	
+    	try {
+    		cliente entity = em.find(cliente.class, username);
+    		
+    		DtoClient cliente = new DtoClient();
+    		
+    		cliente.setUsername(username);
+    		cliente.setName(entity.getName());
+    		cliente.setSurname(entity.getSurname());
+    		cliente.setEmail(entity.getEmail());
+    		cliente.setCellphone(entity.getCellphone());
+    		cliente.setUrlphoto(entity.getUrlphoto());
+    		cliente.setSaldo(entity.getSaldo());
+    		
+    		return cliente;
+    	} catch ( Exception e ) {
+    		System.out.println(e.getMessage());
+    	}
+    	 
+    	return null;
+    }
+    
     public DtoParm obtenerParametro(String key) {
     	
     	try {
@@ -491,4 +518,97 @@ public class PostgresBean implements PostgresBeanLocal {
     	return null;
     }
     
+    public List<DtoAlquiler> obtenerAlquileres(String username) {
+    	
+    	List<DtoAlquiler> alquileres = new ArrayList<DtoAlquiler>();
+		
+		try {
+			Query q = em.createQuery("select p from alquiler p where p.cliente.username = :username");
+			q.setParameter("username", username);
+			
+			DtoAlquiler aux;
+			
+			List<alquiler> l = q.getResultList();
+		
+			for (alquiler alq : l) {
+				
+				System.out.println("Llega 3  " + alq.getGuid());
+
+				aux = new DtoAlquiler();
+				aux.setGuid(alq.getGuid());
+				aux.setCliente(username);
+				aux.setDuration(alq.getDuration());
+				aux.setGuidscooter(alq.getScooter().getGuid());
+				aux.setPrice(alq.getPrice());
+				aux.setTimestamp(alq.getTimestamp());
+				
+				alquileres.add(aux);
+			}
+			
+			if (l.isEmpty()) {
+				System.out.println("Result set movimientos is empty");
+			}
+			
+		} catch( Exception e ) {
+			System.out.println(e.getMessage());
+		}
+    	
+    	return alquileres;
+    	
+    }
+    
+    public List<DtoScooter> scootersDisponibles() {
+    	
+    	List<DtoScooter> scooters = new ArrayList<DtoScooter>();
+		
+		try {
+			Query q = em.createQuery("select p from scooter p where p.isRented = false and p.isAvailable = true");
+			
+			DtoScooter aux;
+			
+			List<scooter> l = q.getResultList();
+		
+			for (scooter alq : l) {
+				
+				aux = new DtoScooter();
+				aux.setGuid(alq.getGuid());
+				aux.setBateryLevel(alq.getBateryLevel());
+				aux.setIsAvailable(alq.getIsAvailable());
+				aux.setIsRented(alq.getIsRented());
+				
+				scooters.add(aux);
+			}
+			
+			if (l.isEmpty()) {
+				System.out.println("Result set movimientos is empty");
+			}
+			
+		} catch( Exception e ) {
+			System.out.println(e.getMessage());
+		}
+    	
+    	return scooters;
+    	
+    }
+
+    public float obtenerTiempoDisponible(String username) {
+    	
+    	parametro parametro = null;
+    	Float tarifa;
+    	
+    	try {
+    		cliente entity = em.find(cliente.class, username);
+    		parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
+    		
+    		tarifa = Float.valueOf(parametro.getValue().trim()).floatValue();
+    		
+    		return ( entity.getSaldo() / tarifa );
+    		
+    	} catch( Exception e ) {
+    		System.out.println(e.getMessage());
+    	}
+    	
+    	return (float) 0;
+    }
+
 }

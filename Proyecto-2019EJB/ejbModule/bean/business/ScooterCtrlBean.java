@@ -1,5 +1,7 @@
 package bean.business;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -35,7 +37,7 @@ public class ScooterCtrlBean implements ScooterCtrlBeanLocal {
     	return postgres.MScooter(campo, guid, value);
     }
     
-    public Boolean mongo() {
-    	return mongo.mongo();
+    public List<DtoScooter> scootersDisponibles() {
+    	return postgres.scootersDisponibles();
     }
 }

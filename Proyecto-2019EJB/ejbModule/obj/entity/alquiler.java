@@ -17,8 +17,8 @@ public class alquiler {
 	private String guid;
 	private Timestamp timestamp;
 	private Time duration;
-	private Float price;
-	private Float tarifa;
+	private float price;
+	private float tarifa;
 	
 	@ManyToOne
 	private scooter scooter;
@@ -62,11 +62,11 @@ public class alquiler {
 		this.duration = duration;
 	}
 
-	public Float getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(Float price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 
@@ -98,11 +98,11 @@ public class alquiler {
 		this.movimiento = movimiento;
 	}
 
-	public Float getTarifa() {
+	public float getTarifa() {
 		return tarifa;
 	}
 
-	public void setTarifa(Float tarifa) {
+	public void setTarifa(float tarifa) {
 		this.tarifa = tarifa;
 	}
 	

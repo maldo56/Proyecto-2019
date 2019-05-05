@@ -49,7 +49,7 @@ public class APIUserBean {
 	@Path("/client/abm/{operation}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean createClient(@PathParam("operation") char operation, @QueryParam("client") DtoClient client) {
+    public Boolean createClient(@PathParam("operation") char operation, DtoClient client) {
     	
     	return buissnes.ABMClient(operation, client);
     }
@@ -58,7 +58,7 @@ public class APIUserBean {
 	@Path("/admin/abm/{operation}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean createAdmin(@PathParam("operation") char operation, @QueryParam("admin") DtoAdmin admin) {
+    public Boolean createAdmin(@PathParam("operation") char operation, DtoAdmin admin) {
     	
     	return buissnes.ABMAdmin(operation, admin);
     }
@@ -67,7 +67,7 @@ public class APIUserBean {
 	@Path("/movimiento")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean createMovimiento(@QueryParam("movimiento") DtoMovimiento movimiento) {
+    public Boolean createMovimiento(DtoMovimiento movimiento) {
     	    	
     	
     	return buissnes.createMovimiento(movimiento);
@@ -77,7 +77,7 @@ public class APIUserBean {
     @Path("/parametro/abm/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean ABMParametro(@PathParam("operation") char operation, @QueryParam("parametro") DtoParm parm) {
+    public Boolean ABMParametro(@PathParam("operation") char operation, DtoParm parm) {
     	
     	return buissnes.ABMParametro(operation, parm);
     }
@@ -86,7 +86,7 @@ public class APIUserBean {
     @Path("/alquiler/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean empezarAlquiler(@PathParam("operation") char operation, @QueryParam("alquiler") DtoParm parm) {
+    public Boolean empezarAlquiler(@PathParam("operation") char operation, DtoParm parm) {
     	
     	return buissnes.ABMParametro(operation, parm);
     }
@@ -111,6 +111,16 @@ public class APIUserBean {
     }
     
     @GET
+    @Path("/cliente")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public DtoClient obtenerCliente(@QueryParam("username") String username) {
+    	
+    	
+    	return buissnes.obtenerCliente(username);
+    }
+    
+    @GET
     @Path("/parametro")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -118,6 +128,16 @@ public class APIUserBean {
     	
     	
     	return buissnes.obtenerParametro(key);
+    }
+    
+    @GET
+    @Path("/tiempodisponible")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Float obtenerTiempoDisponible(@QueryParam("username") String username) {
+    	
+    	
+    	return buissnes.obtenerTiempoDisponible(username);
     }
     
 }

@@ -19,7 +19,7 @@ public class scooter implements Serializable {
 	
 	@Id
 	private String guid;
-	private Double bateryLevel;
+	private float bateryLevel;
 	private Boolean isRented;
 	private Boolean isAvailable;
 	
@@ -29,12 +29,12 @@ public class scooter implements Serializable {
 	public scooter() {
 		UUID uuid = UUID.randomUUID();
 		this.guid = uuid.toString();
-		this.bateryLevel = 100.0;
+		this.bateryLevel = (float) 100.0;
 		this.isRented = false;
 		this.isAvailable = true;
 	}
 	
-	public scooter(Double bateryLevel, Boolean isRented, Boolean isAvailable) {
+	public scooter(float bateryLevel, Boolean isRented, Boolean isAvailable) {
 		super();
 		UUID uuid = UUID.randomUUID();
 		this.guid = uuid.toString();
@@ -47,11 +47,11 @@ public class scooter implements Serializable {
 		return guid;
 	}
 	
-	public Double getBateryLevel() {
+	public float getBateryLevel() {
 		return bateryLevel;
 	}
 	
-	public void setBateryLevel(Double bateryLevel) {
+	public void setBateryLevel(float bateryLevel) {
 		this.bateryLevel = bateryLevel;
 	}
 	

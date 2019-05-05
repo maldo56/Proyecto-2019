@@ -1,9 +1,12 @@
 package bean.alquiler.api;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -35,8 +38,22 @@ public class APIAlquilerBean {
     @Path("/alquiler/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean alquiler(@PathParam("operation") char operation, @QueryParam("alquiler") DtoAlquiler alquiler) {
+    public Boolean alquiler(@PathParam("operation") char operation, DtoAlquiler alquiler) {
     	
     	return buissnes.alquiler(operation, alquiler);
+    }
+    
+    
+    //--------------------------------------  GET  ---------------------------------------------------------//
+
+    
+    @GET
+    @Path("/porcliente")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public List<DtoAlquiler> obtenerAlquileres(@QueryParam("username") String username) {
+    	
+    	
+    	return buissnes.obtenerAlquileres(username);
     }
 }

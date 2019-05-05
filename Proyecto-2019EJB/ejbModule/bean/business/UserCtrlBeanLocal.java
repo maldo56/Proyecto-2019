@@ -24,7 +24,8 @@ public interface UserCtrlBeanLocal {
 	
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente);
+	DtoClient obtenerCliente(String username);
 	DtoParm obtenerParametro(String key);
-	
+	Float obtenerTiempoDisponible(String username);
 	
 }

@@ -11,14 +11,14 @@ import javax.json.JsonReader;
 public class DtoMovimiento {
 
 	private Timestamp timestamp;
-	private Double mount;
+	private float mount;
 	private String paypalguid;
 	private String moneda;
 	private String username;
 	
 	public DtoMovimiento() {}
 	
-	public DtoMovimiento(Timestamp timestamp, Double mount, String paypalguid, String moneda, String username) {
+	public DtoMovimiento(Timestamp timestamp, float mount, String paypalguid, String moneda, String username) {
 		super();
 		this.timestamp = timestamp;
 		this.mount = mount;
@@ -40,7 +40,7 @@ public class DtoMovimiento {
 			this.moneda = object.getString("moneda");
 			
 			JsonNumber aux = object.getJsonNumber("mount");
-			this.mount = aux.doubleValue();
+			this.mount = (float) aux.doubleValue();
 			
 			String date = object.getString("timestamp");
 			this.timestamp = Timestamp.valueOf(date);
@@ -62,11 +62,11 @@ public class DtoMovimiento {
 		this.timestamp = timestamp;
 	}
 
-	public Double getMount() {
+	public float getMount() {
 		return mount;
 	}
 
-	public void setMount(Double mount) {
+	public void setMount(float mount) {
 		this.mount = mount;
 	}
 
