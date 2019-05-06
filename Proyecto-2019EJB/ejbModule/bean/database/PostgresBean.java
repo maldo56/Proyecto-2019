@@ -66,10 +66,7 @@ public class PostgresBean implements PostgresBeanLocal {
     }
     
     public DtoUsuario login(String username, String password) {
-    	System.out.println(username + " -- " + password);
     	
-    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyecto");
-		EntityManager em = emf.createEntityManager();
 
 		DtoUsuario user = null;
 		
@@ -685,4 +682,16 @@ public class PostgresBean implements PostgresBeanLocal {
     	return (float) 0;
     }
 
+    public boolean scooterEstaAlquilado(String guid) {
+    	
+    	try {
+    		scooter entity = em.find(scooter.class, guid);
+    		
+    		return entity.getIsRented();
+    	} catch ( Exception e ) {
+    		System.out.println(e.getMessage());
+    	}
+    	
+    	return false;
+    }
 }

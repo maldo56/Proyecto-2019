@@ -40,4 +40,8 @@ public class ScooterCtrlBean implements ScooterCtrlBeanLocal {
     public List<DtoScooter> scootersDisponibles() {
     	return postgres.scootersDisponibles();
     }
+    
+    public boolean estaAlquilado(String guid) {
+    	return postgres.scooterEstaAlquilado(guid);
+    }
 }

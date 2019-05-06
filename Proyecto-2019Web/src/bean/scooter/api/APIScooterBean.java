@@ -68,4 +68,14 @@ public class APIScooterBean {
     	return business.scootersDisponibles();
     }
     
+    
+    @GET
+    @Path("/isAlquilado")
+    @Consumes( {"application/json"} )
+	@Produces( {"application/json"} )
+	public boolean estaAlquilado(String guid) {
+
+    	return business.estaAlquilado(guid);
+    }
+    
 }
