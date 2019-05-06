@@ -38,7 +38,7 @@ public class APIAlquilerBean {
     @Path("/alquiler/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean alquiler(@PathParam("operation") char operation, DtoAlquiler alquiler) {
+    public String alquiler(@PathParam("operation") char operation, DtoAlquiler alquiler) {
     	
     	return buissnes.alquiler(operation, alquiler);
     }

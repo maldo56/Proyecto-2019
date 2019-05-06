@@ -24,6 +24,7 @@ public class DtoAlquiler {
 	private float price;
 	private String guidscooter;
 	private String cliente;
+	private DtoGeometria geometria;
 	
 	
 	public DtoAlquiler() {
@@ -140,6 +141,14 @@ public class DtoAlquiler {
 
 	public void setCliente(String cliente) {
 		this.cliente = cliente;
+	}
+
+	public DtoGeometria getGeometria() {
+		return geometria;
+	}
+
+	public void setGeometria(DtoGeometria geometria) {
+		this.geometria = geometria;
 	}
 	
 }

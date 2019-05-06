@@ -13,7 +13,7 @@ public class DtoScooter {
 	private float bateryLevel;
 	private Boolean isRented;
 	private Boolean isAvailable;
-	
+	private DtoGeometria geometria;
 	
 	public DtoScooter() {}
 	
@@ -76,6 +76,14 @@ public class DtoScooter {
 
 	public void setIsAvailable(Boolean isAvailable) {
 		this.isAvailable = isAvailable;
+	}
+
+	public DtoGeometria getGeometria() {
+		return geometria;
+	}
+
+	public void setGeometria(DtoGeometria geometria) {
+		this.geometria = geometria;
 	}
 	
 }

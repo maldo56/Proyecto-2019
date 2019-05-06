@@ -106,5 +106,5 @@ public class alquiler {
 	public void setTarifa(float tarifa) {
 		this.tarifa = tarifa;
 	}
-	
+
 }

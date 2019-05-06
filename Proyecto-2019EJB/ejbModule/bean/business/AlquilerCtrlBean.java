@@ -27,11 +27,11 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
         // TODO Auto-generated constructor stub
     }
 
-    public Boolean alquiler(char operation, DtoAlquiler alquiler) {
+    public String alquiler(char operation, DtoAlquiler alquiler) {
     	
     	if ( operation == 'E' ) {
     		
-    		database.altaAlquiler(alquiler);
+    		return database.altaAlquiler(alquiler);
         	
     	} else if ( operation == 'T' ) {
     		
@@ -40,8 +40,7 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
     		database.terminarAlquiler(alquiler, ubicaciones);
     	}
     	
-    	
-    	return true;
+    	return "";
     }
     
     public List<DtoAlquiler> obtenerAlquileres(String username) {

@@ -9,7 +9,7 @@ import obj.dto.DtoAlquiler;
 @Local
 public interface AlquilerCtrlBeanLocal {
 
-	Boolean alquiler(char operation, DtoAlquiler alquiler);
+	String alquiler(char operation, DtoAlquiler alquiler);
 	
 	List<DtoAlquiler> obtenerAlquileres(String username);
 }

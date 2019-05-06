@@ -23,6 +23,7 @@ import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 
 import org.postgis.Geometry;
+import org.postgis.LineString;
 import org.postgis.Point;
 
 import bean.scooterclient.database.MongoBeanLocal;
@@ -359,7 +360,7 @@ public class PostgresBean implements PostgresBeanLocal {
 		}
     }
     
-    public Boolean altaAlquiler(DtoAlquiler alquiler) {
+    public String altaAlquiler(DtoAlquiler alquiler) {
     	
     	alquiler entity = new alquiler();
     	
@@ -375,10 +376,9 @@ public class PostgresBean implements PostgresBeanLocal {
     	parametro parametro = null;
     	
 		try {
-			
+
 			cliente = em.find(obj.entity.cliente.class, alquiler.getCliente());
 			parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
-			
 			entity.setCliente(cliente);
 			entity.setTarifa(Float.valueOf(parametro.getValue().trim()).floatValue());
 			
@@ -386,19 +386,18 @@ public class PostgresBean implements PostgresBeanLocal {
 			
 			scooter = em.find(obj.entity.scooter.class, alquiler.getGuidscooter());
 			scooter.setIsRented(true);
-			
 			entity.setScooter(scooter);
 			
 			em.persist(entity);
 			transaction.commit();
 
-			return true;
+			return entity.getGuid();
 			
 		} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
 			
-			return false;
+			return "";
 		}
     	
     	
@@ -551,18 +550,30 @@ public class PostgresBean implements PostgresBeanLocal {
     public List<DtoAlquiler> obtenerAlquileres(String username) {
     	
     	List<DtoAlquiler> alquileres = new ArrayList<DtoAlquiler>();
-		
+		List<String> strgeometrias;
 		try {
-			Query q = em.createQuery("select p from alquiler p where p.cliente.username = :username");
+			
+			
+			String srtquery = "select st_astext(a.recorrido) "
+					+ "from alquiler as a "
+					+ "where a.cliente_username='" + username + "'";
+			
+			Query q = em.createNativeQuery(srtquery);
+			
+			strgeometrias = q.getResultList();
+			
+			
+			q = em.createQuery("select p from alquiler p where p.cliente.username = :username");
 			q.setParameter("username", username);
 			
 			DtoAlquiler aux;
+			int index = 0;
 			
 			List<alquiler> l = q.getResultList();
+			
+			String kml;
 		
 			for (alquiler alq : l) {
-				
-				System.out.println("Llega 3  " + alq.getGuid());
 
 				aux = new DtoAlquiler();
 				aux.setGuid(alq.getGuid());
@@ -572,7 +583,12 @@ public class PostgresBean implements PostgresBeanLocal {
 				aux.setPrice(alq.getPrice());
 				aux.setTimestamp(alq.getTimestamp());
 				
+				kml = strgeometrias.get(index);
+				
+				aux.setGeometria(Utils.kmltoGeometria(kml));
+				
 				alquileres.add(aux);
+				index ++;
 			}
 			
 			if (l.isEmpty()) {
@@ -590,13 +606,26 @@ public class PostgresBean implements PostgresBeanLocal {
     public List<DtoScooter> scootersDisponibles() {
     	
     	List<DtoScooter> scooters = new ArrayList<DtoScooter>();
-		
+    	List<String> strgeometrias;
+    	
 		try {
-			Query q = em.createQuery("select p from scooter p where p.isRented = false and p.isAvailable = true");
+			
+			String srtquery = "select st_astext(s.location) "
+							+ "from scooter as s "
+							+ "where s.isRented = false and s.isAvailable = true";
+			
+			Query q = em.createNativeQuery(srtquery);
+			strgeometrias = q.getResultList();
+			
+			
+			q = em.createQuery("select p from scooter p where p.isRented = false and p.isAvailable = true");
 			
 			DtoScooter aux;
 			
 			List<scooter> l = q.getResultList();
+			
+			int index = 0;
+			String kml;
 		
 			for (scooter alq : l) {
 				
@@ -606,7 +635,13 @@ public class PostgresBean implements PostgresBeanLocal {
 				aux.setIsAvailable(alq.getIsAvailable());
 				aux.setIsRented(alq.getIsRented());
 				
+				
+				kml = strgeometrias.get(index);
+				
+				aux.setGeometria(Utils.kmltoGeometria(kml));
+				
 				scooters.add(aux);
+				index ++;
 			}
 			
 			if (l.isEmpty()) {
