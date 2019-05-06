@@ -47,6 +47,10 @@ public class scooter implements Serializable {
 		return guid;
 	}
 	
+	public void setGuid(String guid) {
+		this.guid = guid;
+	}
+	
 	public float getBateryLevel() {
 		return bateryLevel;
 	}

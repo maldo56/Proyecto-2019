@@ -41,7 +41,7 @@ public class APIScooterBean {
 	@Path("/ab/{operation}")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public Boolean ABM(@PathParam("operation") char operation, @QueryParam("guid") String guid) {
+	public Boolean AB(@PathParam("operation") char operation, @QueryParam("guid") String guid) {
 
     	return business.AB(operation, guid);
     }

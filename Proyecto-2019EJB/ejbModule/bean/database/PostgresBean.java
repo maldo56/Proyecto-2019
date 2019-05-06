@@ -117,6 +117,7 @@ public class PostgresBean implements PostgresBeanLocal {
 				location.setX(4);
 				location.setY(7);
 				
+				entity.setGuid(guid);
 				
 				em.persist(entity);
 				transaction.commit();
