@@ -119,10 +119,19 @@ public class PostgresBean implements PostgresBeanLocal {
 				Point location = new Point();
 				location.setX(4);
 				location.setY(7);
-//				entity.setLocation(location);
 				
 				
 				em.persist(entity);
+				transaction.commit();
+				
+				
+				transaction.begin();
+				
+				String query = "UPDATE scooter "
+						+ "SET location = ST_GeomFromText('POINT(-71.060316 48.432044)', 4326) "
+						+ "WHERE scooter.guid = '" + entity.getGuid() + "'";
+				
+				em.createNativeQuery(query).executeUpdate();
 				
 				
 			} else if( operation == 'B' ) {
@@ -133,7 +142,7 @@ public class PostgresBean implements PostgresBeanLocal {
 				}
 					
 			}
-
+			
 			transaction.commit();
 
 			return true;
