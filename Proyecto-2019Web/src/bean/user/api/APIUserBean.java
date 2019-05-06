@@ -92,6 +92,16 @@ public class APIUserBean {
     }
     
     
+    @POST
+    @Path("/recargar")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Boolean recargarSaldo(@QueryParam("username") String username, @QueryParam("guidpaypal") String guidpaypal, @QueryParam("monto") float monto, @QueryParam("moneda") String moneda) {
+    	
+    	return buissnes.recargarSaldo(username, guidpaypal, monto, moneda);
+    }
+    
+    
     
     //--------------------------------------  GET  ---------------------------------------------------------//
     

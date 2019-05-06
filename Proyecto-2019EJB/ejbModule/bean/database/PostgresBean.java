@@ -367,7 +367,7 @@ public class PostgresBean implements PostgresBeanLocal {
 		}
     }
     
-    public String altaAlquiler(DtoAlquiler alquiler) {
+    public DtoAlquiler altaAlquiler(DtoAlquiler alquiler) {
     	
     	alquiler entity = new alquiler();
     	
@@ -398,19 +398,22 @@ public class PostgresBean implements PostgresBeanLocal {
 			em.persist(entity);
 			transaction.commit();
 
-			return entity.getGuid();
+			alquiler.setGuid(entity.getGuid());
+			alquiler.setTimestamp(entity.getTimestamp());
+			
+			return alquiler;
 			
 		} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
 			
-			return "";
+			return null;
 		}
     	
     	
     }
     
-    public Boolean terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones) {
+    public DtoAlquiler terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones) {
     	
     	alquiler entity;
     	scooter scooter;
@@ -423,8 +426,6 @@ public class PostgresBean implements PostgresBeanLocal {
     	Time time;
     	
     	String kml = Utils.kmlLinestring(ubicaciones);
-    	
-    	System.out.println(kml);
     	
 		try {
 			
@@ -459,6 +460,38 @@ public class PostgresBean implements PostgresBeanLocal {
 			em.createNativeQuery("UPDATE alquiler p SET recorrido = ST_GeomFromText('" + kml + "', 4326) WHERE guid = \'" + alquiler.getGuid() + "\'").executeUpdate();
 			
 			transaction.commit();
+			
+			alquiler.setDuration(entity.getDuration());
+			
+			System.out.println("Kml: " + kml);
+			
+			alquiler.setGeometria(Utils.kmltoGeometria(kml));
+			alquiler.setPrice(entity.getPrice());
+			alquiler.setTimestamp(entity.getTimestamp());
+			
+			return alquiler;
+			
+		} catch (Exception e) {
+			e.getMessage();
+			e.printStackTrace();
+			
+			return null;
+		}
+		
+    }
+    
+    public Boolean recargarSaldoCliente(String username, float monto) {
+    	
+    	cliente entity;
+		
+		try {
+			transaction.begin();
+			
+			entity = em.find(cliente.class, username);
+			entity.setSaldo(monto);
+				
+			transaction.commit();
+
 			return true;
 			
 		} catch (Exception e) {
@@ -468,7 +501,9 @@ public class PostgresBean implements PostgresBeanLocal {
 			return false;
 		}
 		
+		
     }
+    
     
     //--------------------------------  GET  --------------------------------------------------------------//
     

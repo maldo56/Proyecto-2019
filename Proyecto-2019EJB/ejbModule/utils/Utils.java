@@ -20,6 +20,7 @@ public class Utils {
 		DtoLocation point;
 		
 		point = ubicaciones.get(0);
+		
 		kml = point.getLat() + " " + point.getLng();
 		
 		for ( int x = 1; x < ubicaciones.size(); x ++ ) {

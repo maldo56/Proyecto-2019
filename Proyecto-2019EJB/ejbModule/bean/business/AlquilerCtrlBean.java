@@ -27,7 +27,7 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
         // TODO Auto-generated constructor stub
     }
 
-    public String alquiler(char operation, DtoAlquiler alquiler) {
+    public DtoAlquiler alquiler(char operation, DtoAlquiler alquiler) {
     	
     	if ( operation == 'E' ) {
     		
@@ -37,10 +37,10 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
     		
     		List<DtoLocation> ubicaciones = mongo.obtenerPuntos(alquiler.getGuid());
     		
-    		database.terminarAlquiler(alquiler, ubicaciones);
+    		return database.terminarAlquiler(alquiler, ubicaciones);
     	}
     	
-    	return "";
+    	return null;
     }
     
     public List<DtoAlquiler> obtenerAlquileres(String username) {

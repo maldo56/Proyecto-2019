@@ -1,5 +1,6 @@
 package bean.business;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -52,6 +53,21 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     
     public Boolean ABMParametro(char operation, DtoParm parm) {
     	return database.ABMParametro(operation, parm);
+    }
+    
+    
+    public Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda) {
+    	
+    	DtoMovimiento movimiento = new DtoMovimiento();
+    	movimiento.setMoneda(moneda);
+    	movimiento.setMount(monto);
+    	movimiento.setPaypalguid(guidpaypal);
+    	movimiento.setUsername(username);
+    	movimiento.setTimestamp(new Timestamp(System.currentTimeMillis()));
+    	
+    	database.createMovimiento(movimiento);
+    	
+    	return database.recargarSaldoCliente(username, monto);
     }
     
     //-------------------------------  GET  ----------------------------------------------------//

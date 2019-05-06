@@ -21,6 +21,7 @@ public interface UserCtrlBeanLocal {
 	Boolean ABMAdmin(char operation, DtoAdmin admin);
 	Boolean createMovimiento(DtoMovimiento movimiento);
 	Boolean ABMParametro(char operation, DtoParm parm);
+	Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda);
 	
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente);

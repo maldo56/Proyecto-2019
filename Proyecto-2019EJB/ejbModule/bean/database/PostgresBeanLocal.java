@@ -26,9 +26,11 @@ public interface PostgresBeanLocal {
 	Boolean ABMAdmin(char operation, DtoAdmin client);
 	Boolean ABMParametro(char operation, DtoParm parm);
 	Boolean createMovimiento(DtoMovimiento movimiento);
-	String altaAlquiler(DtoAlquiler alquiler);
+	DtoAlquiler altaAlquiler(DtoAlquiler alquiler);
 	
-	Boolean terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones);
+	Boolean recargarSaldoCliente(String username, float monto);
+	
+	DtoAlquiler terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones);
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente);
 	DtoClient obtenerCliente(String username);
