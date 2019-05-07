@@ -4,6 +4,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import bean.database.PostgresBeanLocal;
 import bean.scooterclient.database.MongoBeanLocal;
 
 
@@ -11,6 +12,8 @@ import bean.scooterclient.database.MongoBeanLocal;
 @LocalBean
 public class ServicioCtrlBean implements ServicioCtrlBeanLocal {
 
+	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/PostgresBean!bean.database.PostgresBeanLocal")
+	private PostgresBeanLocal postgres;
 	
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/MongoBean!bean.scooterclient.database.MongoBeanLocal")
 	private MongoBeanLocal mongo;
@@ -23,5 +26,9 @@ public class ServicioCtrlBean implements ServicioCtrlBeanLocal {
     public void addPoint(String scooterGuid, String alquilerGuid, float x, float y) {
     	
     	mongo.servicioAddPunto(scooterGuid,alquilerGuid, x, y);
+    }
+    
+    public String estaAlquilado(String guid) {
+    	return postgres.scooterEstaAlquilado(guid);
     }
 }

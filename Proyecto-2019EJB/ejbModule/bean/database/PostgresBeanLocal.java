@@ -38,6 +38,6 @@ public interface PostgresBeanLocal {
 	List<DtoAlquiler> obtenerAlquileres(String username);
 	List<DtoScooter> scootersDisponibles();
 	float obtenerTiempoDisponible(String username);
-	boolean scooterEstaAlquilado(String guid);
+	String scooterEstaAlquilado(String guid);
 	
 }

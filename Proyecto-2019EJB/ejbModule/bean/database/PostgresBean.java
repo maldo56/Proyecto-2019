@@ -718,16 +718,30 @@ public class PostgresBean implements PostgresBeanLocal {
     	return (float) 0;
     }
 
-    public boolean scooterEstaAlquilado(String guid) {
+    public String scooterEstaAlquilado(String guid) {
     	
     	try {
     		scooter entity = em.find(scooter.class, guid);
     		
-    		return entity.getIsRented();
+    		if ( entity.getIsRented() ) {
+    			
+    			Query q = em.createQuery("select p from alquiler p where p.scooter.guid = :guid order by timestamp");
+    			q.setParameter("guid", guid);
+    			
+    			DtoAlquiler aux;
+    			int index = 0;
+    			
+    			alquiler l = (alquiler) q.getResultList().get(0);
+    			
+    			
+    			return l.getGuid();
+    		}
+    		
+    		
     	} catch ( Exception e ) {
     		System.out.println(e.getMessage());
     	}
     	
-    	return false;
+    	return "false";
     }
 }

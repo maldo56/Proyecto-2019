@@ -41,7 +41,7 @@ public class ScooterCtrlBean implements ScooterCtrlBeanLocal {
     	return postgres.scootersDisponibles();
     }
     
-    public boolean estaAlquilado(String guid) {
+    public String estaAlquilado(String guid) {
     	return postgres.scooterEstaAlquilado(guid);
     }
 }

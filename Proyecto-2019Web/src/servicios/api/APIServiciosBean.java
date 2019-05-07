@@ -1,5 +1,6 @@
 package servicios.api;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,37 +49,57 @@ public class APIServiciosBean {
 	
 	
 	@OnMessage
-    public void handleMessage(String message, Session session) {
+    public void handleMessage(String message, Session session) throws IOException {
         System.out.println("WebSocket: Nuevo mensaje ==> " + message);
-        try {
+        
+        String[] partes = message.split("&");
+        
+        if ( partes[0].equals("esperando") ) {
+        	System.out.println("esperando");
         	
-        	String scooterGuid = "";
-        	String alquilerGuid = "";
-        	float x;
-        	float y;
+        	String msg = buissnes.estaAlquilado(partes[1]);
         	
-        	JsonReader jsonReader = Json.createReader(new StringReader(message));
-			JsonObject object = jsonReader.readObject();
-			
-			
-			scooterGuid = object.getString("guid");
-			alquilerGuid = object.getString("alquilerGuid");
-			
-			JsonNumber aux = object.getJsonNumber("x");
-			x = (float) aux.doubleValue();
-			
-			aux = object.getJsonNumber("y");
-			y = (float) aux.doubleValue();
-			
-        	buissnes.addPoint(scooterGuid, alquilerGuid, x, y);
-			
-			
-//        	session.getBasicRemote().sendText("" + count);
+        	if ( msg.equals("false") ) {
+        		msg = "terminado&" + msg;
+        	} else {
+        		msg = "alquilado&" + msg;
+        	}
         	
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+        	session.getBasicRemote().sendText(msg);
+        } else if ( partes[0].equals("alquilado") ) {
+        	
+        	try {
+            	
+            	String scooterGuid = "";
+            	String alquilerGuid = "";
+            	float x;
+            	float y;
+            	
+            	JsonReader jsonReader = Json.createReader(new StringReader(partes[1]));
+    			JsonObject object = jsonReader.readObject();
+    			
+    			
+    			scooterGuid = object.getString("guid");
+    			alquilerGuid = object.getString("alquilerGuid");
+    			
+    			JsonNumber aux = object.getJsonNumber("x");
+    			x = (float) aux.doubleValue();
+    			
+    			aux = object.getJsonNumber("y");
+    			y = (float) aux.doubleValue();
+    			
+            	buissnes.addPoint(scooterGuid, alquilerGuid, x, y);
+    			
+    			
+//            	session.getBasicRemote().sendText("" + count);
+            	
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+        		
         }
+        
     }
  
     @OnClose

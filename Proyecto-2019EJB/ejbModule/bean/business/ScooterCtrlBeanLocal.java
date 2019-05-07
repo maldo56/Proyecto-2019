@@ -13,6 +13,6 @@ public interface ScooterCtrlBeanLocal {
 	Boolean M(String campo, String guid, String value);
 	
 	List<DtoScooter> scootersDisponibles();
-	boolean estaAlquilado(String guid);
+	String estaAlquilado(String guid);
 	
 }

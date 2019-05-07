@@ -73,7 +73,7 @@ public class APIScooterBean {
     @Path("/isAlquilado")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public boolean estaAlquilado(String guid) {
+	public String estaAlquilado(@QueryParam("guid") String guid) {
 
     	return business.estaAlquilado(guid);
     }
