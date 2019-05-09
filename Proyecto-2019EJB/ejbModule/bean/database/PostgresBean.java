@@ -376,41 +376,45 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     	entity.setTimestamp(new Timestamp(time));
     	entity.setPrice(-1);
-    	
+    	entity.setDuration(null);
     	
     	cliente cliente = null;
     	scooter scooter = null;
     	parametro parametro = null;
     	
 		try {
-
-			cliente = em.find(obj.entity.cliente.class, alquiler.getCliente());
-			parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
-			entity.setCliente(cliente);
-			entity.setTarifa(Float.valueOf(parametro.getValue().trim()).floatValue());
-			
-			transaction.begin();
-			
 			scooter = em.find(obj.entity.scooter.class, alquiler.getGuidscooter());
-			scooter.setIsRented(true);
-			entity.setScooter(scooter);
 			
-			em.persist(entity);
-			transaction.commit();
+			if ( !scooter.getIsRented() ) {
+				
+				cliente = em.find(obj.entity.cliente.class, alquiler.getCliente());
+				parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
+				entity.setCliente(cliente);
+				entity.setTarifa(Float.valueOf(parametro.getValue().trim()).floatValue());
+				
+				transaction.begin();
+				
+				scooter = em.find(obj.entity.scooter.class, alquiler.getGuidscooter());
+				scooter.setIsRented(true);
+				
+				entity.setScooter(scooter);
+				
+				em.persist(entity);
+				
+				transaction.commit();
 
-			alquiler.setGuid(entity.getGuid());
-			alquiler.setTimestamp(entity.getTimestamp());
-			
-			return alquiler;
+				alquiler.setGuid(entity.getGuid());
+				alquiler.setTimestamp(entity.getTimestamp());
+				
+				return alquiler;
+			}
 			
 		} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
-			
-			return null;
 		}
     	
-    	
+		return null;
     }
     
     public DtoAlquiler terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones) {
@@ -430,54 +434,57 @@ public class PostgresBean implements PostgresBeanLocal {
 		try {
 			
 			parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
-			transaction.begin();
 			
-			scooter = em.find(scooter.class, alquiler.getGuidscooter());
-			scooter.setIsRented(false);
+			transaction.begin();
 			
 			entity = em.find(alquiler.class, alquiler.getGuid());
 			
-			dateInicio = new Time(entity.getTimestamp().getHours(), entity.getTimestamp().getMinutes(), entity.getTimestamp().getSeconds());
-			diferencia = dateFinal.getTime() - dateInicio.getTime();
-			time = new Time(diferencia);
-			
-			if ( dateInicio.getMinutes() >  dateFinal.getMinutes()) {
-				time.setHours( (dateFinal.getHours() -  dateInicio.getHours() - 1) );
-			} else {
-				time.setHours( (dateFinal.getHours() -  dateInicio.getHours()) );
-			}
-			
-			entity.setDuration( time );
-			
-			entity.setPrice( (diferencia/1000) * ( Float.valueOf(parametro.getValue().trim()).floatValue() ) );
-			
-			transaction.commit();
+			if ( entity.getDuration() == null ) {
+				
+				scooter = em.find(scooter.class, alquiler.getGuidscooter());
+				scooter.setIsRented(false);
+				
+				
+				dateInicio = new Time(entity.getTimestamp().getHours(), entity.getTimestamp().getMinutes(), entity.getTimestamp().getSeconds());
+				diferencia = dateFinal.getTime() - dateInicio.getTime();
+				time = new Time(diferencia);
+				
+				if ( dateInicio.getMinutes() >  dateFinal.getMinutes()) {
+					time.setHours( (dateFinal.getHours() -  dateInicio.getHours() - 1) );
+				} else {
+					time.setHours( (dateFinal.getHours() -  dateInicio.getHours()) );
+				}
+				
+				entity.setDuration( time );
+				
+				entity.setPrice( (diferencia/1000) * ( Float.valueOf(parametro.getValue().trim()).floatValue() ) );
+				
+				transaction.commit();
 
-			
-			
-			transaction.begin();
-			
-			em.createNativeQuery("UPDATE alquiler p SET recorrido = ST_GeomFromText('" + kml + "', 4326) WHERE guid = \'" + alquiler.getGuid() + "\'").executeUpdate();
-			
-			transaction.commit();
-			
-			alquiler.setDuration(entity.getDuration());
-			
-			System.out.println("Kml: " + kml);
-			
-			alquiler.setGeometria(Utils.kmltoGeometria(kml));
-			alquiler.setPrice(entity.getPrice());
-			alquiler.setTimestamp(entity.getTimestamp());
-			
-			return alquiler;
+				
+				if ( !kml.equals("LINESTRING()") ) {
+					
+					transaction.begin();
+					em.createNativeQuery("UPDATE alquiler p SET recorrido = ST_GeomFromText('" + kml + "', 4326) WHERE guid = \'" + alquiler.getGuid() + "\'").executeUpdate();
+					transaction.commit();
+				}
+				
+				alquiler.setDuration(entity.getDuration());
+				alquiler.setGeometria(Utils.kmltoGeometria(kml));
+				alquiler.setPrice(entity.getPrice());
+				alquiler.setTimestamp(entity.getTimestamp());
+				
+				return alquiler;
+			} else {
+				transaction.rollback();
+			}
 			
 		} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
-			
-			return null;
 		}
 		
+		return null;
     }
     
     public Boolean recargarSaldoCliente(String username, float monto) {

@@ -31,7 +31,8 @@ import javax.websocket.Session;
 @ServerEndpoint(value = "/servicios", configurator = MyServerEndpointConfigurator.class)
 public class APIServiciosBean {
 
-	private Set<Session> sessions = new HashSet<>();
+	private Set<Session> scooterSessions = new HashSet<>();
+	private Set<Session> usuarioSessions = new HashSet<>();
 	
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ServicioCtrlBean!servicios.business.ServicioCtrlBeanLocal")
 	private ServicioCtrlBeanLocal buissnes;
@@ -44,20 +45,43 @@ public class APIServiciosBean {
         String userAgent = (String) endpointConfig.getUserProperties().get("user-agent");
         System.out.println("UserAgent: " + userAgent);
         
-        sessions.add(session);
+        if ( userAgent == null || userAgent.equals("null") ) {
+        	scooterSessions.add(session);
+        } else {
+        	usuarioSessions.add(session);
+        }
+        
     }
 	
 	
 	@OnMessage
     public void handleMessage(String message, Session session) throws IOException {
-        System.out.println("WebSocket: Nuevo mensaje ==> " + message);
+        System.out.println("WebSocket: Nuevo mensaje ==> " + message.toString());
+ 
+        String estado;
+        String id;
+        String alquiler;
+        float latitude;
+        float longitude;
         
-        String[] partes = message.split("&");
+        JsonReader jsonReader = Json.createReader(new StringReader(message));
+		JsonObject object = jsonReader.readObject();
+		
+		estado = object.getString("estado");
+		id = object.getString("id");
+		alquiler = object.getString("alquiler");
+		
+		JsonNumber aux = object.getJsonNumber("latitude");
+		latitude = (float) aux.doubleValue();
+		
+		aux = object.getJsonNumber("longitude");
+		longitude = (float) aux.doubleValue();
+		
         
-        if ( partes[0].equals("esperando") ) {
+        if ( estado.equals("esperando") ) {
         	System.out.println("esperando");
         	
-        	String msg = buissnes.estaAlquilado(partes[1]);
+        	String msg = buissnes.estaAlquilado(id);
         	
         	if ( msg.equals("false") ) {
         		msg = "terminado&" + msg;
@@ -66,32 +90,15 @@ public class APIServiciosBean {
         	}
         	
         	session.getBasicRemote().sendText(msg);
-        } else if ( partes[0].equals("alquilado") ) {
+        } else if ( estado.equals("alquilado") ) {
         	
         	try {
             	
-            	String scooterGuid = "";
-            	String alquilerGuid = "";
-            	float x;
-            	float y;
-            	
-            	JsonReader jsonReader = Json.createReader(new StringReader(partes[1]));
-    			JsonObject object = jsonReader.readObject();
+            	buissnes.addPoint(id, alquiler, latitude, longitude);
     			
-    			
-    			scooterGuid = object.getString("guid");
-    			alquilerGuid = object.getString("alquilerGuid");
-    			
-    			JsonNumber aux = object.getJsonNumber("x");
-    			x = (float) aux.doubleValue();
-    			
-    			aux = object.getJsonNumber("y");
-    			y = (float) aux.doubleValue();
-    			
-            	buissnes.addPoint(scooterGuid, alquilerGuid, x, y);
-    			
-    			
-//            	session.getBasicRemote().sendText("" + count);
+            	for ( Session s : this.usuarioSessions) {
+            		s.getBasicRemote().sendText("algo");
+            	}
             	
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -105,7 +112,8 @@ public class APIServiciosBean {
     @OnClose
     public void close(Session session) {
         System.out.println("Session closed ==>");
-        sessions.remove(session);
+        scooterSessions.remove(session);
+        usuarioSessions.remove(session);
     }
  
     @OnError

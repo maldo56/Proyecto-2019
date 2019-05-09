@@ -19,13 +19,15 @@ public class Utils {
 		
 		DtoLocation point;
 		
-		point = ubicaciones.get(0);
-		
-		kml = point.getLat() + " " + point.getLng();
-		
-		for ( int x = 1; x < ubicaciones.size(); x ++ ) {
-			point = ubicaciones.get(x);
-			kml = kml + "," + point.getLat() + " " + point.getLng();
+		if ( ubicaciones.size() > 0 ) {
+			point = ubicaciones.get(0);
+			
+			kml = point.getLat() + " " + point.getLng();
+			
+			for ( int x = 1; x < ubicaciones.size(); x ++ ) {
+				point = ubicaciones.get(x);
+				kml = kml + "," + point.getLat() + " " + point.getLng();
+			}
 		}
 		
 		return "LINESTRING(" + kml + ")";
@@ -35,8 +37,6 @@ public class Utils {
 	public static DtoGeometria kmltoGeometria(String kml) {
 		
 //		LINESTRING(0 0,1 1,2 2,3 3,4 4,5 5,6 6,7 7,8 8,9 9)
-
-		System.out.println("Kml:  " + kml);
 		
 		DtoGeometria geom = new DtoGeometria();
 		List<DtoPunto> puntos = new ArrayList<DtoPunto>();
@@ -50,11 +50,7 @@ public class Utils {
 			
 			aux1 = kml.split("\\(");
 			geom.setType(aux1[0]);
-			
 			aux2 = aux1[1].substring(0, (aux1[1].length() - 1) );
-			
-			System.out.println(aux2);
-			
 			aux1 = aux2.split(",");
 			
 			for (int x = 0; x < aux1.length; x ++ ) {
