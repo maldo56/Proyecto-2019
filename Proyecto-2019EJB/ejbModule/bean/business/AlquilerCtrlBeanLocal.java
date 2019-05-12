@@ -9,7 +9,7 @@ import obj.dto.DtoAlquiler;
 @Local
 public interface AlquilerCtrlBeanLocal {
 
-	DtoAlquiler alquiler(char operation, DtoAlquiler alquiler);
+	DtoAlquiler alquiler(char operation, DtoAlquiler alquiler) throws Exception;
 	
-	List<DtoAlquiler> obtenerAlquileres(String username);
+	List<DtoAlquiler> obtenerAlquileres(String username) throws Exception;
 }

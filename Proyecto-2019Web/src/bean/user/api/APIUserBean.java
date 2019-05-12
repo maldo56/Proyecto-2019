@@ -1,6 +1,8 @@
 package bean.user.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -20,6 +22,7 @@ import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
 import obj.dto.DtoUsuario;
 import obj.dto.DtoAdmin;
+import obj.dto.DtoAlquiler;
 
 
 @Stateless
@@ -40,8 +43,23 @@ public class APIUserBean {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public DtoUsuario login(@QueryParam("username") String username, @QueryParam("password") String password) {
-    	return buissnes.login(username, password);
+    public Map<String, Object> login(@QueryParam("username") String username, @QueryParam("password") String password) {
+    	
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		DtoUsuario a = buissnes.login(username, password);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+ 	
+    	return resp;
     }
     
     
@@ -49,46 +67,115 @@ public class APIUserBean {
 	@Path("/client/abm/{operation}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean createClient(@PathParam("operation") char operation, DtoClient client) {
+    public Map<String, Object> createClient(@PathParam("operation") char operation, DtoClient client) {
     	
-    	return buissnes.ABMClient(operation, client);
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		boolean a = buissnes.ABMClient(operation, client);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
     @POST
 	@Path("/admin/abm/{operation}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean createAdmin(@PathParam("operation") char operation, DtoAdmin admin) {
+    public Map<String, Object> createAdmin(@PathParam("operation") char operation, DtoAdmin admin) {
     	
-    	return buissnes.ABMAdmin(operation, admin);
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		boolean a = buissnes.ABMAdmin(operation, admin);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
 
     @POST
 	@Path("/movimiento")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean createMovimiento(DtoMovimiento movimiento) {
+    public Map<String, Object> createMovimiento(DtoMovimiento movimiento) {
     	    	
+    	Map<String, Object> resp = new HashMap();
     	
-    	return buissnes.createMovimiento(movimiento);
+    	try {
+    		boolean a = buissnes.createMovimiento(movimiento);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
     @POST
     @Path("/parametro/abm/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean ABMParametro(@PathParam("operation") char operation, DtoParm parm) {
+    public Map<String, Object> ABMParametro(@PathParam("operation") char operation, DtoParm parm) {
     	
-    	return buissnes.ABMParametro(operation, parm);
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		boolean a = buissnes.ABMParametro(operation, parm);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
     @POST
     @Path("/alquiler/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean empezarAlquiler(@PathParam("operation") char operation, DtoParm parm) {
+    public Map<String, Object> empezarAlquiler(@PathParam("operation") char operation, DtoParm parm) {
     	
-    	return buissnes.ABMParametro(operation, parm);
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		boolean a = buissnes.ABMParametro(operation, parm);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
     
@@ -96,9 +183,23 @@ public class APIUserBean {
     @Path("/recargar")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Boolean recargarSaldo(@QueryParam("username") String username, @QueryParam("guidpaypal") String guidpaypal, @QueryParam("monto") float monto, @QueryParam("moneda") String moneda) {
+    public Map<String, Object> recargarSaldo(@QueryParam("username") String username, @QueryParam("guidpaypal") String guidpaypal, @QueryParam("monto") float monto, @QueryParam("moneda") String moneda) {
     	
-    	return buissnes.recargarSaldo(username, guidpaypal, monto, moneda);
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		boolean a = buissnes.recargarSaldo(username, guidpaypal, monto, moneda);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
     
@@ -109,45 +210,98 @@ public class APIUserBean {
     @Path("/movimientos")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public List<DtoMovimiento> obtenerMovimientos(@QueryParam("client") String client) {
+    public Map<String, Object> obtenerMovimientos(@QueryParam("client") String client) {
     	
-    	if ( client.equals("") || client == null ) {
-    		System.out.println("Todos los movimientos");
-    	} else {
-    		System.out.println("Movimientos de " + client);
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		if ( client.equals("") || client == null ) {
+        		System.out.println("Todos los movimientos");
+        	} else {
+        		System.out.println("Movimientos de " + client);
+        	}
+        	
+        	List<DtoMovimiento> a = buissnes.obtenerMovimientos(client);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
     	}
     	
-    	return buissnes.obtenerMovimientos(client);
+    	return resp;
     }
     
     @GET
     @Path("/cliente")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public DtoClient obtenerCliente(@QueryParam("username") String username) {
+    public Map<String, Object> obtenerCliente(@QueryParam("username") String username) {
     	
+    	Map<String, Object> resp = new HashMap();
     	
-    	return buissnes.obtenerCliente(username);
+    	try {
+    		DtoClient a = buissnes.obtenerCliente(username);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
     @GET
     @Path("/parametro")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public DtoParm obtenerParametro(@QueryParam("key") String key) {
+    public Map<String, Object> obtenerParametro(@QueryParam("key") String key) {
     	
+    	Map<String, Object> resp = new HashMap();
     	
-    	return buissnes.obtenerParametro(key);
+    	try {
+    		DtoParm a = buissnes.obtenerParametro(key);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
     @GET
     @Path("/tiempodisponible")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Float obtenerTiempoDisponible(@QueryParam("username") String username) {
+    public Map<String, Object> obtenerTiempoDisponible(@QueryParam("username") String username) {
     	
+    	Map<String, Object> resp = new HashMap();
     	
-    	return buissnes.obtenerTiempoDisponible(username);
+    	try {
+    		float a = buissnes.obtenerTiempoDisponible(username);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
 }

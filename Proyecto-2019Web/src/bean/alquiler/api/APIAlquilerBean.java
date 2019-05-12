@@ -1,6 +1,8 @@
 package bean.alquiler.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -38,9 +40,26 @@ public class APIAlquilerBean {
     @Path("/alquiler/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public DtoAlquiler alquiler(@PathParam("operation") char operation, DtoAlquiler alquiler) {
+    public Map<String, Object> alquiler(@PathParam("operation") char operation, DtoAlquiler alquiler) {
     	
-    	return buissnes.alquiler(operation, alquiler);
+//    	Response resp = new Response();
+    	Map<String, Object> resp = new HashMap();
+    	
+      
+    	try {
+    		DtoAlquiler a = buissnes.alquiler(operation, alquiler);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	
+    	return resp;
     }
     
     
@@ -51,9 +70,23 @@ public class APIAlquilerBean {
     @Path("/porcliente")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public List<DtoAlquiler> obtenerAlquileres(@QueryParam("username") String username) {
+    public Map<String, Object> obtenerAlquileres(@QueryParam("username") String username) {
+    	
+    	Map<String, Object> resp = new HashMap();
     	
     	
-    	return buissnes.obtenerAlquileres(username);
+    	try {
+    		List<DtoAlquiler> a = buissnes.obtenerAlquileres(username);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
 }

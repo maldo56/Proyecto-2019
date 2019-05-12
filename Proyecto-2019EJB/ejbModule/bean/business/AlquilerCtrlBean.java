@@ -27,7 +27,7 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
         // TODO Auto-generated constructor stub
     }
 
-    public DtoAlquiler alquiler(char operation, DtoAlquiler alquiler) {
+    public DtoAlquiler alquiler(char operation, DtoAlquiler alquiler) throws Exception {
     	
     	if ( operation == 'E' ) {
     		
@@ -43,7 +43,7 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
     	return null;
     }
     
-    public List<DtoAlquiler> obtenerAlquileres(String username) {
+    public List<DtoAlquiler> obtenerAlquileres(String username) throws Exception {
     	return database.obtenerAlquileres(username);
     }
 }

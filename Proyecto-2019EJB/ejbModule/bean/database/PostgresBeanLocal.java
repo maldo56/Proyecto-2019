@@ -18,26 +18,26 @@ import obj.dto.DtoUsuario;
 @Local
 public interface PostgresBeanLocal {
 
-	DtoUsuario login(String username, String password);
+	DtoUsuario login(String username, String password) throws Exception;
 	
-	Boolean ABScooter(char operation, String guid);
-	Boolean MScooter(String campo, String guid, String value);
-	Boolean ABMClient(char operation, DtoClient client);
-	Boolean ABMAdmin(char operation, DtoAdmin client);
-	Boolean ABMParametro(char operation, DtoParm parm);
-	Boolean createMovimiento(DtoMovimiento movimiento);
-	DtoAlquiler altaAlquiler(DtoAlquiler alquiler);
+	Boolean ABScooter(char operation, String guid) throws Exception;
+	Boolean MScooter(String campo, String guid, String value) throws Exception;
+	Boolean ABMClient(char operation, DtoClient client) throws Exception;
+	Boolean ABMAdmin(char operation, DtoAdmin client) throws Exception;
+	Boolean ABMParametro(char operation, DtoParm parm) throws Exception;
+	Boolean createMovimiento(DtoMovimiento movimiento) throws Exception;
+	DtoAlquiler altaAlquiler(DtoAlquiler alquiler) throws Exception;
 	
-	Boolean recargarSaldoCliente(String username, float monto);
+	Boolean recargarSaldoCliente(String username, float monto) throws Exception;
 	
-	DtoAlquiler terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones);
+	DtoAlquiler terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones) throws Exception;
 	
-	List<DtoMovimiento> obtenerMovimientos(String cliente);
-	DtoClient obtenerCliente(String username);
-	DtoParm obtenerParametro(String key);
-	List<DtoAlquiler> obtenerAlquileres(String username);
-	List<DtoScooter> scootersDisponibles();
-	float obtenerTiempoDisponible(String username);
-	String scooterEstaAlquilado(String guid);
+	List<DtoMovimiento> obtenerMovimientos(String cliente) throws Exception;
+	DtoClient obtenerCliente(String username) throws Exception;
+	DtoParm obtenerParametro(String key) throws Exception;
+	List<DtoAlquiler> obtenerAlquileres(String username) throws Exception;
+	List<DtoScooter> scootersDisponibles() throws Exception;
+	float obtenerTiempoDisponible(String username) throws Exception;
+	String scooterEstaAlquilado(String guid) throws Exception;
 	
 }

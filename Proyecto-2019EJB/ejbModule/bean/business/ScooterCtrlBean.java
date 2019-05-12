@@ -28,20 +28,20 @@ public class ScooterCtrlBean implements ScooterCtrlBeanLocal {
         // TODO Auto-generated constructor stub
     }
     
-    public Boolean AB(char operation, String guid) {
+    public Boolean AB(char operation, String guid) throws Exception {
     	
     	return postgres.ABScooter(operation, guid);
     }
     
-    public Boolean M(String campo, String guid, String value) {
+    public Boolean M(String campo, String guid, String value) throws Exception {
     	return postgres.MScooter(campo, guid, value);
     }
     
-    public List<DtoScooter> scootersDisponibles() {
+    public List<DtoScooter> scootersDisponibles() throws Exception {
     	return postgres.scootersDisponibles();
     }
     
-    public String estaAlquilado(String guid) {
+    public String estaAlquilado(String guid) throws Exception {
     	return postgres.scooterEstaAlquilado(guid);
     }
 }

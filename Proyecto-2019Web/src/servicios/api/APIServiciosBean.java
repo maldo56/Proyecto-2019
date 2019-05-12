@@ -81,7 +81,14 @@ public class APIServiciosBean {
         if ( estado.equals("esperando") ) {
         	System.out.println("esperando");
         	
-        	String msg = buissnes.estaAlquilado(id);
+        	String msg = "";
+        	
+        	try {
+        		msg = buissnes.estaAlquilado(id);
+        	} catch ( Exception e ) {
+        		
+        	}
+        	
         	
         	if ( msg.equals("false") ) {
         		msg = "terminado&" + msg;

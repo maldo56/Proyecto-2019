@@ -29,34 +29,34 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
         // TODO Auto-generated constructor stub
     }
     
-    public DtoUsuario login(String username, String password) {
+    public DtoUsuario login(String username, String password) throws Exception {
     	return database.login(username, password);
     }
     
     
   //-------------------------------  ABM  ----------------------------------------------------//
     
-    public Boolean ABMClient(char operation, DtoClient client) {
+    public Boolean ABMClient(char operation, DtoClient client) throws Exception {
     	
     	return database.ABMClient(operation, client);
     }
 
-    public Boolean ABMAdmin(char operation, DtoAdmin admin) {
+    public Boolean ABMAdmin(char operation, DtoAdmin admin) throws Exception {
     	
     	return database.ABMAdmin(operation, admin);
     }
     
-    public Boolean createMovimiento(DtoMovimiento movimiento) {
+    public Boolean createMovimiento(DtoMovimiento movimiento) throws Exception {
     	
     	return database.createMovimiento(movimiento);
     }
     
-    public Boolean ABMParametro(char operation, DtoParm parm) {
+    public Boolean ABMParametro(char operation, DtoParm parm) throws Exception {
     	return database.ABMParametro(operation, parm);
     }
     
     
-    public Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda) {
+    public Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda) throws Exception {
     	
     	DtoMovimiento movimiento = new DtoMovimiento();
     	movimiento.setMoneda(moneda);
@@ -72,19 +72,19 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     
     //-------------------------------  GET  ----------------------------------------------------//
     
-    public List<DtoMovimiento> obtenerMovimientos(String cliente) {
+    public List<DtoMovimiento> obtenerMovimientos(String cliente) throws Exception {
     	return database.obtenerMovimientos(cliente);
     }
     
-    public DtoClient obtenerCliente(String username) {
+    public DtoClient obtenerCliente(String username) throws Exception {
     	return database.obtenerCliente(username);
     }
     
-    public DtoParm obtenerParametro(String key) {
+    public DtoParm obtenerParametro(String key) throws Exception {
     	return database.obtenerParametro(key);
     }
     
-    public Float obtenerTiempoDisponible(String username) {
+    public Float obtenerTiempoDisponible(String username) throws Exception {
     	return database.obtenerTiempoDisponible(username);
     }
 }

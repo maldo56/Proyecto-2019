@@ -15,18 +15,18 @@ import obj.dto.DtoAdmin;
 @Local
 public interface UserCtrlBeanLocal {
 
-	DtoUsuario login(String username, String password);
+	DtoUsuario login(String username, String password) throws Exception;
 	
-	Boolean ABMClient(char operation, DtoClient client);
-	Boolean ABMAdmin(char operation, DtoAdmin admin);
-	Boolean createMovimiento(DtoMovimiento movimiento);
-	Boolean ABMParametro(char operation, DtoParm parm);
-	Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda);
+	Boolean ABMClient(char operation, DtoClient client) throws Exception;
+	Boolean ABMAdmin(char operation, DtoAdmin admin) throws Exception;
+	Boolean createMovimiento(DtoMovimiento movimiento) throws Exception;
+	Boolean ABMParametro(char operation, DtoParm parm) throws Exception;
+	Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda) throws Exception;
 	
 	
-	List<DtoMovimiento> obtenerMovimientos(String cliente);
-	DtoClient obtenerCliente(String username);
-	DtoParm obtenerParametro(String key);
-	Float obtenerTiempoDisponible(String username);
+	List<DtoMovimiento> obtenerMovimientos(String cliente) throws Exception;
+	DtoClient obtenerCliente(String username) throws Exception;
+	DtoParm obtenerParametro(String key) throws Exception;
+	Float obtenerTiempoDisponible(String username) throws Exception;
 	
 }

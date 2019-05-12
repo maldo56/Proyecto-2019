@@ -1,6 +1,8 @@
 package bean.scooter.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -14,7 +16,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import obj.dto.DtoScooter;
-
 import bean.business.ScooterCtrlBeanLocal;
 
 /**
@@ -41,18 +42,46 @@ public class APIScooterBean {
 	@Path("/ab/{operation}")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public Boolean AB(@PathParam("operation") char operation, @QueryParam("guid") String guid) {
+	public Map<String, Object> AB(@PathParam("operation") char operation, @QueryParam("guid") String guid) {
 
-    	return business.AB(operation, guid);
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		boolean a = business.AB(operation, guid);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
 
     @POST
 	@Path("/m/{campo}")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public Boolean M(@PathParam("campo") String campo, @QueryParam("guid") String guid, @QueryParam("value") String value) {
+	public Map<String, Object> M(@PathParam("campo") String campo, @QueryParam("guid") String guid, @QueryParam("value") String value) {
 
-    	return business.M(campo, guid, value);
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		boolean a = business.M(campo, guid, value);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
     
@@ -63,9 +92,23 @@ public class APIScooterBean {
     @Path("/disponibles")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public List<DtoScooter> scootersDisponibles() {
+	public Map<String, Object> scootersDisponibles() {
 
-    	return business.scootersDisponibles();
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		List<DtoScooter> a = business.scootersDisponibles();
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	   	
+    	return resp;
     }
     
     
@@ -73,9 +116,23 @@ public class APIScooterBean {
     @Path("/isAlquilado")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public String estaAlquilado(@QueryParam("guid") String guid) {
+	public Map<String, Object> estaAlquilado(@QueryParam("guid") String guid) {
 
-    	return business.estaAlquilado(guid);
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		String a = business.estaAlquilado(guid);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
     }
     
 }

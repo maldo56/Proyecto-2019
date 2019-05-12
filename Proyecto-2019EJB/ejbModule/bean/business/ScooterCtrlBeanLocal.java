@@ -9,10 +9,10 @@ import obj.dto.DtoScooter;
 @Local
 public interface ScooterCtrlBeanLocal {
 
-	Boolean AB(char operation, String guid);
-	Boolean M(String campo, String guid, String value);
+	Boolean AB(char operation, String guid) throws Exception;
+	Boolean M(String campo, String guid, String value) throws Exception;
 	
-	List<DtoScooter> scootersDisponibles();
-	String estaAlquilado(String guid);
+	List<DtoScooter> scootersDisponibles() throws Exception;
+	String estaAlquilado(String guid) throws Exception;
 	
 }

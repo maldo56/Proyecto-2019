@@ -65,7 +65,7 @@ public class PostgresBean implements PostgresBeanLocal {
         // TODO Auto-generated constructor stub
     }
     
-    public DtoUsuario login(String username, String password) {
+    public DtoUsuario login(String username, String password) throws Exception {
     	
 
 		DtoUsuario user = null;
@@ -94,7 +94,7 @@ public class PostgresBean implements PostgresBeanLocal {
 			}
 			
 		} catch( Exception e ) {
-			System.out.println(e.getMessage());
+			throw new Exception("Ha ocurrido un error");
 		}
     	
     	return user;
@@ -103,7 +103,7 @@ public class PostgresBean implements PostgresBeanLocal {
     
   //--------------------------------  ABM  --------------------------------------------------------------//
     
-    public Boolean ABScooter(char operation, String guid) {
+    public Boolean ABScooter(char operation, String guid) throws Exception {
 
 		scooter entity;
 		
@@ -146,14 +146,11 @@ public class PostgresBean implements PostgresBeanLocal {
 			return true;
 			
 		} catch (Exception e) {
-			e.getMessage();
-			e.printStackTrace();
-			
-			return false;
+			throw new Exception("Ha ocurrido un error");
 		}	
     }
     
-    public Boolean ABMClient(char operation, DtoClient client) {
+    public Boolean ABMClient(char operation, DtoClient client) throws Exception {
 
 		cliente entity;
 		
@@ -203,14 +200,11 @@ public class PostgresBean implements PostgresBeanLocal {
 			return true;
 			
 		} catch (Exception e) {
-			e.getMessage();
-			e.printStackTrace();
-			
-			return false;
+			throw new Exception("Ha ocurrido un error");
 		}
     }
 
-    public Boolean ABMAdmin(char operation, DtoAdmin admin) {
+    public Boolean ABMAdmin(char operation, DtoAdmin admin) throws Exception {
 
 		administrador entity;
 		
@@ -250,14 +244,11 @@ public class PostgresBean implements PostgresBeanLocal {
 			return true;
 			
 		} catch (Exception e) {
-			e.getMessage();
-			e.printStackTrace();
-			
-			return false;
+			throw new Exception("Ha ocurrido un error");
 		}
     }
     
-    public Boolean MScooter(String campo, String guid, String value) {
+    public Boolean MScooter(String campo, String guid, String value) throws Exception {
     	
 		scooter entity;
 		
@@ -285,14 +276,11 @@ public class PostgresBean implements PostgresBeanLocal {
 			return true;
 			
 		} catch (Exception e) {
-			e.getMessage();
-			e.printStackTrace();
-			
-			return false;
+			throw new Exception("Ha ocurrido un error");
 		}
     }
     
-    public Boolean ABMParametro(char operation, DtoParm parm) {
+    public Boolean ABMParametro(char operation, DtoParm parm) throws Exception {
     	
 		parametro entity;
 		
@@ -330,14 +318,11 @@ public class PostgresBean implements PostgresBeanLocal {
 			return true;
 			
 		} catch (Exception e) {
-			e.getMessage();
-			e.printStackTrace();
-			
-			return false;
+			throw new Exception("Ha ocurrido un error");
 		}
     }
     
-    public Boolean createMovimiento(DtoMovimiento movimiento) {
+    public Boolean createMovimiento(DtoMovimiento movimiento) throws Exception {
     	
 		movimiento entity = new movimiento();
 		entity.setTimestamp(movimiento.getTimestamp());
@@ -360,14 +345,11 @@ public class PostgresBean implements PostgresBeanLocal {
 			return true;
 			
 		} catch (Exception e) {
-			e.getMessage();
-			e.printStackTrace();
-			
-			return false;
+			throw new Exception("Ha ocurrido un error");
 		}
     }
     
-    public DtoAlquiler altaAlquiler(DtoAlquiler alquiler) {
+    public DtoAlquiler altaAlquiler(DtoAlquiler alquiler) throws Exception {
     	
     	alquiler entity = new alquiler();
     	
@@ -410,14 +392,13 @@ public class PostgresBean implements PostgresBeanLocal {
 			}
 			
 		} catch (Exception e) {
-			e.getMessage();
-			e.printStackTrace();
+			throw new Exception("Ha ocurrido un error");
 		}
-    	
+		
 		return null;
     }
     
-    public DtoAlquiler terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones) {
+    public DtoAlquiler terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones) throws Exception {
     	
     	alquiler entity;
     	scooter scooter;
@@ -480,14 +461,13 @@ public class PostgresBean implements PostgresBeanLocal {
 			}
 			
 		} catch (Exception e) {
-			e.getMessage();
-			e.printStackTrace();
+			throw new Exception("Ha ocurrido un error");
 		}
 		
 		return null;
     }
     
-    public Boolean recargarSaldoCliente(String username, float monto) {
+    public Boolean recargarSaldoCliente(String username, float monto) throws Exception {
     	
     	cliente entity;
 		
@@ -502,10 +482,7 @@ public class PostgresBean implements PostgresBeanLocal {
 			return true;
 			
 		} catch (Exception e) {
-			e.getMessage();
-			e.printStackTrace();
-			
-			return false;
+			throw new Exception("Ha ocurrido un error");
 		}
 		
 		
@@ -514,7 +491,7 @@ public class PostgresBean implements PostgresBeanLocal {
     
     //--------------------------------  GET  --------------------------------------------------------------//
     
-    public List<DtoMovimiento> obtenerMovimientos(String cliente) {
+    public List<DtoMovimiento> obtenerMovimientos(String cliente) throws Exception {
 
 		List<DtoMovimiento> movimientos = new ArrayList<DtoMovimiento>();
 		
@@ -549,13 +526,13 @@ public class PostgresBean implements PostgresBeanLocal {
 			}
 			
 		} catch( Exception e ) {
-			System.out.println(e.getMessage());
+			throw new Exception("Ha ocurrido un error");
 		}
     	
     	return movimientos;
     }
     
-    public DtoClient obtenerCliente(String username) {
+    public DtoClient obtenerCliente(String username) throws Exception {
     	
     	try {
     		cliente entity = em.find(cliente.class, username);
@@ -572,13 +549,12 @@ public class PostgresBean implements PostgresBeanLocal {
     		
     		return cliente;
     	} catch ( Exception e ) {
-    		System.out.println(e.getMessage());
+    		throw new Exception("Ha ocurrido un error");
     	}
     	 
-    	return null;
     }
     
-    public DtoParm obtenerParametro(String key) {
+    public DtoParm obtenerParametro(String key) throws Exception {
     	
     	try {
     		parametro entity = em.find(parametro.class, key);
@@ -590,13 +566,12 @@ public class PostgresBean implements PostgresBeanLocal {
     		
     		return param;
     	} catch ( Exception e ) {
-    		System.out.println(e.getMessage());
+    		throw new Exception("Ha ocurrido un error");
     	}
     	 
-    	return null;
     }
     
-    public List<DtoAlquiler> obtenerAlquileres(String username) {
+    public List<DtoAlquiler> obtenerAlquileres(String username) throws Exception {
     	
     	List<DtoAlquiler> alquileres = new ArrayList<DtoAlquiler>();
 		List<String> strgeometrias;
@@ -645,14 +620,14 @@ public class PostgresBean implements PostgresBeanLocal {
 			}
 			
 		} catch( Exception e ) {
-			System.out.println(e.getMessage());
+			throw new Exception("Ha ocurrido un error");
 		}
     	
     	return alquileres;
     	
     }
     
-    public List<DtoScooter> scootersDisponibles() {
+    public List<DtoScooter> scootersDisponibles() throws Exception {
     	
     	List<DtoScooter> scooters = new ArrayList<DtoScooter>();
     	List<String> strgeometrias;
@@ -698,14 +673,14 @@ public class PostgresBean implements PostgresBeanLocal {
 			}
 			
 		} catch( Exception e ) {
-			System.out.println(e.getMessage());
+			throw new Exception("Ha ocurrido un error");
 		}
     	
     	return scooters;
     	
     }
 
-    public float obtenerTiempoDisponible(String username) {
+    public float obtenerTiempoDisponible(String username) throws Exception {
     	
     	parametro parametro = null;
     	Float tarifa;
@@ -719,20 +694,18 @@ public class PostgresBean implements PostgresBeanLocal {
     		return ( entity.getSaldo() / tarifa );
     		
     	} catch( Exception e ) {
-    		System.out.println(e.getMessage());
+    		throw new Exception("Ha ocurrido un error");
     	}
-    	
-    	return (float) 0;
     }
 
-    public String scooterEstaAlquilado(String guid) {
+    public String scooterEstaAlquilado(String guid) throws Exception {
     	
     	try {
     		scooter entity = em.find(scooter.class, guid);
     		
     		if ( entity.getIsRented() ) {
     			
-    			Query q = em.createQuery("select p from alquiler p where p.scooter.guid = :guid order by timestamp");
+    			Query q = em.createQuery("select p from alquiler p where p.scooter.guid = :guid order by timestamp desc");
     			q.setParameter("guid", guid);
     			
     			DtoAlquiler aux;
@@ -746,7 +719,7 @@ public class PostgresBean implements PostgresBeanLocal {
     		
     		
     	} catch ( Exception e ) {
-    		System.out.println(e.getMessage());
+    		throw new Exception("Ha ocurrido un error");
     	}
     	
     	return "false";
