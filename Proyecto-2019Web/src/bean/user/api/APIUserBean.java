@@ -17,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import bean.business.UserCtrlBeanLocal;
+import exceptions.ImageException;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
@@ -70,17 +71,29 @@ public class APIUserBean {
     public Map<String, Object> createClient(@PathParam("operation") char operation, DtoClient client) {
     	
     	Map<String, Object> resp = new HashMap();
+    	boolean a = false;
     	
     	try {
-    		boolean a = buissnes.ABMClient(operation, client);
+    		a = buissnes.ABMClient(operation, client);
     		resp.put("success", true);
     		resp.put("message", "");
     		resp.put("body", a);
     		
     	} catch (Exception e) {
-    		resp.put("success", false);
-    		resp.put("message", e.getMessage() + ".");
-    		resp.put("body", null);
+    		
+    		if (e instanceof ImageException) {
+    			
+    			ImageException ie = (ImageException) e;
+    			
+    			resp.put("success", ie.isSuccess());
+        		resp.put("message", e.getMessage() + ".");
+        		resp.put("body", a);
+    		} else {
+    			resp.put("success", false);
+        		resp.put("message", e.getMessage() + ".");
+        		resp.put("body", null);
+    		}
+    		
     	}
     	
     	return resp;

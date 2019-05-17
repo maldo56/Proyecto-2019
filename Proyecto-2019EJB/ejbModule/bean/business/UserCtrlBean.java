@@ -45,6 +45,8 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     
     public Boolean ABMClient(char operation, DtoClient client) throws Exception {
     	
+    	boolean result = false;
+    	
     	try {
     		
     		if ( client.getUrlphoto() == null || client.getUrlphoto().isEmpty() ) {
@@ -71,18 +73,23 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
         				System.out.println(uploadResult.toString());
         				
         			} else {
-        				throw new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
+        				client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
+        				result = database.ABMClient(operation, client);
+        				
+        				ImageException ie = new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
+        				ie.setSuccess(result);
+        				
+        				throw ie;
         			}
     				
     			} catch ( Exception e) {
-    				throw new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
+    				throw e;
     			}
     		}
      		
     	} catch ( Exception e ) {
-    		
+    		throw e;
     	}
-    	
     	
     	return database.ABMClient(operation, client);
     }
