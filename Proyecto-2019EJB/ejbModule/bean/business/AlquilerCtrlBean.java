@@ -43,6 +43,10 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
     	return null;
     }
     
+    public DtoAlquiler obtenerAlquiler(String guid) throws Exception {
+    	return database.obtenerAlquiler(guid);
+    }
+    
     public List<DtoAlquiler> obtenerAlquileres(String username) throws Exception {
     	return database.obtenerAlquileres(username);
     }

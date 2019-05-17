@@ -57,8 +57,9 @@ public class APIServiciosBean {
 	@OnMessage
     public void handleMessage(String message, Session session) throws IOException {
         System.out.println("WebSocket: Nuevo mensaje ==> " + message.toString());
- 
-        String estado;
+
+
+        boolean alquilado;
         String id;
         String alquiler;
         float latitude;
@@ -67,7 +68,7 @@ public class APIServiciosBean {
         JsonReader jsonReader = Json.createReader(new StringReader(message));
 		JsonObject object = jsonReader.readObject();
 		
-		estado = object.getString("estado");
+		alquilado = object.getBoolean("alquilado");
 		id = object.getString("id");
 		alquiler = object.getString("alquiler");
 		
@@ -78,7 +79,7 @@ public class APIServiciosBean {
 		longitude = (float) aux.doubleValue();
 		
         
-        if ( estado.equals("esperando") ) {
+        if ( !alquilado ) {
         	System.out.println("esperando");
         	
         	String msg = "";
@@ -91,13 +92,19 @@ public class APIServiciosBean {
         	
         	
         	if ( msg.equals("false") ) {
-        		msg = "terminado&" + msg;
+        		
+//        		"{\"alquilado\":\"esperando\",\"id\":\"" + scooterGuid + "\",\"alquiler\":\" \",\"latitude\":0,\"longitude\":0}";
+        		
+        		msg = "{\"alquilado\":false,\"id\":\"" + id + "\",\"alquiler\":\" \",\"latitude\":-1,\"longitude\":-1}";
+        		
         	} else {
-        		msg = "alquilado&" + msg;
+        		msg = "{\"alquilado\":true,\"id\":\"" + id + "\",\"alquiler\":\"" + msg + "\",\"latitude\":-1,\"longitude\":-1}";
         	}
         	
+        	System.out.println("Mandando mensaje");
+        	
         	session.getBasicRemote().sendText(msg);
-        } else if ( estado.equals("alquilado") ) {
+        } else {
         	
         	try {
             	

@@ -1,18 +1,25 @@
 package bean.business;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
 import bean.database.PostgresBeanLocal;
+import exceptions.ImageException;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
 import obj.dto.DtoUsuario;
+import sun.misc.BASE64Decoder;
 
 
 /**
@@ -37,6 +44,45 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
   //-------------------------------  ABM  ----------------------------------------------------//
     
     public Boolean ABMClient(char operation, DtoClient client) throws Exception {
+    	
+    	try {
+    		
+    		if ( client.getUrlphoto() == null || client.getUrlphoto().isEmpty() ) {
+    			client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
+    		} else {
+    			
+    			try {
+    				
+    				if ( client.getUrlphoto().matches("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$") ) {
+        				
+        				byte[] imageByte;
+
+        				BASE64Decoder decoder = new BASE64Decoder();
+        				imageByte = decoder.decodeBuffer(client.getUrlphoto());
+        				
+        				Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+        						  "cloud_name", "dnieertcs",
+        						  "api_key", "282786385515145",
+        						  "api_secret", "qWy6caiRGyo-l1TK41pjUcTIumM"));
+        				
+        				File file = new File("my_image.jpg");
+        				Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+        				
+        				System.out.println(uploadResult.toString());
+        				
+        			} else {
+        				throw new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
+        			}
+    				
+    			} catch ( Exception e) {
+    				throw new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
+    			}
+    		}
+     		
+    	} catch ( Exception e ) {
+    		
+    	}
+    	
     	
     	return database.ABMClient(operation, client);
     }

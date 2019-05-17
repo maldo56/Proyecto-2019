@@ -65,6 +65,29 @@ public class APIAlquilerBean {
     
     //--------------------------------------  GET  ---------------------------------------------------------//
 
+    @GET
+    @Path("/find")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Map<String, Object> obtenerAlquiler(@QueryParam("guid") String guid) {
+    	
+    	Map<String, Object> resp = new HashMap();
+    	
+    	
+    	try {
+    		DtoAlquiler a = buissnes.obtenerAlquiler(guid);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    }
     
     @GET
     @Path("/porcliente")

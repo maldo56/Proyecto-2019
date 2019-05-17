@@ -39,5 +39,6 @@ public interface PostgresBeanLocal {
 	List<DtoScooter> scootersDisponibles() throws Exception;
 	float obtenerTiempoDisponible(String username) throws Exception;
 	String scooterEstaAlquilado(String guid) throws Exception;
+	DtoAlquiler obtenerAlquiler(String guid) throws Exception;
 	
 }

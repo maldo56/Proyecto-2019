@@ -724,4 +724,35 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     	return "false";
     }
+
+    public DtoAlquiler obtenerAlquiler(String guid) throws Exception {
+    	
+    	try {
+    		alquiler entity = em.find(alquiler.class, guid);
+    		
+    		DtoAlquiler alquiler = new DtoAlquiler();
+    		
+    		alquiler.setGuid(entity.getGuid());
+    		alquiler.setGuidscooter(entity.getScooter().getGuid());
+    		alquiler.setPrice(entity.getPrice());
+    		alquiler.setDuration(entity.getDuration());
+    		alquiler.setTimestamp(entity.getTimestamp());
+    		alquiler.setCliente(entity.getCliente().getUsername());
+    		
+    		String srtquery = "select st_astext(a.recorrido) "
+					+ "from alquiler as a "
+					+ "where a.guid='" + guid + "'";
+			
+			Query q = em.createNativeQuery(srtquery);
+			
+			String strgeometria = (String) q.getResultList().get(0);
+    		
+			alquiler.setGeometria(Utils.kmltoGeometria(strgeometria));
+			
+    		return alquiler;
+    	} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    }
+
 }
