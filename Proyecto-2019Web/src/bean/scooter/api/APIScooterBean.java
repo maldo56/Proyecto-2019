@@ -15,6 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import obj.dto.DtoGeometria;
 import obj.dto.DtoScooter;
 import bean.business.ScooterCtrlBeanLocal;
 
@@ -84,6 +85,28 @@ public class APIScooterBean {
     	return resp;
     }
     
+    @POST
+	@Path("/area/{operation}")
+    @Consumes( {"application/json"} )
+	@Produces( {"application/json"} )
+	public Map<String, Object> abArea(@PathParam("operation") char operation, DtoGeometria geometry) {
+
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		boolean a = business.abArea(operation, geometry);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    }
     
     //-----------------------------------------  GET  ------------------------------------------------------------------------//
     
@@ -122,6 +145,29 @@ public class APIScooterBean {
     	
     	try {
     		String a = business.estaAlquilado(guid);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    }
+    
+    @GET
+    @Path("/isAlquilado")
+    @Consumes( {"application/json"} )
+	@Produces( {"application/json"} )
+	public Map<String, Object> obtenerArea() {
+
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		DtoGeometria a = business.obtenerArea();
     		resp.put("success", true);
     		resp.put("message", "");
     		resp.put("body", a);

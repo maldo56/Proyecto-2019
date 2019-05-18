@@ -30,6 +30,7 @@ import bean.scooterclient.database.MongoBeanLocal;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoAlquiler;
 import obj.dto.DtoClient;
+import obj.dto.DtoGeometria;
 import obj.dto.DtoLocation;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
@@ -42,6 +43,7 @@ import obj.entity.movimiento;
 import obj.entity.parametro;
 import obj.entity.scooter;
 import obj.entity.usuario;
+import obj.entity.zona;
 import utils.Utils;
 
 import javax.ejb.TransactionManagementType;
@@ -488,6 +490,27 @@ public class PostgresBean implements PostgresBeanLocal {
 		
     }
     
+    public Boolean abArea(char operation, DtoGeometria geometry) throws Exception {
+    	
+    	try {
+    		zona entity = new zona();
+    		
+    		transaction.begin();
+    		em.persist(entity);
+    		transaction.commit();
+    		
+    		String kml = Utils.geometriaToKml(geometry);
+    		
+    		transaction.begin();
+			em.createNativeQuery("UPDATE alquiler p SET recorrido = ST_GeomFromText('" + kml + "', 4326) WHERE guid = \'" + entity.getGuid() + "\'").executeUpdate();
+			transaction.commit();
+    		
+			return true;
+    	} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    	
+    }
     
     //--------------------------------  GET  --------------------------------------------------------------//
     
@@ -755,4 +778,23 @@ public class PostgresBean implements PostgresBeanLocal {
     	}
     }
 
+    public DtoGeometria obtenerArea() throws Exception {
+    	
+    	try {
+    		DtoGeometria geom = new DtoGeometria();
+    		String srtquery = "select st_astext(st_union(st_transform(zona::geometry, 4326))) FROM zona;";
+			
+			Query q = em.createNativeQuery(srtquery);
+			
+			String strgeometria = (String) q.getResultList().get(0);
+    		
+			geom = Utils.kmlMultiLinestringToGeometryPolygon(strgeometria);
+			
+    		return geom;
+    	} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    	
+    }
+    
 }

@@ -7,6 +7,7 @@ import javax.ejb.Local;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoAlquiler;
 import obj.dto.DtoClient;
+import obj.dto.DtoGeometria;
 import obj.dto.DtoLocation;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
@@ -27,6 +28,7 @@ public interface PostgresBeanLocal {
 	Boolean ABMParametro(char operation, DtoParm parm) throws Exception;
 	Boolean createMovimiento(DtoMovimiento movimiento) throws Exception;
 	DtoAlquiler altaAlquiler(DtoAlquiler alquiler) throws Exception;
+	Boolean abArea(char operation, DtoGeometria geometry) throws Exception;
 	
 	Boolean recargarSaldoCliente(String username, float monto) throws Exception;
 	
@@ -40,5 +42,6 @@ public interface PostgresBeanLocal {
 	float obtenerTiempoDisponible(String username) throws Exception;
 	String scooterEstaAlquilado(String guid) throws Exception;
 	DtoAlquiler obtenerAlquiler(String guid) throws Exception;
+	DtoGeometria obtenerArea() throws Exception;
 	
 }

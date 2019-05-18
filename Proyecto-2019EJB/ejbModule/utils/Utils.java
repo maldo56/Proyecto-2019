@@ -32,7 +32,27 @@ public class Utils {
 		
 		return "LINESTRING(" + kml + ")";
 	}
-	
+
+	public static String geometriaToKml(DtoGeometria geometry) {
+		String kml = "";
+		
+		kml = geometry.getType();
+		
+		if ( geometry.getPuntos() == null || geometry.getPuntos().size() == 0 ) {
+			kml = kml + "()";
+		} else {
+			
+			kml = kml + "(" + geometry.getPuntos().get(0).getLat() + " " + geometry.getPuntos().get(0).getLng();
+			
+			for ( int x = 1; x < geometry.getPuntos().size(); x ++ ) {
+				kml = kml + "," + geometry.getPuntos().get(x).getLat() + " " + geometry.getPuntos().get(x).getLng();
+			}
+			
+			kml = kml + ")";
+		}
+		
+		return kml;
+	}
 	
 	public static DtoGeometria kmltoGeometria(String kml) {
 		
@@ -67,6 +87,50 @@ public class Utils {
 			
 			return geom;
 		} catch( Exception e ) {
+			System.out.println(e.getMessage());
+		}
+		
+		return null;
+	}
+	
+	public static DtoGeometria kmlMultiLinestringToGeometryPolygon(String kml) {
+		
+//		MULTILINESTRING((-34.898994 -56.168793,-34.898697 -56.167763),(0 0,1 1),(1 1,2 2),(2 2,3 3),(3 3,4 4),(4 4,5 5),(5 5,6 6),(6 6,7 7),(7 7,8 8),(8 8,9 9))
+		String aux = "";
+		String[] auxPoints;
+		
+		String[] auxcoord;
+		DtoGeometria geom = new DtoGeometria();
+		
+		List<DtoPunto> puntos = new ArrayList<DtoPunto>();
+		DtoPunto punto;
+		
+		try {
+			
+			geom.setType(kml.substring(0, 14));
+			
+			aux = kml.substring(15, kml.length());
+			
+			aux = aux.replace("(", "");
+			aux = aux.replace(")", "");
+			
+			auxPoints = aux.split(",");
+			
+			for ( int x = 0; x < auxPoints.length; x ++ ) {
+				auxcoord = auxPoints[x].split(" ");
+				
+				punto = new DtoPunto();
+				punto.setLat(Float.parseFloat(auxcoord[0]));
+				punto.setLng(Float.parseFloat(auxcoord[1]));
+				
+				puntos.add(punto);
+			}
+			
+			geom.setPuntos(puntos);
+			
+			return geom;
+			
+		} catch ( Exception e ) {
 			System.out.println(e.getMessage());
 		}
 		

@@ -54,24 +54,34 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     		} else {
     			
     			try {
-    				
     				if ( client.getUrlphoto().matches("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$") ) {
         				
-        				byte[] imageByte;
+    					try {
+    						byte[] imageByte;
 
-        				BASE64Decoder decoder = new BASE64Decoder();
-        				imageByte = decoder.decodeBuffer(client.getUrlphoto());
-        				
-        				Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-        						  "cloud_name", "dnieertcs",
-        						  "api_key", "282786385515145",
-        						  "api_secret", "qWy6caiRGyo-l1TK41pjUcTIumM"));
-        				
-        				File file = new File("my_image.jpg");
-        				Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-        				
-        				System.out.println(uploadResult.toString());
-        				
+            				BASE64Decoder decoder = new BASE64Decoder();
+            				imageByte = decoder.decodeBuffer(client.getUrlphoto());
+            				
+            				Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+            						  "cloud_name", "dnieertcs",
+            						  "api_key", "282786385515145",
+            						  "api_secret", "qWy6caiRGyo-l1TK41pjUcTIumM"));
+            				
+            				File file = new File("my_image.jpg");
+            				Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+            				
+            				System.out.println(uploadResult.toString());
+            				
+    					} catch ( Exception e ) {
+    						client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
+            				result = database.ABMClient(operation, client);
+            				
+            				ImageException ie = new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
+            				ie.setSuccess(result);
+            				
+            				throw ie;
+    					}
+						
         			} else {
         				client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
         				result = database.ABMClient(operation, client);

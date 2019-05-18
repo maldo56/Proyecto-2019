@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import bean.database.PostgresBeanLocal;
 import bean.scooterclient.database.MongoBeanLocal;
+import obj.dto.DtoGeometria;
 import obj.dto.DtoScooter;
 
 /**
@@ -37,11 +38,19 @@ public class ScooterCtrlBean implements ScooterCtrlBeanLocal {
     	return postgres.MScooter(campo, guid, value);
     }
     
+    public Boolean abArea(char operation, DtoGeometria geometry) throws Exception {
+    	return postgres.abArea(operation, geometry);
+    }
+    
     public List<DtoScooter> scootersDisponibles() throws Exception {
     	return postgres.scootersDisponibles();
     }
     
     public String estaAlquilado(String guid) throws Exception {
     	return postgres.scooterEstaAlquilado(guid);
+    }
+    
+    public DtoGeometria obtenerArea() throws Exception {
+    	return postgres.obtenerArea();
     }
 }
