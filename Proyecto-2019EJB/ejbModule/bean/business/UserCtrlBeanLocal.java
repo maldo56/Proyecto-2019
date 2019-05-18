@@ -1,8 +1,10 @@
 package bean.business;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Local;
+import javax.ws.rs.QueryParam;
 
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
@@ -22,7 +24,6 @@ public interface UserCtrlBeanLocal {
 	Boolean createMovimiento(DtoMovimiento movimiento) throws Exception;
 	Boolean ABMParametro(char operation, DtoParm parm) throws Exception;
 	Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda) throws Exception;
-	
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente) throws Exception;
 	DtoClient obtenerCliente(String username) throws Exception;

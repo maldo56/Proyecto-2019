@@ -191,7 +191,6 @@ public class APIUserBean {
     	return resp;
     }
     
-    
     @POST
     @Path("/recargar")
     @Consumes(MediaType.APPLICATION_JSON)

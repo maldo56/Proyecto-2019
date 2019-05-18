@@ -27,6 +27,8 @@ import org.postgis.LineString;
 import org.postgis.Point;
 
 import bean.scooterclient.database.MongoBeanLocal;
+import exceptions.DateTimeException;
+import exceptions.MovimientoException;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoAlquiler;
 import obj.dto.DtoClient;
@@ -402,17 +404,24 @@ public class PostgresBean implements PostgresBeanLocal {
     
     public DtoAlquiler terminarAlquiler(DtoAlquiler alquiler, List<DtoLocation> ubicaciones) throws Exception {
     	
+    	boolean DateTimeException = false;
+    	boolean MovimientoException = false;
+    	
     	alquiler entity;
     	scooter scooter;
     	parametro parametro;
+    	cliente cliente;
+    	movimiento movimiento = null;
+    	
     	Time dateInicio;
     	Time dateFinal = java.sql.Time.valueOf(LocalTime.now());
+    	Time time = null;
     	
-    	long diferencia;
-    	
-    	Time time;
-    	
+    	long diferencia = 0;
+    	float monto = 0;
+    	float saldoCliente = 0;
     	String kml = Utils.kmlLinestring(ubicaciones);
+    	
     	
 		try {
 			
@@ -421,30 +430,63 @@ public class PostgresBean implements PostgresBeanLocal {
 			transaction.begin();
 			
 			entity = em.find(alquiler.class, alquiler.getGuid());
+			cliente = em.find(obj.entity.cliente.class, alquiler.getCliente());
 			
+			// Calculo de duracion y precio
 			if ( entity.getDuration() == null ) {
 				
+				// Cambio de estado del scooter
 				scooter = em.find(scooter.class, alquiler.getGuidscooter());
 				scooter.setIsRented(false);
 				
-				
-				dateInicio = new Time(entity.getTimestamp().getHours(), entity.getTimestamp().getMinutes(), entity.getTimestamp().getSeconds());
-				diferencia = dateFinal.getTime() - dateInicio.getTime();
-				time = new Time(diferencia);
-				
-				if ( dateInicio.getMinutes() >  dateFinal.getMinutes()) {
-					time.setHours( (dateFinal.getHours() -  dateInicio.getHours() - 1) );
-				} else {
-					time.setHours( (dateFinal.getHours() -  dateInicio.getHours()) );
+				try {
+					
+					dateInicio = new Time(entity.getTimestamp().getHours(), entity.getTimestamp().getMinutes(), entity.getTimestamp().getSeconds());
+					diferencia = dateFinal.getTime() - dateInicio.getTime();
+					
+					if ( dateInicio.getMinutes() >  dateFinal.getMinutes()) {
+						time.setHours( (dateFinal.getHours() -  dateInicio.getHours() - 1) );
+					} else {
+						time.setHours( (dateFinal.getHours() -  dateInicio.getHours()) );
+					}
+					
+					//cargar monto
+					monto = (diferencia/1000) * ( Float.valueOf(parametro.getValue().trim()).floatValue() );
+					
+				} catch( Exception e ) {
+					DateTimeException = true;
 				}
 				
-				entity.setDuration( time );
+				// Cobrarle al cliente
+				saldoCliente = cliente.getSaldo() - monto;
+				cliente.setSaldo(saldoCliente);
 				
-				entity.setPrice( (diferencia/1000) * ( Float.valueOf(parametro.getValue().trim()).floatValue() ) );
+				
+				// Asignar movimiento
+				try {
+					movimiento = new movimiento();
+					movimiento.setCliente(cliente);
+					movimiento.setMoneda("UY");
+					movimiento.setMount(monto);
+					movimiento.setPaypalguid("");
+					movimiento.setTimestamp(new Timestamp(System.currentTimeMillis()));
+					
+					em.persist(movimiento);
+					
+				} catch( Exception e) {
+					MovimientoException = true;
+				}
+				
+				
+				// Cargar datos 
+				
+				entity.setMovimiento(movimiento);
+				entity.setDuration( time );
+				entity.setPrice(monto);
 				
 				transaction.commit();
-
 				
+				// Cargar recorrido
 				if ( !kml.equals("LINESTRING()") ) {
 					
 					transaction.begin();
@@ -457,13 +499,34 @@ public class PostgresBean implements PostgresBeanLocal {
 				alquiler.setPrice(entity.getPrice());
 				alquiler.setTimestamp(entity.getTimestamp());
 				
+				
+				// CONTROL DE ERRORES
+				if ( DateTimeException ) {
+					
+					DateTimeException ex = new DateTimeException("Error: Ocurrió un error al cargar precio y duracion.");
+					ex.setAlquiler(alquiler);
+					
+					throw ex;
+				} else if ( MovimientoException ) {
+					MovimientoException ex = new MovimientoException("Error: Ocurrió un error al cargar movimiento.");
+					ex.setAlquiler(alquiler);
+					
+					throw ex;
+				}
+				
 				return alquiler;
 			} else {
 				transaction.rollback();
 			}
 			
 		} catch (Exception e) {
-			throw new Exception("Ha ocurrido un error");
+			
+			if (e instanceof DateTimeException) {
+				throw e;
+			} else {
+				throw new Exception("Ha ocurrido un error");
+			}
+			
 		}
 		
 		return null;
@@ -472,12 +535,16 @@ public class PostgresBean implements PostgresBeanLocal {
     public Boolean recargarSaldoCliente(String username, float monto) throws Exception {
     	
     	cliente entity;
+    	float montoOld = 0;
 		
 		try {
 			transaction.begin();
 			
 			entity = em.find(cliente.class, username);
-			entity.setSaldo(monto);
+			
+			montoOld = entity.getSaldo();
+			
+			entity.setSaldo( (monto + montoOld) );
 				
 			transaction.commit();
 
@@ -486,7 +553,6 @@ public class PostgresBean implements PostgresBeanLocal {
 		} catch (Exception e) {
 			throw new Exception("Ha ocurrido un error");
 		}
-		
 		
     }
     
@@ -511,6 +577,7 @@ public class PostgresBean implements PostgresBeanLocal {
     	}
     	
     }
+    
     
     //--------------------------------  GET  --------------------------------------------------------------//
     

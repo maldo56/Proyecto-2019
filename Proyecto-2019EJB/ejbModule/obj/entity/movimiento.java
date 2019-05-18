@@ -17,6 +17,7 @@ public class movimiento {
 	private float mount;
 	private String paypalguid;
 	private String moneda;
+	private boolean isValido;
 	
 	@ManyToOne
 	private cliente cliente;
@@ -26,7 +27,7 @@ public class movimiento {
 		this.guid = uuid.toString();
 	}
 
-	public movimiento(Timestamp timestamp, float mount, String paypalguid, String moneda) {
+	public movimiento(Timestamp timestamp, float mount, String paypalguid, String moneda, boolean isValido) {
 		super();
 		UUID uuid = UUID.randomUUID();
 		this.guid = uuid.toString();
@@ -34,6 +35,7 @@ public class movimiento {
 		this.mount = mount;
 		this.paypalguid = paypalguid;
 		this.moneda = moneda;
+		this.isValido = isValido;
 	}
 
 	
@@ -81,5 +83,13 @@ public class movimiento {
 	public void setCliente(cliente cliente) {
 		this.cliente = cliente;
 	}
-	
+
+	public boolean isValido() {
+		return isValido;
+	}
+
+	public void setValido(boolean isValido) {
+		this.isValido = isValido;
+	}
+		
 }

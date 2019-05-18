@@ -17,6 +17,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import bean.business.AlquilerCtrlBeanLocal;
+import exceptions.DateTimeException;
+import exceptions.ImageException;
+import exceptions.MovimientoException;
 import obj.dto.DtoAlquiler;
 
 
@@ -42,9 +45,7 @@ public class APIAlquilerBean {
 	@Produces(MediaType.APPLICATION_JSON)
     public Map<String, Object> alquiler(@PathParam("operation") char operation, DtoAlquiler alquiler) {
     	
-//    	Response resp = new Response();
     	Map<String, Object> resp = new HashMap();
-    	
       
     	try {
     		DtoAlquiler a = buissnes.alquiler(operation, alquiler);
@@ -52,12 +53,19 @@ public class APIAlquilerBean {
     		resp.put("message", "");
     		resp.put("body", a);
     		
+    	} catch (DateTimeException e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", e.getAlquiler());
+    	} catch (MovimientoException e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", e.getAlquiler());
     	} catch (Exception e) {
     		resp.put("success", false);
     		resp.put("message", e.getMessage() + ".");
     		resp.put("body", null);
     	}
-    	
     	
     	return resp;
     }

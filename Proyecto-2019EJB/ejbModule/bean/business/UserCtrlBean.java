@@ -118,7 +118,6 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	return database.ABMParametro(operation, parm);
     }
     
-    
     public Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda) throws Exception {
     	
     	DtoMovimiento movimiento = new DtoMovimiento();
@@ -132,6 +131,7 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	
     	return database.recargarSaldoCliente(username, monto);
     }
+    
     
     //-------------------------------  GET  ----------------------------------------------------//
     
