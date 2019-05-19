@@ -43,5 +43,6 @@ public interface PostgresBeanLocal {
 	String scooterEstaAlquilado(String guid) throws Exception;
 	DtoAlquiler obtenerAlquiler(String guid) throws Exception;
 	DtoGeometria obtenerArea() throws Exception;
+	DtoAlquiler obtenerAlquilerActivo(String username) throws Exception;
 	
 }

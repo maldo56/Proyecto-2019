@@ -863,5 +863,31 @@ public class PostgresBean implements PostgresBeanLocal {
     	}
     	
     }
+ 
+    public DtoAlquiler obtenerAlquilerActivo(String username) throws Exception {
+    	
+    	try {
+    		alquiler entity;
+    		DtoAlquiler alquiler = new DtoAlquiler();
+    		
+    		Query q = em.createQuery("select p from alquiler p where p.cliente.username = :username order by p.timestamp desc");
+			q.setParameter("username", username);
+    		
+			entity = (obj.entity.alquiler) q.getResultList().get(0);
+    		
+    		
+    		alquiler.setGuid(entity.getGuid());
+    		alquiler.setGuidscooter(entity.getScooter().getGuid());
+    		alquiler.setPrice(entity.getPrice());
+    		alquiler.setDuration(entity.getDuration());
+    		alquiler.setTimestamp(entity.getTimestamp());
+    		alquiler.setCliente(entity.getCliente().getUsername());
+    		
+    		return alquiler;
+    	} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    	
+    }
     
 }

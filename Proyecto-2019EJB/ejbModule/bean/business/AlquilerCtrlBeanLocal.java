@@ -13,4 +13,5 @@ public interface AlquilerCtrlBeanLocal {
 	
 	DtoAlquiler obtenerAlquiler(String guid) throws Exception;
 	List<DtoAlquiler> obtenerAlquileres(String username) throws Exception;
+	DtoAlquiler obtenerAlquilerActivo(String username) throws Exception;
 }

@@ -58,7 +58,7 @@ public class APIServiciosBean {
     public void handleMessage(String message, Session session) throws IOException {
         System.out.println("WebSocket: Nuevo mensaje ==> " + message.toString());
 
-
+        
         boolean alquilado;
         String id;
         String alquiler;
@@ -74,14 +74,10 @@ public class APIServiciosBean {
 		
 		JsonNumber aux = object.getJsonNumber("latitude");
 		latitude = (float) aux.doubleValue();
-		
 		aux = object.getJsonNumber("longitude");
 		longitude = (float) aux.doubleValue();
-		
         
         if ( !alquilado ) {
-        	System.out.println("esperando");
-        	
         	String msg = "";
         	
         	try {
@@ -89,14 +85,9 @@ public class APIServiciosBean {
         	} catch ( Exception e ) {
         		
         	}
-        	
-        	
+
         	if ( msg.equals("false") ) {
-        		
-//        		"{\"alquilado\":\"esperando\",\"id\":\"" + scooterGuid + "\",\"alquiler\":\" \",\"latitude\":0,\"longitude\":0}";
-        		
         		msg = "{\"alquilado\":false,\"id\":\"" + id + "\",\"alquiler\":\" \",\"latitude\":-1,\"longitude\":-1}";
-        		
         	} else {
         		msg = "{\"alquilado\":true,\"id\":\"" + id + "\",\"alquiler\":\"" + msg + "\",\"latitude\":-1,\"longitude\":-1}";
         	}

@@ -120,4 +120,28 @@ public class APIAlquilerBean {
     	
     	return resp;
     }
+    
+    @GET
+    @Path("/activoporcliente")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Map<String, Object> obtenerAlquilerActivo(@QueryParam("username") String username) {
+    	
+    	Map<String, Object> resp = new HashMap();
+    	
+    	
+    	try {
+    		DtoAlquiler a = buissnes.obtenerAlquilerActivo(username);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    }
 }
