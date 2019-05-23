@@ -568,7 +568,7 @@ public class PostgresBean implements PostgresBeanLocal {
     		String kml = Utils.geometriaToKml(geometry);
     		
     		transaction.begin();
-			em.createNativeQuery("UPDATE alquiler p SET recorrido = ST_GeomFromText('" + kml + "', 4326) WHERE guid = \'" + entity.getGuid() + "\'").executeUpdate();
+			em.createNativeQuery("UPDATE zona p SET areaPermitida = '" + kml + "' WHERE guid = \'" + entity.getGuid() + "\'").executeUpdate();
 			transaction.commit();
     		
 			return true;

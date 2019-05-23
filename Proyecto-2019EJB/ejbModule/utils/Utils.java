@@ -42,13 +42,13 @@ public class Utils {
 			kml = kml + "()";
 		} else {
 			
-			kml = kml + "(" + geometry.getPuntos().get(0).getLat() + " " + geometry.getPuntos().get(0).getLng();
+			kml = kml + "((" + geometry.getPuntos().get(0).getLat() + " " + geometry.getPuntos().get(0).getLng();
 			
 			for ( int x = 1; x < geometry.getPuntos().size(); x ++ ) {
 				kml = kml + "," + geometry.getPuntos().get(x).getLat() + " " + geometry.getPuntos().get(x).getLng();
 			}
 			
-			kml = kml + ")";
+			kml = kml + "))";
 		}
 		
 		return kml;
