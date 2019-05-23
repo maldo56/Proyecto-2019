@@ -3,6 +3,7 @@ package bean.business;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.imageio.ImageIO;
+import javax.management.ObjectName;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -84,7 +86,9 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
             				File outputfile = new File("C:\\images\\" + imgName);
             				ImageIO.write(image, "png", outputfile);
             				
-            				client.setUrlphoto("http://localhost:8080/resources/images/" + imgName);
+            				int port = (int) ManagementFactory.getPlatformMBeanServer().getAttribute(new ObjectName("jboss.as:socket-binding-group=standard-sockets,socket-binding=http"), "port");
+            				
+            				client.setUrlphoto("http://localhost:" + port + "/resources/images/" + imgName);
             				
     					} catch ( Exception e ) {
     						System.out.println(e.getMessage());
