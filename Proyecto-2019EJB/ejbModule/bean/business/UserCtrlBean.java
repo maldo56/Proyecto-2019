@@ -1,13 +1,17 @@
 package bean.business;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.imageio.ImageIO;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -54,25 +58,37 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     		} else {
     			
     			try {
-    				if ( client.getUrlphoto().matches("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$") ) {
+//    				if ( client.getUrlphoto().matches("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$") ) {
         				
     					try {
     						byte[] imageByte;
-
+    						
             				BASE64Decoder decoder = new BASE64Decoder();
             				imageByte = decoder.decodeBuffer(client.getUrlphoto());
             				
-            				Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-            						  "cloud_name", "dnieertcs",
-            						  "api_key", "282786385515145",
-            						  "api_secret", "qWy6caiRGyo-l1TK41pjUcTIumM"));
+            				File dataDir = new File(System.getProperty("jboss.server.data.dir"));
+            				File yourFile = new File(dataDir, "filename.ext");
             				
-            				File file = new File("my_image.jpg");
-            				Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+            				String parts[] = client.getUrlphoto().split(",");
+
+            				BufferedImage image = null;
+
+            				imageByte = decoder.decodeBuffer(parts[1]);
+            				ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            				image = ImageIO.read(bis);
+            				bis.close();
+
+            				UUID uuid = UUID.randomUUID();
+            				String imgName = uuid.toString() + ".png";
+
+            				File outputfile = new File("C:\\images\\" + imgName);
+            				ImageIO.write(image, "png", outputfile);
             				
-            				System.out.println(uploadResult.toString());
+            				client.setUrlphoto("http://localhost:8080/resources/images/" + imgName);
             				
     					} catch ( Exception e ) {
+    						System.out.println(e.getMessage());
+    						
     						client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
             				result = database.ABMClient(operation, client);
             				
@@ -82,15 +98,15 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
             				throw ie;
     					}
 						
-        			} else {
-        				client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
-        				result = database.ABMClient(operation, client);
-        				
-        				ImageException ie = new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
-        				ie.setSuccess(result);
-        				
-        				throw ie;
-        			}
+//        			} else {
+//        				client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
+//        				result = database.ABMClient(operation, client);
+//        				
+//        				ImageException ie = new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
+//        				ie.setSuccess(result);
+//        				
+//        				throw ie;
+//        			}
     				
     			} catch ( Exception e) {
     				throw e;
