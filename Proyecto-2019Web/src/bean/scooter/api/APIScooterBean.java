@@ -160,7 +160,7 @@ public class APIScooterBean {
     }
     
     @GET
-    @Path("/isAlquilado")
+    @Path("/obtenerArea")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
 	public Map<String, Object> obtenerArea() {
