@@ -568,7 +568,7 @@ public class PostgresBean implements PostgresBeanLocal {
     		String kml = Utils.geometriaToKml(geometry);
     		
     		transaction.begin();
-			em.createNativeQuery("UPDATE zona p SET areaPermitida = '" + kml + "' WHERE guid = \'" + entity.getGuid() + "\'").executeUpdate();
+			em.createNativeQuery("UPDATE zona p SET areaPermitida = ST_GeomFromText('" + kml + "',4326) WHERE guid = \'" + entity.getGuid() + "\'").executeUpdate();
 			transaction.commit();
     		
 			return true;
@@ -849,16 +849,14 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     	try {
     		DtoGeometria geom = new DtoGeometria();
-    		String srtquery = "select st_astext(st_union(st_transform(zona::geometry, 4326))) FROM zona;";
-			
+    		String srtquery = "select st_astext(st_union(st_transform(areapermitida, 4326))) FROM zona;";
 			Query q = em.createNativeQuery(srtquery);
-			
 			String strgeometria = (String) q.getResultList().get(0);
-    		
 			geom = Utils.kmlMultiLinestringToGeometryPolygon(strgeometria);
-			
     		return geom;
     	} catch ( Exception e ) {
+    		System.out.println(e.getMessage());
+    		
     		throw new Exception("Ha ocurrido un error");
     	}
     	

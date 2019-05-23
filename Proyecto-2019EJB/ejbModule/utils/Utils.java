@@ -95,6 +95,10 @@ public class Utils {
 	
 	public static DtoGeometria kmlMultiLinestringToGeometryPolygon(String kml) {
 		
+		System.out.println("KML: " + kml);
+		
+//		 POLYGON((0 0,0 1,1 1,1 0,0 0))
+		
 //		MULTILINESTRING((-34.898994 -56.168793,-34.898697 -56.167763),(0 0,1 1),(1 1,2 2),(2 2,3 3),(3 3,4 4),(4 4,5 5),(5 5,6 6),(6 6,7 7),(7 7,8 8),(8 8,9 9))
 		String aux = "";
 		String[] auxPoints;
@@ -105,11 +109,16 @@ public class Utils {
 		List<DtoPunto> puntos = new ArrayList<DtoPunto>();
 		DtoPunto punto;
 		
+		int index = 0;
+		
 		try {
+			index = kml.indexOf("(");
 			
-			geom.setType(kml.substring(0, 14));
+			System.out.println(index);
 			
-			aux = kml.substring(15, kml.length());
+			geom.setType(kml.substring(0, index));
+			
+			aux = kml.substring(index, kml.length()); //no va index en lugar de 15? dale gas
 			
 			aux = aux.replace("(", "");
 			aux = aux.replace(")", "");
@@ -117,6 +126,9 @@ public class Utils {
 			auxPoints = aux.split(",");
 			
 			for ( int x = 0; x < auxPoints.length; x ++ ) {
+				
+				System.out.println(auxPoints[x]);
+				
 				auxcoord = auxPoints[x].split(" ");
 				
 				punto = new DtoPunto();
@@ -133,7 +145,7 @@ public class Utils {
 		} catch ( Exception e ) {
 			System.out.println(e.getMessage());
 		}
-		
+		System.out.println("retorna null");
 		return null;
 	}
 }
