@@ -868,7 +868,11 @@ public class PostgresBean implements PostgresBeanLocal {
     		alquiler entity;
     		DtoAlquiler alquiler = new DtoAlquiler();
     		
-    		Query q = em.createQuery("select p from alquiler p where p.cliente.username = :username order by p.timestamp desc");
+    		String query = "select p from alquiler p "
+		    				+ "where p.cliente.username = :username and p.scooter.isRented "
+		    					+ "order by p.timestamp desc";
+    		
+    		Query q = em.createQuery(query);
 			q.setParameter("username", username);
     		
 			entity = (obj.entity.alquiler) q.getResultList().get(0);
