@@ -47,6 +47,9 @@ public class ScooterCtrlBean implements ScooterCtrlBeanLocal {
     }
     
     public String estaAlquilado(String guid) throws Exception {
+    	
+    	System.out.println("estaAlquilado Ctrl: " + guid);
+    	
     	return postgres.scooterEstaAlquilado(guid);
     }
     

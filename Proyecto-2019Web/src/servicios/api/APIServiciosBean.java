@@ -82,8 +82,9 @@ public class APIServiciosBean {
         	
         	try {
         		msg = buissnes.estaAlquilado(id);
-        	} catch ( Exception e ) {
         		
+        	} catch ( Exception e ) {
+//        		System.out.println(e.getMessage());
         	}
 
         	if ( msg.equals("false") ) {
@@ -92,7 +93,7 @@ public class APIServiciosBean {
         		msg = "{\"alquilado\":true,\"id\":\"" + id + "\",\"alquiler\":\"" + msg + "\",\"latitude\":-1,\"longitude\":-1}";
         	}
         	
-        	System.out.println("Mandando mensaje");
+        	System.out.println("Mandando mensaje ==> " + msg);
         	
         	session.getBasicRemote().sendText(msg);
         } else {
@@ -100,10 +101,14 @@ public class APIServiciosBean {
         	try {
             	
             	buissnes.addPoint(id, alquiler, latitude, longitude);
+            	
+            	System.out.println("Mandando mensaje ==> Llega");
     			
-            	for ( Session s : this.usuarioSessions) {
-            		s.getBasicRemote().sendText("algo");
-            	}
+            	session.getBasicRemote().sendText("{\"alquilado\":true,\"id\":\"be039aae-3798-4c98-95f8-37cbc68c6a5c\",\"alquiler\":\"" + alquiler + "\",\"latitude\":-1,\"longitude\":-1}");
+            	
+//            	for ( Session s : this.usuarioSessions) {
+//            		s.getBasicRemote().sendText("algo");
+//            	}
             	
             } catch (Exception e) {
                 System.out.println(e.getMessage());
