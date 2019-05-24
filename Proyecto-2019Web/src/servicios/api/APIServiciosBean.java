@@ -102,13 +102,11 @@ public class APIServiciosBean {
             	
             	buissnes.addPoint(id, alquiler, latitude, longitude);
             	
-            	System.out.println("Mandando mensaje ==> Llega");
-    			
-            	session.getBasicRemote().sendText("{\"alquilado\":true,\"id\":\"be039aae-3798-4c98-95f8-37cbc68c6a5c\",\"alquiler\":\"" + alquiler + "\",\"latitude\":-1,\"longitude\":-1}");
+            	session.getBasicRemote().sendText("{\"alquilado\":true,\"id\":\"" + id + "\",\"alquiler\":\"" + alquiler + "\",\"latitude\":-1,\"longitude\":-1}");
             	
-//            	for ( Session s : this.usuarioSessions) {
-//            		s.getBasicRemote().sendText("algo");
-//            	}
+            	for ( Session s : this.usuarioSessions) {
+            		s.getBasicRemote().sendText(message);
+            	}
             	
             } catch (Exception e) {
                 System.out.println(e.getMessage());
