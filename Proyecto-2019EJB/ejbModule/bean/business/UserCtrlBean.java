@@ -6,7 +6,6 @@ import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.ejb.EJB;
@@ -14,9 +13,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.imageio.ImageIO;
 import javax.management.ObjectName;
-
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 
 import bean.database.PostgresBeanLocal;
 import exceptions.ImageException;
@@ -64,16 +60,12 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
         				
     					try {
     						byte[] imageByte;
+    						BufferedImage image = null;
     						
             				BASE64Decoder decoder = new BASE64Decoder();
             				imageByte = decoder.decodeBuffer(client.getUrlphoto());
             				
-            				File dataDir = new File(System.getProperty("jboss.server.data.dir"));
-            				File yourFile = new File(dataDir, "filename.ext");
-            				
             				String parts[] = client.getUrlphoto().split(",");
-
-            				BufferedImage image = null;
 
             				imageByte = decoder.decodeBuffer(parts[1]);
             				ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);

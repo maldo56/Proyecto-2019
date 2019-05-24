@@ -185,13 +185,24 @@ public class PostgresBean implements PostgresBeanLocal {
 				
 				entity = em.find(cliente.class, client.getUsername());
 				
-				entity.setPassword(client.getPassword());
-				entity.setEmail(client.getEmail());
-				entity.setName(client.getName());
-				entity.setSurname(client.getSurname());
-				entity.setUrlphoto(client.getUrlphoto());
-				entity.setCellphone(client.getCellphone());
-				entity.setSaldo(client.getSaldo());
+				if ( client.getPassword() != null && !client.getPassword().isEmpty() )
+					entity.setPassword(client.getPassword());
+				
+				if ( client.getEmail() != null && !client.getEmail().isEmpty() )
+					entity.setEmail(client.getEmail());
+				
+				if ( client.getName() != null && !client.getName().isEmpty() )
+					entity.setName(client.getName());
+				
+				if ( client.getSurname() != null && !client.getSurname().isEmpty() )
+					entity.setSurname(client.getSurname());
+				
+				if ( client.getUrlphoto() != null && !client.getUrlphoto().isEmpty() )
+					entity.setUrlphoto(client.getUrlphoto());
+				
+				if ( client.getCellphone() != null && !client.getCellphone().isEmpty() )
+					entity.setCellphone(client.getCellphone());
+				
 				
 			} else {
 				transaction.rollback();
@@ -234,9 +245,14 @@ public class PostgresBean implements PostgresBeanLocal {
 				
 				entity = em.find(administrador.class, admin.getUsername());
 				
-				entity.setPassword(admin.getPassword());
-				entity.setEmail(admin.getEmail());
-				entity.setIsSuperuser(admin.getIsSuperuser());
+				if ( admin.getPassword() != null && !admin.getPassword().isEmpty() )
+					entity.setPassword(admin.getPassword());
+				
+				if ( admin.getEmail() != null && !admin.getEmail().isEmpty() )
+					entity.setEmail(admin.getEmail());
+				
+				if ( admin.getIsSuperuser() != null )
+					entity.setIsSuperuser(admin.getIsSuperuser());
 				
 			} else {
 				
@@ -255,6 +271,10 @@ public class PostgresBean implements PostgresBeanLocal {
     public Boolean MScooter(String campo, String guid, String value) throws Exception {
     	
 		scooter entity;
+		
+		if (value == null || value.isEmpty()) {
+			return false;
+		}
 		
 		try {
 			transaction.begin();
@@ -288,6 +308,10 @@ public class PostgresBean implements PostgresBeanLocal {
     	
 		parametro entity;
 		
+		if ( parm.getCode() == null || parm.getCode().isEmpty() ) {
+			return false;
+		}
+		
 		try {
 			transaction.begin();
 			
@@ -308,8 +332,12 @@ public class PostgresBean implements PostgresBeanLocal {
 			}else if( operation == 'M' ) {
 				
 				entity = em.find(parametro.class, parm.getCode());
-				entity.setUnit(parm.getUnit());
-				entity.setValue(parm.getValue());
+				
+				if ( parm.getUnit() != null && !parm.getUnit().isEmpty() )
+					entity.setUnit(parm.getUnit());
+				
+				if ( parm.getValue() != null && !parm.getValue().isEmpty() )
+					entity.setValue(parm.getValue());
 				
 			} else {
 				transaction.rollback();
@@ -426,6 +454,7 @@ public class PostgresBean implements PostgresBeanLocal {
 		try {
 			
 			parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
+			String value = parametro.getValue();
 			
 			transaction.begin();
 			
@@ -444,14 +473,8 @@ public class PostgresBean implements PostgresBeanLocal {
 					dateInicio = new Time(entity.getTimestamp().getHours(), entity.getTimestamp().getMinutes(), entity.getTimestamp().getSeconds());
 					diferencia = dateFinal.getTime() - dateInicio.getTime();
 					
-					if ( dateInicio.getMinutes() >  dateFinal.getMinutes()) {
-						time.setHours( (dateFinal.getHours() -  dateInicio.getHours() - 1) );
-					} else {
-						time.setHours( (dateFinal.getHours() -  dateInicio.getHours()) );
-					}
-					
 					//cargar monto
-					monto = (diferencia/1000) * ( Float.valueOf(parametro.getValue().trim()).floatValue() );
+					monto = (diferencia/1000) * ( Float.valueOf(value).floatValue() );
 					
 				} catch( Exception e ) {
 					DateTimeException = true;
@@ -460,7 +483,6 @@ public class PostgresBean implements PostgresBeanLocal {
 				// Cobrarle al cliente
 				saldoCliente = cliente.getSaldo() - monto;
 				cliente.setSaldo(saldoCliente);
-				
 				
 				// Asignar movimiento
 				try {
@@ -477,11 +499,10 @@ public class PostgresBean implements PostgresBeanLocal {
 					MovimientoException = true;
 				}
 				
-				
 				// Cargar datos 
 				
 				entity.setMovimiento(movimiento);
-				entity.setDuration( time );
+				entity.setDuration(new Time(diferencia));
 				entity.setPrice(monto);
 				
 				transaction.commit();
@@ -515,15 +536,16 @@ public class PostgresBean implements PostgresBeanLocal {
 				}
 				
 				return alquiler;
-			} else {
-				transaction.rollback();
-			}
+			}// else {
+//				transaction.rollback();
+//			}
 			
 		} catch (Exception e) {
 			
 			if (e instanceof DateTimeException) {
 				throw e;
 			} else {
+				
 				throw new Exception("Ha ocurrido un error");
 			}
 			
@@ -536,6 +558,10 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     	cliente entity;
     	float montoOld = 0;
+    	
+    	if ( monto <= 0 ) {
+    		return false;
+    	}
 		
 		try {
 			transaction.begin();

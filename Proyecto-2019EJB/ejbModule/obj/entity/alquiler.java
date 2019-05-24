@@ -33,16 +33,21 @@ public class alquiler {
 	public alquiler() {
 		UUID uuid = UUID.randomUUID();
 		this.guid = uuid.toString();
+		
+		Time duration = new Time(0);
+		this.duration = duration;
 	}
 
-	public alquiler(Timestamp timestamp, Time duration, Float price, Float tarifa) {
+	public alquiler(Timestamp timestamp, Float price, Float tarifa) {
 		super();
 		UUID uuid = UUID.randomUUID();
 		this.guid = uuid.toString();
 		this.timestamp = timestamp;
-		this.duration = duration;
 		this.price = price;
 		this.tarifa = tarifa;
+		
+		Time duration = new Time(0);
+		this.duration = duration;
 	}
 
 	
