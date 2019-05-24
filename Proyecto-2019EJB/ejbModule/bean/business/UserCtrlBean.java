@@ -56,7 +56,10 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     		} else {
     			
     			try {
-//    				if ( client.getUrlphoto().matches("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$") ) {
+    				
+    				String[] aux = client.getUrlphoto().split(",");
+    				
+    				if ( aux[1].matches("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$") ) {
         				
     					try {
     						byte[] imageByte;
@@ -94,15 +97,15 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
             				throw ie;
     					}
 						
-//        			} else {
-//        				client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
-//        				result = database.ABMClient(operation, client);
-//        				
-//        				ImageException ie = new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
-//        				ie.setSuccess(result);
-//        				
-//        				throw ie;
-//        			}
+        			} else {
+        				client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
+        				result = database.ABMClient(operation, client);
+        				
+        				ImageException ie = new ImageException("Error: Ha ocurrido un error al cargar su imagen de perfil.");
+        				ie.setSuccess(result);
+        				
+        				throw ie;
+        			}
     				
     			} catch ( Exception e) {
     				throw e;
