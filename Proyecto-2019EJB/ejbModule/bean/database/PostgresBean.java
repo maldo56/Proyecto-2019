@@ -38,6 +38,7 @@ import obj.dto.DtoInfoScooters;
 import obj.dto.DtoLocation;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
+import obj.dto.DtoRakingUsuarios;
 import obj.dto.DtoScooter;
 import obj.dto.DtoUsuario;
 import obj.entity.administrador;
@@ -1059,6 +1060,23 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     }
     
-    
+    public List<DtoRakingUsuarios> reporteRakingUsuarios() throws Exception {
+    	
+    	try {
+    		
+    		String query = "SELECT DISTINCT u.username, u.email, u.name, u.surname, u.urlphoto, u.cellphone, count(a.tarifa) as cantalquileres" + 
+    						"	FROM alquiler as a INNER JOIN usuario as u ON a.cliente_username = u.username" + 
+    							"	GROUP BY u.username";
+
+    		Query q = em.createNativeQuery(query, DtoRakingUsuarios.class);
+    		List<DtoRakingUsuarios> resp = q.getResultList();
+    		
+    		return resp;
+    	} catch ( Exception e ) {
+    		System.out.println(e.getMessage());
+    		
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    }
     
 }

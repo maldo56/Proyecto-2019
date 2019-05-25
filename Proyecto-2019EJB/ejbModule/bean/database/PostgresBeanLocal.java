@@ -13,6 +13,7 @@ import obj.dto.DtoInfoScooters;
 import obj.dto.DtoLocation;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
+import obj.dto.DtoRakingUsuarios;
 import obj.dto.DtoScooter;
 import obj.dto.DtoUsuario;
 
@@ -52,4 +53,5 @@ public interface PostgresBeanLocal {
 	DtoInfoScooters reporteInfoScooter() throws Exception;
 	float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception;
 	int reportesCantAlquileres(Timestamp inicio, Timestamp fin) throws Exception;
+	List<DtoRakingUsuarios> reporteRakingUsuarios() throws Exception;
 }

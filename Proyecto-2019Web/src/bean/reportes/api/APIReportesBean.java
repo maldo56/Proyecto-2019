@@ -2,6 +2,7 @@ package bean.reportes.api;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
@@ -18,6 +19,7 @@ import javax.ws.rs.QueryParam;
 import bean.business.ReportesCtrlBeanLocal;
 import bean.business.ScooterCtrlBeanLocal;
 import obj.dto.DtoInfoScooters;
+import obj.dto.DtoRakingUsuarios;
 
 @Stateless
 @LocalBean
@@ -96,6 +98,31 @@ public class APIReportesBean {
     	try {
     		
     		int a = business.cantAlquileres(inicio, fin);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    }
+    
+    
+    @GET
+	@Path("/rakingUsuarios")
+    @Consumes( {"application/json"} )
+	@Produces( {"application/json"} )
+	public Map<String, Object> rakingUsuarios() {
+
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		
+    		List<DtoRakingUsuarios> a = business.rakingUsuarios();
     		resp.put("success", true);
     		resp.put("message", "");
     		resp.put("body", a);

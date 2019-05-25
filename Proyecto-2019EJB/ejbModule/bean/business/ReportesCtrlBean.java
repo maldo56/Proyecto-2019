@@ -1,6 +1,7 @@
 package bean.business;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -8,6 +9,7 @@ import javax.ejb.Stateless;
 
 import bean.database.PostgresBeanLocal;
 import obj.dto.DtoInfoScooters;
+import obj.dto.DtoRakingUsuarios;
 
 
 
@@ -32,6 +34,10 @@ public class ReportesCtrlBean implements ReportesCtrlBeanLocal {
     
     public int cantAlquileres(Timestamp inicio, Timestamp fin) throws Exception {
     	return database.reportesCantAlquileres(inicio, fin);
+    }
+    
+    public List<DtoRakingUsuarios> rakingUsuarios() throws Exception {
+    	return database.reporteRakingUsuarios();
     }
     
 }
