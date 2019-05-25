@@ -214,6 +214,28 @@ public class APIUserBean {
     	return resp;
     }
     
+    @POST
+    @Path("/recargarSaldo/admin")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Map<String, Object> recargarSaldoAdmin(@QueryParam("admin") String admin, @QueryParam("password") String password, @QueryParam("usernameCliente") String usernameCliente, @QueryParam("monto") float monto) {
+    	
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		boolean a = buissnes.recargarSaldoAdmin(admin, password, usernameCliente, monto);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    }
     
     
     //--------------------------------------  GET  ---------------------------------------------------------//

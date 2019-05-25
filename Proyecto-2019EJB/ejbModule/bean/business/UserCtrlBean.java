@@ -13,6 +13,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.imageio.ImageIO;
 import javax.management.ObjectName;
+import javax.security.sasl.AuthenticationException;
 
 import bean.database.PostgresBeanLocal;
 import exceptions.ImageException;
@@ -150,6 +151,26 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	return database.recargarSaldoCliente(username, monto);
     }
     
+    public Boolean recargarSaldoAdmin(String admin, String password, String usernameCliente, float monto) throws Exception {
+    	
+    	DtoAdmin Auxadmin = database.obtenerAdmin(admin);
+    	
+    	if ( Auxadmin != null && Auxadmin.getPassword() != password ) {
+    		throw new AuthenticationException("Usuario o contraseña incorrecto.");
+    	}
+    	
+    	
+    	DtoMovimiento movimiento = new DtoMovimiento();
+    	movimiento.setMoneda("U$S");
+    	movimiento.setMount(monto);
+    	movimiento.setPaypalguid("");
+    	movimiento.setUsername(usernameCliente);
+    	movimiento.setTimestamp(new Timestamp(System.currentTimeMillis()));
+    	
+    	database.createMovimiento(movimiento);
+    	
+    	return database.recargarSaldoCliente(usernameCliente, monto);
+    }
     
     //-------------------------------  GET  ----------------------------------------------------//
     

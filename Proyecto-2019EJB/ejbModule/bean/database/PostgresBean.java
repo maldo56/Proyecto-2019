@@ -20,6 +20,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.security.sasl.AuthenticationException;
 import javax.transaction.UserTransaction;
 
 import org.postgis.Geometry;
@@ -94,11 +95,17 @@ public class PostgresBean implements PostgresBeanLocal {
 					user = new DtoAdmin(aux.getUsername(), "", aux.getEmail(), ((administrador) aux).getIsSuperuser());
 				}
 			} else {
-				System.out.println("Vacio");
+				throw new AuthenticationException("Usuario o contraseña incorrecto.");
 			}
 			
 		} catch( Exception e ) {
-			throw new Exception("Ha ocurrido un error");
+			
+			if ( e instanceof AuthenticationException ) {
+				throw new AuthenticationException("Usuario o contraseña incorrecto.");
+			} else {
+				throw new Exception("Ha ocurrido un error");
+			}
+			
 		}
     	
     	return user;
