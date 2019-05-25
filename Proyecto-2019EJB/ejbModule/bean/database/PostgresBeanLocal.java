@@ -51,4 +51,5 @@ public interface PostgresBeanLocal {
 	
 	DtoInfoScooters reporteInfoScooter() throws Exception;
 	float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception;
+	int reportesCantAlquileres(Timestamp inicio, Timestamp fin) throws Exception;
 }

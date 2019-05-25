@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 import javax.ejb.Local;
+import javax.ws.rs.QueryParam;
 
 import obj.dto.DtoInfoScooters;
 
@@ -12,4 +13,5 @@ public interface ReportesCtrlBeanLocal {
 
 	DtoInfoScooters infoScooters() throws Exception;
 	float ganancias(Timestamp inicio, Timestamp fin) throws Exception;
+	public int cantAlquileres(Timestamp inicio, Timestamp fin) throws Exception;
 }

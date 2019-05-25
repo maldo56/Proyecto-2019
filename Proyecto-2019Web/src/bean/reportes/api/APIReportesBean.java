@@ -84,4 +84,28 @@ public class APIReportesBean {
     	
     	return resp;
     }
+    
+    @GET
+	@Path("/cantalquileres")
+    @Consumes( {"application/json"} )
+	@Produces( {"application/json"} )
+	public Map<String, Object> cantAlquileres(@QueryParam("inicio") Timestamp inicio, @QueryParam("fin") Timestamp fin) {
+
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		
+    		int a = business.cantAlquileres(inicio, fin);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    }
 }

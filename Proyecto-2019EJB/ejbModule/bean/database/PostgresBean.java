@@ -1023,30 +1023,34 @@ public class PostgresBean implements PostgresBeanLocal {
 
     public float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception {
     	
-    	
-//    	String query = "select " + 
-//				"	sum(case when isavailable = true then 1 else 0 end) as scootersdisponibles," + 
-//				"	sum(case when isavailable = false then 1 else 0 end) as scootersrotos," + 
-//				"	sum(case when isrented = true then 1 else 0 end) as scootersenuso" + 
-//					"	from scooter;";
-//
-//Query q = em.createNativeQuery(query);
-//resp = (String) q.getResultList().get(0).;
-    	
-    	
     	try {
     		
     		String query = "select sum(mount) from movimiento "
     						+ "where paypalguid != \"\" and timestamp > " + inicio + " and timestamp < " + fin;
     
     		Query q = em.createNativeQuery(query);
-    		
-
     		double resp = (double) q.getResultList().get(0);
-    		
-    		DtoClient cliente = new DtoClient();
 
     		return (float) resp;
+    	} catch ( Exception e ) {
+    		System.out.println(e.getMessage());
+    		
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    	
+    }
+    
+    public int reportesCantAlquileres(Timestamp inicio, Timestamp fin) throws Exception {
+    	
+    	try {
+    		
+    		String query = "select sum(guid) from alquiler "
+    						+ "where \"\" and timestamp > " + inicio + " and timestamp < " + fin;
+    
+    		Query q = em.createNativeQuery(query);
+    		double resp = (double) q.getResultList().get(0);
+
+    		return (int) resp;
     	} catch ( Exception e ) {
     		System.out.println(e.getMessage());
     		
