@@ -81,9 +81,12 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
             				File outputfile = new File("C:\\images\\" + imgName);
             				ImageIO.write(image, "png", outputfile);
             				
-            				int port = (int) ManagementFactory.getPlatformMBeanServer().getAttribute(new ObjectName("jboss.as:socket-binding-group=standard-sockets,socket-binding=http"), "port");
             				
-            				client.setUrlphoto("http://localhost:" + port + "/resources/images/" + imgName);
+            				DtoParm host = database.obtenerParametro("host");
+            				DtoParm port = database.obtenerParametro("port");
+            				
+            				
+            				client.setUrlphoto("http://" + host.getValue() +":" + port.getValue() + "/resources/images/" + imgName);
             				
     					} catch ( Exception e ) {
     						System.out.println(e.getMessage());

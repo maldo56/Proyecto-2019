@@ -450,7 +450,6 @@ public class PostgresBean implements PostgresBeanLocal {
     	float saldoCliente = 0;
     	String kml = Utils.kmlLinestring(ubicaciones);
     	
-    	
 		try {
 			
 			parametro = em.find(obj.entity.parametro.class, "tarifa-actual");
@@ -469,16 +468,17 @@ public class PostgresBean implements PostgresBeanLocal {
 				scooter.setIsRented(false);
 				
 				try {
-					
+
 					dateInicio = new Time(entity.getTimestamp().getHours(), entity.getTimestamp().getMinutes(), entity.getTimestamp().getSeconds());
 					diferencia = dateFinal.getTime() - dateInicio.getTime();
-					
+
 					//cargar monto
 					monto = (diferencia/1000) * ( Float.valueOf(value).floatValue() );
-					
+
 				} catch( Exception e ) {
 					DateTimeException = true;
 				}
+				
 				
 				// Cobrarle al cliente
 				saldoCliente = cliente.getSaldo() - monto;
@@ -515,7 +515,7 @@ public class PostgresBean implements PostgresBeanLocal {
 					transaction.commit();
 				}
 				
-				alquiler.setDuration(entity.getDuration());
+				alquiler.setDuration(entity.getDuration());			
 				alquiler.setGeometria(Utils.kmltoGeometria(kml));
 				alquiler.setPrice(entity.getPrice());
 				alquiler.setTimestamp(entity.getTimestamp());
@@ -536,9 +536,9 @@ public class PostgresBean implements PostgresBeanLocal {
 				}
 				
 				return alquiler;
-			}// else {
-//				transaction.rollback();
-//			}
+			} else {
+				transaction.rollback();
+			}
 			
 		} catch (Exception e) {
 			
