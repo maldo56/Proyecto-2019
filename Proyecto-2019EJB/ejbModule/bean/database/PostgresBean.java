@@ -980,7 +980,7 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     	
     	try {
-    		String resp = null;
+    		DtoInfoScooters resp = null;
     		
     		String query = "select " + 
 		    				"	sum(case when isavailable = true then 1 else 0 end) as scootersdisponibles," + 
@@ -988,38 +988,15 @@ public class PostgresBean implements PostgresBeanLocal {
 		    				"	sum(case when isrented = true then 1 else 0 end) as scootersenuso" + 
 		    					"	from scooter;";
     		
-    		Query q = em.createNativeQuery(query);
-    		
-//    		resp = (String) q.getResultList().get(0).;
-    		
-//    		System.out.println(q.getResultList().toString());
+    		Query q = em.createNativeQuery(query, DtoInfoScooters.class);
+    		resp = (DtoInfoScooters) q.getResultList().get(0);
     		
     		
-    		System.out.println("Llega <=============================== 1");
-    		System.out.println("Llega <=    " + resp + "1");
-    		
-    		
-    		return null;
+    		return resp;
     	} catch (Exception e) {
     		throw e;
     	}
 			
-//			String srtquery = "select st_astext(s.location) "
-//							+ "from scooter as s "
-//							+ "where s.isRented = false and s.isAvailable = true";
-//			
-//			Query q = em.createNativeQuery(srtquery);
-//			strgeometrias = q.getResultList();
-//			
-//			
-//			q = em.createQuery("select p from scooter p where p.isRented = false and p.isAvailable = true");
-//			
-//			DtoScooter aux;
-//			
-//			List<scooter> l = q.getResultList();
-//			
-			
-		
     }
 
     public float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception {

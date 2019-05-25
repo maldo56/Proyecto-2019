@@ -1,7 +1,12 @@
 package obj.dto;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class DtoInfoScooters {
 
+	@Id
 	private int scootersdisponibles;
 	private int scootersenUso;
 	private int scootersrotos;
@@ -9,10 +14,10 @@ public class DtoInfoScooters {
 	
 	public DtoInfoScooters() {}
 	
-	public DtoInfoScooters(int scootersDisponibles, int scootersEnUso, int scootersDañados) {
+	public DtoInfoScooters(int scootersDisponibles, int scootersEnUso, int scootersrotos) {
 		scootersdisponibles = scootersDisponibles;
 		scootersenUso = scootersEnUso;
-		scootersrotos = scootersDañados;
+		scootersrotos = scootersrotos;
 	}
 
 	
@@ -33,12 +38,12 @@ public class DtoInfoScooters {
 		scootersenUso = scootersEnUso;
 	}
 
-	public int getScootersDañados() {
+	public int getScootersrotos() {
 		return scootersrotos;
 	}
 
-	public void setScootersDañados(int scootersDañados) {
-		scootersrotos = scootersDañados;
+	public void setScootersrotos(int scootersrotos) {
+		this.scootersrotos = scootersrotos;
 	}
 	
 }
