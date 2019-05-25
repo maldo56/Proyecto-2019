@@ -1,5 +1,6 @@
 package bean.database;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -8,6 +9,7 @@ import obj.dto.DtoAdmin;
 import obj.dto.DtoAlquiler;
 import obj.dto.DtoClient;
 import obj.dto.DtoGeometria;
+import obj.dto.DtoInfoScooters;
 import obj.dto.DtoLocation;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
@@ -47,4 +49,6 @@ public interface PostgresBeanLocal {
 	DtoGeometria obtenerArea() throws Exception;
 	DtoAlquiler obtenerAlquilerActivo(String username) throws Exception;
 	
+	DtoInfoScooters reporteInfoScooter() throws Exception;
+	float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception;
 }

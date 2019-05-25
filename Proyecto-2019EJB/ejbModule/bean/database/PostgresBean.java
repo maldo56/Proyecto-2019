@@ -34,6 +34,7 @@ import obj.dto.DtoAdmin;
 import obj.dto.DtoAlquiler;
 import obj.dto.DtoClient;
 import obj.dto.DtoGeometria;
+import obj.dto.DtoInfoScooters;
 import obj.dto.DtoLocation;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
@@ -495,7 +496,7 @@ public class PostgresBean implements PostgresBeanLocal {
 				try {
 					movimiento = new movimiento();
 					movimiento.setCliente(cliente);
-					movimiento.setMoneda("UY");
+					movimiento.setMoneda("USD");
 					movimiento.setMount(monto);
 					movimiento.setPaypalguid("");
 					movimiento.setTimestamp(new Timestamp(System.currentTimeMillis()));
@@ -571,14 +572,13 @@ public class PostgresBean implements PostgresBeanLocal {
     	}
 		
 		try {
+			
 			transaction.begin();
 			
 			entity = em.find(cliente.class, username);
-			
 			montoOld = entity.getSaldo();
-			
 			entity.setSaldo( (monto + montoOld) );
-				
+
 			transaction.commit();
 
 			return true;
@@ -971,5 +971,90 @@ public class PostgresBean implements PostgresBeanLocal {
     	}
     	
     }
+    
+    
+    //--------------------------------  REPORTES   --------------------------------------------------------------//
+     
+    public DtoInfoScooters reporteInfoScooter() throws Exception {
+    	
+    	
+    	try {
+    		String resp = null;
+    		
+    		String query = "select " + 
+		    				"	sum(case when isavailable = true then 1 else 0 end) as scootersdisponibles," + 
+		    				"	sum(case when isavailable = false then 1 else 0 end) as scootersrotos," + 
+		    				"	sum(case when isrented = true then 1 else 0 end) as scootersenuso" + 
+		    					"	from scooter;";
+    		
+    		Query q = em.createNativeQuery(query);
+    		
+//    		resp = (String) q.getResultList().get(0).;
+    		
+//    		System.out.println(q.getResultList().toString());
+    		
+    		
+    		System.out.println("Llega <=============================== 1");
+    		System.out.println("Llega <=    " + resp + "1");
+    		
+    		
+    		return null;
+    	} catch (Exception e) {
+    		throw e;
+    	}
+			
+//			String srtquery = "select st_astext(s.location) "
+//							+ "from scooter as s "
+//							+ "where s.isRented = false and s.isAvailable = true";
+//			
+//			Query q = em.createNativeQuery(srtquery);
+//			strgeometrias = q.getResultList();
+//			
+//			
+//			q = em.createQuery("select p from scooter p where p.isRented = false and p.isAvailable = true");
+//			
+//			DtoScooter aux;
+//			
+//			List<scooter> l = q.getResultList();
+//			
+			
+		
+    }
+
+    public float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception {
+    	
+    	
+//    	String query = "select " + 
+//				"	sum(case when isavailable = true then 1 else 0 end) as scootersdisponibles," + 
+//				"	sum(case when isavailable = false then 1 else 0 end) as scootersrotos," + 
+//				"	sum(case when isrented = true then 1 else 0 end) as scootersenuso" + 
+//					"	from scooter;";
+//
+//Query q = em.createNativeQuery(query);
+//resp = (String) q.getResultList().get(0).;
+    	
+    	
+    	try {
+    		
+    		String query = "select sum(mount) from movimiento "
+    						+ "where paypalguid != \"\" and timestamp > " + inicio + " and timestamp < " + fin;
+    
+    		Query q = em.createNativeQuery(query);
+    		
+
+    		double resp = (double) q.getResultList().get(0);
+    		
+    		DtoClient cliente = new DtoClient();
+
+    		return (float) resp;
+    	} catch ( Exception e ) {
+    		System.out.println(e.getMessage());
+    		
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    	
+    }
+    
+    
     
 }
