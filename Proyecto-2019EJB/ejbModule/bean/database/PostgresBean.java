@@ -670,6 +670,23 @@ public class PostgresBean implements PostgresBeanLocal {
     	 
     }
     
+    public DtoAdmin obtenerAdmin(String username) throws Exception {
+    	
+    	try {
+    		administrador entity = em.find(administrador.class, username);
+    		
+    		DtoAdmin admin = new DtoAdmin();
+    		
+    		admin.setUsername(username);
+    		admin.setEmail(entity.getEmail());
+    		admin.setIsSuperuser(entity.getIsSuperuser());
+    		
+    		return admin;
+    	} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    }
+    
     public DtoParm obtenerParametro(String key) throws Exception {
     	
     	try {
@@ -685,6 +702,36 @@ public class PostgresBean implements PostgresBeanLocal {
     		throw new Exception("Ha ocurrido un error");
     	}
     	 
+    }
+    
+    public List<DtoParm> obtenerParametros() throws Exception {
+    	
+    	try {
+    		
+    		String query = "select p from parametro p";
+    		
+    		Query q = em.createQuery(query);
+			List<parametro> entity = (List<parametro>) q.getResultList();
+		    
+			DtoParm parm;
+			List<DtoParm> params = new ArrayList<DtoParm>();
+    		
+			
+			for ( parametro aux : entity ) {
+				parm = new DtoParm();
+				
+				parm.setCode(aux.getCode());
+				parm.setUnit(aux.getUnit());
+				parm.setValue(aux.getValue());
+				
+				params.add(parm);
+			}
+			
+    		return params;
+    	} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    	
     }
     
     public List<DtoAlquiler> obtenerAlquileres(String username) throws Exception {

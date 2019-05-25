@@ -271,6 +271,55 @@ public class APIUserBean {
     }
     
     @GET
+    @Path("/admin")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Map<String, Object> obtenerAdmin(@QueryParam("username") String username) {
+    	
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		DtoAdmin a = buissnes.obtenerAdmin(username);
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    }
+
+    @GET
+    @Path("/parametros")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+    public Map<String, Object> obtenerParametros() {
+    	
+    	Map<String, Object> resp = new HashMap();
+    	
+    	System.out.println("Llega <=============== API");
+    	
+    	try {
+    		List<DtoParm> a = buissnes.obtenerParametros();
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    	
+    }
+    
+    @GET
     @Path("/parametro")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

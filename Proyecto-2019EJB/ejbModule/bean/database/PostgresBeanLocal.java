@@ -36,7 +36,9 @@ public interface PostgresBeanLocal {
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente) throws Exception;
 	DtoClient obtenerCliente(String username) throws Exception;
+	DtoAdmin obtenerAdmin(String username) throws Exception; 
 	DtoParm obtenerParametro(String key) throws Exception;
+	List<DtoParm> obtenerParametros() throws Exception;
 	List<DtoAlquiler> obtenerAlquileres(String username) throws Exception;
 	List<DtoScooter> scootersDisponibles() throws Exception;
 	float obtenerTiempoDisponible(String username) throws Exception;

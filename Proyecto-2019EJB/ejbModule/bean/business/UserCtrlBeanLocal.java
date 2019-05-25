@@ -1,10 +1,8 @@
 package bean.business;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.Local;
-import javax.ws.rs.QueryParam;
 
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
@@ -27,7 +25,9 @@ public interface UserCtrlBeanLocal {
 	
 	List<DtoMovimiento> obtenerMovimientos(String cliente) throws Exception;
 	DtoClient obtenerCliente(String username) throws Exception;
+	DtoAdmin obtenerAdmin(String username) throws Exception;
 	DtoParm obtenerParametro(String key) throws Exception;
+	List<DtoParm> obtenerParametros() throws Exception;
 	Float obtenerTiempoDisponible(String username) throws Exception;
 	
 }

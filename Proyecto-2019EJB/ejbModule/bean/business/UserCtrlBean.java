@@ -161,8 +161,16 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	return database.obtenerCliente(username);
     }
     
+    public DtoAdmin obtenerAdmin(String username) throws Exception {
+    	return database.obtenerAdmin(username);
+    }
+    
     public DtoParm obtenerParametro(String key) throws Exception {
     	return database.obtenerParametro(key);
+    }
+    
+    public List<DtoParm> obtenerParametros() throws Exception {
+    	return database.obtenerParametros();
     }
     
     public Float obtenerTiempoDisponible(String username) throws Exception {
