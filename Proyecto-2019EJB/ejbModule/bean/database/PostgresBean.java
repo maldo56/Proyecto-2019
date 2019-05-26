@@ -797,6 +797,43 @@ public class PostgresBean implements PostgresBeanLocal {
     	return alquileres;
     	
     }
+
+    
+    public List<DtoScooter> allScooters() throws Exception {
+    	
+    	List<DtoScooter> scooters = new ArrayList<DtoScooter>();
+    	
+		try {
+			DtoScooter aux;
+			
+			Query q = em.createQuery("select p from scooter p ");
+			List<scooter> l = q.getResultList();
+			
+			int index = 0;
+			String kml;
+		
+			for (scooter alq : l) {
+				
+				aux = new DtoScooter();
+				aux.setGuid(alq.getGuid());
+				aux.setBateryLevel(alq.getBateryLevel());
+				aux.setIsAvailable(alq.getIsAvailable());
+				aux.setIsRented(alq.getIsRented());
+				
+				scooters.add(aux);
+				index ++;
+			}
+			
+			if (l.isEmpty()) {
+				System.out.println("Result set movimientos is empty");
+			}
+			
+		} catch( Exception e ) {
+			throw new Exception("Ha ocurrido un error");
+		}
+    	
+    	return scooters;
+    }
     
     public List<DtoScooter> scootersDisponibles() throws Exception {
     	

@@ -110,7 +110,29 @@ public class APIScooterBean {
     
     
     //-----------------------------------------  GET  ------------------------------------------------------------------------//
-    
+
+    @GET
+    @Path("/allScooters")
+    @Consumes( {"application/json"} )
+	@Produces( {"application/json"} )
+	public Map<String, Object> allScooters() {
+
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		List<DtoScooter> a = business.allScooters();
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	   	
+    	return resp;
+    }
     
     @GET
     @Path("/disponibles")
@@ -134,8 +156,7 @@ public class APIScooterBean {
     	   	
     	return resp;
     }
-    
-    
+
     @GET
     @Path("/isAlquilado")
     @Consumes( {"application/json"} )

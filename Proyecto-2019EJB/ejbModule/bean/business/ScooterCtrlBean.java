@@ -42,6 +42,10 @@ public class ScooterCtrlBean implements ScooterCtrlBeanLocal {
     	return postgres.abArea(operation, geometry);
     }
     
+    public List<DtoScooter> allScooters() throws Exception {
+    	return postgres.allScooters();
+    }
+    
     public List<DtoScooter> scootersDisponibles() throws Exception {
     	return postgres.scootersDisponibles();
     }

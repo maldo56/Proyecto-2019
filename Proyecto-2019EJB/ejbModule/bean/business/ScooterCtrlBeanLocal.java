@@ -1,6 +1,7 @@
 package bean.business;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Local;
 
@@ -14,6 +15,7 @@ public interface ScooterCtrlBeanLocal {
 	Boolean M(String campo, String guid, String value) throws Exception;
 	Boolean abArea(char operation, DtoGeometria geometry) throws Exception;
 	
+	List<DtoScooter> allScooters() throws Exception;
 	List<DtoScooter> scootersDisponibles() throws Exception;
 	String estaAlquilado(String guid) throws Exception;
 	DtoGeometria obtenerArea() throws Exception;
