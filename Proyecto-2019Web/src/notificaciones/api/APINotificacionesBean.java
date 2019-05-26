@@ -68,16 +68,35 @@ public class APINotificacionesBean {
 			System.out.println("Username session: " + aux.getUsername());
 			System.out.println("Rol session: " + aux.getRol());
 			
+			System.out.println("Username: " + username);
+			System.out.println("Rol: " + rol);
+			
+			if ( rol.isEmpty()) {
+				if ( username.isEmpty() ) {
+					aux.getSession().getBasicRemote().sendText(message);
+				} else {
+					if ( aux.getUsername().equals(username) ) {
+						aux.getSession().getBasicRemote().sendText(message);
+					}
+				}
+			} else if ( username.isEmpty() ) {
+				if ( aux.getRol().equals(rol) ) {
+					aux.getSession().getBasicRemote().sendText(message);
+				}
+			} else {
+				if ( aux.getRol().equals(rol) && aux.getUsername().equals(username) ) {
+					aux.getSession().getBasicRemote().sendText(message);
+				}
+			}
 			
 			if ( aux.getRol().equals(rol) && aux.getUsername().equals(username)) {
+				
+				System.out.println("Entraa");
 				aux.getSession().getBasicRemote().sendText(message);
+			} else {
+				System.out.println("Else");
 			}
 		}
-		
-		
-//		for (WSSession s : Sessions) {
-//			s.getSession().getBasicRemote().sendText(message);
-//		}
 		
 	}
 	

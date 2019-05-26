@@ -165,13 +165,15 @@ public class APIUserBean {
     		resp.put("message", "");
     		resp.put("body", a);
     		
+    		if ( operation == 'M' ) {
+        		notifications.sendNotification("admin", "", "Se ha cambiado el parametro '" + parm.getCode() + "' a " + parm.getValue());
+        	}
+    		
     	} catch (Exception e) {
     		resp.put("success", false);
     		resp.put("message", e.getMessage() + ".");
     		resp.put("body", null);
     	}
-    	
-    	notifications.sendNotification("client", "mmaldonado", "Nueva notificacion");
     	
     	return resp;
     }
@@ -190,6 +192,8 @@ public class APIUserBean {
     		resp.put("message", "");
     		resp.put("body", a);
     		
+    		notifications.sendNotification("client", username, "Se le ha acreditado a su cuenta: " + monto);
+    		
     	} catch (Exception e) {
     		resp.put("success", false);
     		resp.put("message", e.getMessage() + ".");
@@ -205,6 +209,8 @@ public class APIUserBean {
 	@Produces(MediaType.APPLICATION_JSON)
     public Map<String, Object> recargarSaldoAdmin(@QueryParam("admin") String admin, @QueryParam("password") String password, @QueryParam("usernameCliente") String usernameCliente, @QueryParam("monto") float monto) {
     	
+    	System.out.println("Recarga saldo");
+    	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
@@ -212,6 +218,8 @@ public class APIUserBean {
     		resp.put("success", true);
     		resp.put("message", "");
     		resp.put("body", a);
+    		
+    		notifications.sendNotification("client", usernameCliente, "Se le ha acreditado a su cuenta: " + monto);
     		
     	} catch (Exception e) {
     		resp.put("success", false);
