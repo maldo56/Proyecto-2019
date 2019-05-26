@@ -2,7 +2,11 @@ package notificaciones.api;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.EJB;
@@ -19,8 +23,10 @@ import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import dto.WSSession;
 import servicios.business.ServicioCtrlBeanLocal;
 
 import javax.websocket.Session;
@@ -30,29 +36,48 @@ import javax.websocket.Session;
  */
 @Stateless
 @LocalBean
-@ServerEndpoint(value = "/notifications", configurator = MyServerEndpointConfigurator.class)
+@ServerEndpoint(value = "/notifications/{rol}/{username}", configurator = MyServerEndpointConfigurator.class)
 public class APINotificacionesBean {
 
-	static private Set<Session> Sessions = new HashSet<>();
+	static private List<WSSession> Sessions = new ArrayList<WSSession>();
 	
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ServicioCtrlBean!servicios.business.ServicioCtrlBeanLocal")
 	private ServicioCtrlBeanLocal buissnes;
 	
 	
 	@OnOpen
-    public void open(Session session, EndpointConfig endpointConfig) {
+    public void open(@PathParam("rol") String rol, @PathParam("username") String username, Session session, EndpointConfig endpointConfig) {
         System.out.println("WebSocket: Nueva sesion abierta ==> " + session.getId());
         
-        String userAgent = (String) endpointConfig.getUserProperties().get("user-agent");
+//        String userAgent = (String) endpointConfig.getUserProperties().get("user-agent");
         
-        Sessions.add(session);
+        System.out.println(username);
+        System.out.println(rol);
+        
+        WSSession wss = new WSSession(username, rol, session);
+        
+        Sessions.add(wss);
     }
 	
-	static public void sendNotification(String message) throws IOException {
+	static public void sendNotification(String rol, String username, String message) throws IOException {
 		
-		for (Session s : Sessions) {
-			s.getBasicRemote().sendText(message);
+		WSSession aux;
+		for (int x = 0; x < Sessions.size(); x++) {
+			aux = Sessions.get(x);
+			
+			System.out.println("Username session: " + aux.getUsername());
+			System.out.println("Rol session: " + aux.getRol());
+			
+			
+			if ( aux.getRol().equals(rol) && aux.getUsername().equals(username)) {
+				aux.getSession().getBasicRemote().sendText(message);
+			}
 		}
+		
+		
+//		for (WSSession s : Sessions) {
+//			s.getSession().getBasicRemote().sendText(message);
+//		}
 		
 	}
 	

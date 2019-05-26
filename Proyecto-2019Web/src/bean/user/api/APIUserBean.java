@@ -171,7 +171,7 @@ public class APIUserBean {
     		resp.put("body", null);
     	}
     	
-    	notifications.sendNotification("Nueva notificacion");
+    	notifications.sendNotification("client", "mmaldonado", "Nueva notificacion");
     	
     	return resp;
     }
