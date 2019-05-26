@@ -149,35 +149,12 @@ public class APIUserBean {
     @Path("/parametro/abm/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> ABMParametro(@PathParam("operation") char operation, DtoParm parm) {
+    public Map<String, Object> ABMParametro(@PathParam("operation") char operation, @QueryParam("admin") String admin, DtoParm parm) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
-    		boolean a = buissnes.ABMParametro(operation, parm);
-    		resp.put("success", true);
-    		resp.put("message", "");
-    		resp.put("body", a);
-    		
-    	} catch (Exception e) {
-    		resp.put("success", false);
-    		resp.put("message", e.getMessage() + ".");
-    		resp.put("body", null);
-    	}
-    	
-    	return resp;
-    }
-    
-    @POST
-    @Path("/alquiler/{operation}")
-    @Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> empezarAlquiler(@PathParam("operation") char operation, DtoParm parm) {
-    	
-    	Map<String, Object> resp = new HashMap();
-    	
-    	try {
-    		boolean a = buissnes.ABMParametro(operation, parm);
+    		boolean a = buissnes.ABMParametro(operation, admin, parm);
     		resp.put("success", true);
     		resp.put("message", "");
     		resp.put("body", a);
@@ -376,7 +353,7 @@ public class APIUserBean {
     		float a = buissnes.obtenerTiempoDisponible(username);
     		resp.put("success", true);
     		resp.put("message", "");
-    		resp.put("body", a);
+    		resp.put("body", (int) a);
     		
     	} catch (Exception e) {
     		resp.put("success", false);

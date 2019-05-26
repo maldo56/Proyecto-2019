@@ -27,7 +27,7 @@ import org.postgis.Geometry;
 import org.postgis.LineString;
 import org.postgis.Point;
 
-import bean.scooterclient.database.MongoBeanLocal;
+import bean.database.mongo.MongoBeanLocal;
 import exceptions.DateTimeException;
 import exceptions.MovimientoException;
 import obj.dto.DtoAdmin;
@@ -121,6 +121,7 @@ public class PostgresBean implements PostgresBeanLocal {
 		scooter entity;
 		
 		try {
+			
 			transaction.begin();
 			
 			if ( operation == 'A' ) {
@@ -135,11 +136,14 @@ public class PostgresBean implements PostgresBeanLocal {
 				em.persist(entity);
 				transaction.commit();
 				
+				parametro parametroLat = em.find(obj.entity.parametro.class, "scooter-init-lat");
+				parametro parametroLng = em.find(obj.entity.parametro.class, "scooter-init-lng");
+				
 				
 				transaction.begin();
 				
 				String query = "UPDATE scooter "
-						+ "SET location = ST_GeomFromText('POINT(-71.060316 48.432044)', 4326) "
+						+ "SET location = ST_GeomFromText('POINT(" + parametroLat.getValue() + " " + parametroLat.getValue() + ")', 4326) "
 						+ "WHERE scooter.guid = '" + entity.getGuid() + "'";
 				
 				em.createNativeQuery(query).executeUpdate();
@@ -313,12 +317,13 @@ public class PostgresBean implements PostgresBeanLocal {
 		}
     }
     
-    public Boolean ABMParametro(char operation, DtoParm parm) throws Exception {
+    public String ABMParametro(char operation, DtoParm parm) throws Exception {
     	
 		parametro entity;
+		String oldValue = "";
 		
 		if ( parm.getCode() == null || parm.getCode().isEmpty() ) {
-			return false;
+			return "false";
 		}
 		
 		try {
@@ -346,17 +351,22 @@ public class PostgresBean implements PostgresBeanLocal {
 					entity.setUnit(parm.getUnit());
 				
 				if ( parm.getValue() != null && !parm.getValue().isEmpty() )
+					oldValue = entity.getValue();
 					entity.setValue(parm.getValue());
 				
 			} else {
 				transaction.rollback();
 				
-				return false;
+				return "false";
 			}
 
 			transaction.commit();
-
-			return true;
+			
+			if ( oldValue.isEmpty() ) {
+				return "true";
+			} else {
+				return oldValue;
+			}
 			
 		} catch (Exception e) {
 			throw new Exception("Ha ocurrido un error");

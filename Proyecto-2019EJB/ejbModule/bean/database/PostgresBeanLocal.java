@@ -28,7 +28,7 @@ public interface PostgresBeanLocal {
 	Boolean MScooter(String campo, String guid, String value) throws Exception;
 	Boolean ABMClient(char operation, DtoClient client) throws Exception;
 	Boolean ABMAdmin(char operation, DtoAdmin client) throws Exception;
-	Boolean ABMParametro(char operation, DtoParm parm) throws Exception;
+	String ABMParametro(char operation, DtoParm parm) throws Exception;
 	Boolean createMovimiento(DtoMovimiento movimiento) throws Exception;
 	DtoAlquiler altaAlquiler(DtoAlquiler alquiler) throws Exception;
 	Boolean abArea(char operation, DtoGeometria geometry) throws Exception;

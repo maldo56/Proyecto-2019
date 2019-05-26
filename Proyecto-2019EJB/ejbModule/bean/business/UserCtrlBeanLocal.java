@@ -22,7 +22,7 @@ public interface UserCtrlBeanLocal {
 	Boolean ABMClient(char operation, DtoClient client) throws Exception;
 	Boolean ABMAdmin(char operation, DtoAdmin admin) throws Exception;
 	Boolean createMovimiento(DtoMovimiento movimiento) throws Exception;
-	Boolean ABMParametro(char operation, DtoParm parm) throws Exception;
+	Boolean ABMParametro(char operation, String admin,DtoParm parm) throws Exception;
 	Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda) throws Exception;
 	Boolean recargarSaldoAdmin(String admin, String password, String usernameCliente, float monto) throws Exception;
 	

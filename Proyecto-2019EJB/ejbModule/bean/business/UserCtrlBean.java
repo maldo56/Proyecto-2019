@@ -16,6 +16,7 @@ import javax.management.ObjectName;
 import javax.security.sasl.AuthenticationException;
 
 import bean.database.PostgresBeanLocal;
+import bean.database.mongo.MongoBeanLocal;
 import exceptions.ImageException;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoClient;
@@ -34,6 +35,9 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
 
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/PostgresBean!bean.database.PostgresBeanLocal")
 	private PostgresBeanLocal database;
+	
+	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/MongoBean!bean.database.mongo.MongoBeanLocal")
+	private MongoBeanLocal mongo;
 	
     public UserCtrlBean() {
         // TODO Auto-generated constructor stub
@@ -134,8 +138,18 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	return database.createMovimiento(movimiento);
     }
     
-    public Boolean ABMParametro(char operation, DtoParm parm) throws Exception {
-    	return database.ABMParametro(operation, parm);
+    public Boolean ABMParametro(char operation, String admin,DtoParm parm) throws Exception {
+    	
+    	String resp = database.ABMParametro(operation, parm);
+    	
+    	if ( resp.equals("false") ) {
+    		return false;
+    	} else if ( resp.equals("true") ) {
+    		return true;
+    	} else {
+    		return mongo.addRegistroParametros(parm, resp, admin);
+    	}
+    	 
     }
     
     public Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda) throws Exception {
