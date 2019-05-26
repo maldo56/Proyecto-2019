@@ -53,7 +53,8 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	try {
     		
     		if ( client.getUrlphoto() == null || client.getUrlphoto().isEmpty() ) {
-    			client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
+    			if ( operation != 'M' )
+    				client.setUrlphoto("https://res.cloudinary.com/dnieertcs/image/upload/v1558049741/user-default.png");
     		} else {
     			
     			try {
