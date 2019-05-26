@@ -8,12 +8,12 @@ public class DtoHistorialTarifa {
     private String admin;
     private String oldValue;
     private String newValue;
-    private Timestamp timestamp;
+    private String timestamp;
     
     
     public DtoHistorialTarifa() {}
     
-	public DtoHistorialTarifa(String parametro, String admin, String oldValue, String newValue, Timestamp timestamp) {
+	public DtoHistorialTarifa(String parametro, String admin, String oldValue, String newValue, String timestamp) {
 		super();
 		this.parametro = parametro;
 		this.admin = admin;
@@ -56,11 +56,11 @@ public class DtoHistorialTarifa {
 		this.newValue = newValue;
 	}
 
-	public Timestamp getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Timestamp timestamp) {
+	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 	}
     

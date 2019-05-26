@@ -1,14 +1,17 @@
 package bean.database.mongo;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
@@ -100,12 +103,21 @@ public class MongoBean implements MongoBeanLocal {
         	MongoDatabase database = mongoClient.getDatabase("Proyecto-2019");
         	MongoCollection<Document> collection = database.getCollection("RegistroParametros");
         	
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss zzz");
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT-03:00"));
+			
+			System.out.println("Forat GTM: : " + sdf.format(new Timestamp(System.currentTimeMillis())));
+			
+			Date parsedDate = sdf.parse(sdf.format(new Timestamp(System.currentTimeMillis())));
+			Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+        	
+        	
             Document d = new Document()
     	           .append("parametro", parm.getCode())
     	           .append("admin", admin)
     	           .append("oldValue", oldValue)
     	           .append("newValue", parm.getValue())
-    	           .append("timestamp", new Timestamp(System.currentTimeMillis()));
+    	           .append("timestamp", timestamp);
                
             collection.insertOne(d);
             
@@ -177,15 +189,20 @@ public class MongoBean implements MongoBeanLocal {
         		historial.setAdmin(document.getString("admin"));
         		historial.setOldValue(document.getString("oldValue"));
         		historial.setNewValue(document.getString("newValue"));
-        		historial.setTimestamp( new Timestamp(document.getDate("timestamp").getTime()) );
         		
-        		System.out.println("Timestamp: " + document.getDate("timestamp").getTime());
+        		SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss zzz");
+				sdf.setTimeZone(TimeZone.getTimeZone("GMT-03:00"));
+				
+				Date parsedDate = sdf.parse(sdf.format(document.getDate("timestamp")));
+        		historial.setTimestamp(sdf.format(document.getDate("timestamp")));
         		
         		list.add(historial);
         	}
         	
         	return list;
     	} catch ( Exception e ) {
+    		System.out.println(e.getMessage());
+    		
     		throw new Exception("Ha ocurrido un error");
     	}
     }
