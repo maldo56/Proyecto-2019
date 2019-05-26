@@ -1,5 +1,6 @@
 package bean.user.api;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 import bean.business.UserCtrlBeanLocal;
 import exceptions.ImageException;
+import notificaciones.api.APINotificacionesBean;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
@@ -35,6 +38,9 @@ public class APIUserBean {
 
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/UserCtrlBean!bean.business.UserCtrlBeanLocal")
 	private UserCtrlBeanLocal buissnes;
+	
+	@Inject
+	APINotificacionesBean notifications;
     
     public APIUserBean() {
         // TODO Auto-generated constructor stub
@@ -149,7 +155,7 @@ public class APIUserBean {
     @Path("/parametro/abm/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> ABMParametro(@PathParam("operation") char operation, @QueryParam("admin") String admin, DtoParm parm) {
+    public Map<String, Object> ABMParametro(@PathParam("operation") char operation, @QueryParam("admin") String admin, DtoParm parm) throws IOException {
     	
     	Map<String, Object> resp = new HashMap();
     	
@@ -164,6 +170,8 @@ public class APIUserBean {
     		resp.put("message", e.getMessage() + ".");
     		resp.put("body", null);
     	}
+    	
+    	notifications.sendNotification("Nueva notificacion");
     	
     	return resp;
     }

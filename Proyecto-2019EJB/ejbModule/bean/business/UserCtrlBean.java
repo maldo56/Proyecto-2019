@@ -147,6 +147,7 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	} else if ( resp.equals("true") ) {
     		return true;
     	} else {
+    		
     		return mongo.addRegistroParametros(parm, resp, admin);
     	}
     }
