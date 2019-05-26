@@ -18,6 +18,7 @@ import javax.ws.rs.QueryParam;
 
 import bean.business.ReportesCtrlBeanLocal;
 import bean.business.ScooterCtrlBeanLocal;
+import obj.dto.DtoHistorialTarifa;
 import obj.dto.DtoInfoScooters;
 import obj.dto.DtoRakingUsuarios;
 
@@ -135,4 +136,32 @@ public class APIReportesBean {
     	
     	return resp;
     }
+    
+    
+    @GET
+	@Path("/historialtarifa")
+    @Consumes( {"application/json"} )
+	@Produces( {"application/json"} )
+	public Map<String, Object> historialTarifa() {
+
+    	Map<String, Object> resp = new HashMap();
+    	
+    	try {
+    		
+    		System.out.println("Llega <=============================== API");
+    		List<DtoHistorialTarifa> a = business.historialTarifa();
+    		resp.put("success", true);
+    		resp.put("message", "");
+    		resp.put("body", a);
+    		
+    	} catch (Exception e) {
+    		resp.put("success", false);
+    		resp.put("message", e.getMessage() + ".");
+    		resp.put("body", null);
+    	}
+    	
+    	return resp;
+    }
+
+    
 }

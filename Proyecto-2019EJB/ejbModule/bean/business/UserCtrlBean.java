@@ -149,7 +149,6 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	} else {
     		return mongo.addRegistroParametros(parm, resp, admin);
     	}
-    	 
     }
     
     public Boolean recargarSaldo(String username, String guidpaypal, float monto, String moneda) throws Exception {

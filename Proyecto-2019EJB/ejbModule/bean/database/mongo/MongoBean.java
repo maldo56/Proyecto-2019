@@ -1,5 +1,6 @@
 package bean.database.mongo;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
+import obj.dto.DtoHistorialTarifa;
 import obj.dto.DtoLocation;
 import obj.dto.DtoParm;
 
@@ -102,7 +104,8 @@ public class MongoBean implements MongoBeanLocal {
     	           .append("parametro", parm.getCode())
     	           .append("admin", admin)
     	           .append("oldValue", oldValue)
-    	           .append("newValue", parm.getValue());
+    	           .append("newValue", parm.getValue())
+    	           .append("timestamp", new Timestamp(System.currentTimeMillis()));
                
             collection.insertOne(d);
             
@@ -141,6 +144,44 @@ public class MongoBean implements MongoBeanLocal {
         		location.setLng(document.getDouble("lng").floatValue());
         		
         		list.add(location);
+        	}
+        	
+        	return list;
+    	} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    }
+    
+    public List<DtoHistorialTarifa> historialParametro(String parmCode) throws Exception {
+
+    	try {
+    		MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+        	MongoDatabase database = mongoClient.getDatabase("Proyecto-2019");
+        	MongoCollection<Document> collection = database.getCollection("RegistroParametros");
+        	
+        	BasicDBObject inQuery = new BasicDBObject();
+        	inQuery.put("parametro", parmCode);
+        	
+        	FindIterable<Document> puntos = collection.find(inQuery);
+        	MongoCursor<Document> it = puntos.iterator();
+        	
+        	List<DtoHistorialTarifa> list = new ArrayList<DtoHistorialTarifa>();
+        	DtoHistorialTarifa historial;
+        	Document document;
+        	
+        	while ( it.hasNext() ) {
+        		document = it.next();
+        		
+        		historial = new DtoHistorialTarifa();
+        		historial.setParametro(document.getString("parametro"));
+        		historial.setAdmin(document.getString("admin"));
+        		historial.setOldValue(document.getString("oldValue"));
+        		historial.setNewValue(document.getString("newValue"));
+        		historial.setTimestamp( new Timestamp(document.getDate("timestamp").getTime()) );
+        		
+        		System.out.println("Timestamp: " + document.getDate("timestamp").getTime());
+        		
+        		list.add(historial);
         	}
         	
         	return list;
