@@ -73,29 +73,30 @@ public class APINotificacionesBean {
 			
 			if ( rol.isEmpty()) {
 				if ( username.isEmpty() ) {
-					aux.getSession().getBasicRemote().sendText(message);
+					if ( aux.getSession().isOpen() )
+						aux.getSession().getBasicRemote().sendText(message);
 				} else {
 					if ( aux.getUsername().equals(username) ) {
-						aux.getSession().getBasicRemote().sendText(message);
+						if ( aux.getSession().isOpen() )
+							aux.getSession().getBasicRemote().sendText(message);
 					}
 				}
 			} else if ( username.isEmpty() ) {
 				if ( aux.getRol().equals(rol) ) {
-					aux.getSession().getBasicRemote().sendText(message);
+					if ( aux.getSession().isOpen() )
+						aux.getSession().getBasicRemote().sendText(message);
 				}
 			} else {
 				if ( aux.getRol().equals(rol) && aux.getUsername().equals(username) ) {
-					aux.getSession().getBasicRemote().sendText(message);
+					if ( aux.getSession().isOpen() )
+						aux.getSession().getBasicRemote().sendText(message);
 				}
 			}
 			
 			if ( aux.getRol().equals(rol) && aux.getUsername().equals(username)) {
-				
-				System.out.println("Entraa");
-				aux.getSession().getBasicRemote().sendText(message);
-			} else {
-				System.out.println("Else");
-			}
+				if ( aux.getSession().isOpen() )
+					aux.getSession().getBasicRemote().sendText(message);
+			} 
 		}
 		
 	}

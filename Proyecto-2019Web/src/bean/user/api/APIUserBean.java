@@ -85,9 +85,9 @@ public class APIUserBean {
     		resp.put("message", "");
     		resp.put("body", a);
     		
-    		if ( operation != 'A' ) {
+    		if ( operation == 'A' ) {
     			notifications.sendNotification("client", client.getUsername(), "Usted se ha registrado correctamente.");
-    		} else if ( operation != 'M' ) {
+    		} else if ( operation == 'M' ) {
     			notifications.sendNotification("client", client.getUsername(), "Sus datos se han actualizado correctamente.");
     		}
     		
