@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,6 +21,7 @@ import bean.business.AlquilerCtrlBeanLocal;
 import exceptions.DateTimeException;
 import exceptions.ImageException;
 import exceptions.MovimientoException;
+import notificaciones.api.APINotificacionesBean;
 import obj.dto.DtoAlquiler;
 
 
@@ -32,6 +34,9 @@ public class APIAlquilerBean {
 
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/AlquilerCtrlBean!bean.business.AlquilerCtrlBeanLocal")
 	private AlquilerCtrlBeanLocal buissnes;
+	
+	@Inject
+	APINotificacionesBean notifications;
 	
 	
     public APIAlquilerBean() {
@@ -52,6 +57,12 @@ public class APIAlquilerBean {
     		resp.put("success", true);
     		resp.put("message", "");
     		resp.put("body", a);
+    		
+    		if ( operation == 'E' ) {
+    			notifications.sendNotification("client", alquiler.getCliente(), "Ha comenzado su alquiler");
+    		} else {
+    			notifications.sendNotification("client", alquiler.getCliente(), "Ha finalizado su alquiler");
+    		}
     		
     	} catch (DateTimeException e) {
     		resp.put("success", false);

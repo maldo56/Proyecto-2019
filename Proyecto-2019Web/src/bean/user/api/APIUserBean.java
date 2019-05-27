@@ -85,6 +85,13 @@ public class APIUserBean {
     		resp.put("message", "");
     		resp.put("body", a);
     		
+    		if ( operation != 'A' ) {
+    			notifications.sendNotification("client", client.getUsername(), "Usted se ha registrado correctamente.");
+    		} else if ( operation != 'M' ) {
+    			notifications.sendNotification("client", client.getUsername(), "Sus datos se han actualizado correctamente.");
+    		}
+    		
+    		
     	} catch (Exception e) {
     		
     		if (e instanceof ImageException) {
@@ -109,7 +116,7 @@ public class APIUserBean {
 	@Path("/admin/abm/{operation}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> createAdmin(@PathParam("operation") char operation, DtoAdmin admin) {
+    public Map<String, Object> createAdmin(@PathParam("operation") char operation, DtoAdmin admin) throws IOException {
     	
     	Map<String, Object> resp = new HashMap();
     	
@@ -124,6 +131,12 @@ public class APIUserBean {
     		resp.put("message", e.getMessage() + ".");
     		resp.put("body", null);
     	}
+    	
+    	if ( operation != 'A' ) {
+			notifications.sendNotification("admin", admin.getUsername(), "Usted se ha registrado correctamente.");
+		} else if ( operation != 'M' ) {
+			notifications.sendNotification("client", admin.getUsername(), "Sus datos se han actualizado correctamente.");
+		}
     	
     	return resp;
     }
