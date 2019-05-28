@@ -66,9 +66,9 @@ public class APINotificacionesBean {
 			aux = Sessions.get(x);
 			
 			System.out.println("Username session: " + aux.getUsername());
-			System.out.println("Rol session: " + aux.getRol());
-			
 			System.out.println("Username: " + username);
+			
+			System.out.println("Rol session: " + aux.getRol());
 			System.out.println("Rol: " + rol);
 			
 			if ( rol.isEmpty()) {

@@ -23,6 +23,7 @@ import exceptions.ImageException;
 import exceptions.MovimientoException;
 import notificaciones.api.APINotificacionesBean;
 import obj.dto.DtoAlquiler;
+import servicios.api.APIServiciosBean;
 
 
 @Stateless
@@ -37,6 +38,9 @@ public class APIAlquilerBean {
 	
 	@Inject
 	APINotificacionesBean notifications;
+	
+	@Inject
+	APIServiciosBean scooterAction;
 	
 	
     public APIAlquilerBean() {
@@ -60,8 +64,11 @@ public class APIAlquilerBean {
     		
     		if ( operation == 'E' ) {
     			notifications.sendNotification("client", alquiler.getCliente(), "Ha comenzado su alquiler");
+    			scooterAction.sendAction("startTravel", a.getGuid(), a.getGuidscooter());
+    			
     		} else {
     			notifications.sendNotification("client", alquiler.getCliente(), "Ha finalizado su alquiler");
+    			scooterAction.sendAction("shutdown", a.getGuid(), a.getGuidscooter());
     		}
     		
     	} catch (DateTimeException e) {
