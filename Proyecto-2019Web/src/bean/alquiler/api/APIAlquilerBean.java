@@ -64,11 +64,11 @@ public class APIAlquilerBean {
     		
     		if ( operation == 'E' ) {
     			notifications.sendNotification("client", alquiler.getCliente(), "Ha comenzado su alquiler");
-    			scooterAction.sendAction("startTravel", a.getGuid(), a.getGuidscooter());
+    			scooterAction.sendAction("startTravel", a.getGuid(), a.getCliente(), a.getGuidscooter());
     			
     		} else {
     			notifications.sendNotification("client", alquiler.getCliente(), "Ha finalizado su alquiler");
-    			scooterAction.sendAction("shutdown", a.getGuid(), a.getGuidscooter());
+    			scooterAction.sendAction("shutdown", a.getGuid(), a.getCliente(), a.getGuidscooter());
     		}
     		
     	} catch (DateTimeException e) {

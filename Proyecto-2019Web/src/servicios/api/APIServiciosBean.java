@@ -90,9 +90,8 @@ public class APIServiciosBean {
 
 
 //	{action,isAlquilado,guidAlquiler}
-//	
 //	action : ["startTravel","shutdown"]
-	static public void sendAction(String action, String guidAlquiler, String scooterGuid) throws IOException {
+	static public void sendAction(String action, String guidAlquiler, String username, String scooterGuid) throws IOException {
 		
 		WSScooterSession session;
 		String message = "";
@@ -105,7 +104,7 @@ public class APIServiciosBean {
 				if ( session.getSession().isOpen() ) {
 					
 					if ( action.equals("startTravel") ) {
-						message = "{\"action\":\"" + action + ",\"isAlquilado\":" + true + ",\"guidAlquiler\":" + guidAlquiler + "}";
+						message = "{\"action\":\"" + action + ",\"username\":\"" + username + "\",\"isAlquilado\":" + true + ",\"guidAlquiler\":" + guidAlquiler + "}";
 					} else {
 						message = "{\"action\":\"" + action + ",\"isAlquilado\":" + false + ",\"guidAlquiler\":\" \"}";
 					}
