@@ -18,5 +18,6 @@ public interface MongoBeanLocal {
 	Boolean addRegistroParametros(DtoParm parm, String oldValue, String admin) throws Exception;
 	
 	List<DtoLocation> obtenerPuntos(String alquilerGuid) throws Exception;
+	List<DtoLocation> ultimosNPuntos(int cant, String scooterGuid) throws Exception;
 	List<DtoHistorialTarifa> historialParametro(String parmCode) throws Exception;
 }

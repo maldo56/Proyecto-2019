@@ -23,9 +23,13 @@ public class ServicioCtrlBean implements ServicioCtrlBeanLocal {
         // TODO Auto-generated constructor stub
     }
 
-    public void addPoint(String scooterGuid, String alquilerGuid, float x, float y)  throws Exception {
+    public void addPoint(String scooterGuid, String alquilerGuid, float x, float y) throws Exception {
     	
     	mongo.servicioAddPunto(scooterGuid,alquilerGuid, x, y);
+    }
+    
+    public void reloadLocation(String guidScooter) throws Exception {
+    	postgres.reloadLocation(guidScooter);
     }
     
     public String estaAlquilado(String guid) throws Exception {
