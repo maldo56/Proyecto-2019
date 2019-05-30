@@ -31,11 +31,18 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
     	
     	if ( operation == 'E' ) {
     		
+    		if ( !alquiler.getGuidscooter().isEmpty() ) {
+    			database.reloadLocation(alquiler.getGuidscooter());
+    		}
+    		
     		return database.altaAlquiler(alquiler);
         	
     	} else if ( operation == 'T' ) {
-    		
+
     		List<DtoLocation> ubicaciones = mongo.obtenerPuntos(alquiler.getGuid());
+    		if ( !ubicaciones.isEmpty() ) {
+    			database.reloadLocation(ubicaciones.get(0));
+    		}
     		
     		return database.terminarAlquiler(alquiler, ubicaciones);
     	}

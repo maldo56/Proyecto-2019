@@ -164,6 +164,49 @@ public class MongoBean implements MongoBeanLocal {
     	}
     }
     
+    
+    public List<DtoLocation> ultimosNPuntos(int cant, String scooterGuid) throws Exception {
+    	
+    	try {
+    		MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+        	MongoDatabase database = mongoClient.getDatabase("Proyecto-2019");
+        	MongoCollection<Document> collection = database.getCollection("ScootersUbicaciones");
+        	
+        	BasicDBObject inQuery = new BasicDBObject();
+        	inQuery.put("scooterGuid", scooterGuid);
+        	
+        	FindIterable<Document> puntos = collection.find(inQuery);
+        	MongoCursor<Document> it = puntos.iterator();
+        	
+        	List<DtoLocation> list = new ArrayList<DtoLocation>();
+        	DtoLocation location;
+        	Document document;
+        	
+        	int count = 0;
+        	
+        	while ( it.hasNext() ) {
+        		if ( count < 5 ) {
+        			document = it.next();
+            		
+            		location = new DtoLocation();
+            		location.setAlquilerGuid(document.getString("alquilerGuid"));
+            		location.setScooterGuid(document.getString("scooterGuid"));
+            		location.setLat(document.getDouble("lat").floatValue());
+            		location.setLng(document.getDouble("lng").floatValue());
+            		
+            		list.add(location);
+        		} else {
+        			break;
+        		}
+        	}
+        	
+        	return list;
+    	} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    }
+    
+    
     public List<DtoHistorialTarifa> historialParametro(String parmCode) throws Exception {
 
     	try {
