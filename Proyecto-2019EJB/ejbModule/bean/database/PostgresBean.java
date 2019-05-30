@@ -1049,14 +1049,19 @@ public class PostgresBean implements PostgresBeanLocal {
     public float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception {
     	
     	try {
+    		System.out.println("parametros:inicio |"+inicio.toString().substring(0,10)+"|  fin |"+fin.toString().substring(0,10)+"|");
     		
-    		String query = "select sum(mount) from movimiento "
-    						+ "where paypalguid != \"\" and timestamp > " + inicio + " and timestamp < " + fin;
+    		String query = "select sum(mount) from movimiento where  timestamp > '"+inicio.toString().substring(0,10)+"' and timestamp < '"+fin.toString().substring(0,10)+"'";
     
     		Query q = em.createNativeQuery(query);
+    		if (!q.getResultList().isEmpty()) {
+    			
     		double resp = (double) q.getResultList().get(0);
 
     		return (float) resp;
+    		}else {
+    			return 0;
+    		}
     	} catch ( Exception e ) {
     		System.out.println(e.getMessage());
     		
@@ -1065,22 +1070,37 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     }
     
-    public int reportesCantAlquileres(Timestamp inicio, Timestamp fin) throws Exception {
+    public double reportesCantAlquileres(Timestamp inicio, Timestamp fin) throws Exception {
     	
     	try {
+    		System.out.println("parametros:inicio |"+inicio.toString().substring(0,10)+"|  fin |"+fin.toString().substring(0,10)+"|");
     		
-    		String query = "select sum(guid) from alquiler "
-    						+ "where \"\" and timestamp > " + inicio + " and timestamp < " + fin;
+    		String query = "select count(*) from alquiler where  timestamp > '"+inicio.toString().substring(0,10)+"' and timestamp < '"+fin.toString().substring(0,10)+"'";
     
     		Query q = em.createNativeQuery(query);
-    		double resp = (double) q.getResultList().get(0);
-
-    		return (int) resp;
+    		if (!q.getResultList().isEmpty()) {
+	    		int resp = Integer.parseInt(q.getResultList().get(0).toString());
+	    		long cantidadDias = fin.getDate() - inicio.getDate();
+	    		System.out.println("calculated diff="+cantidadDias);
+	    		System.out.println("cantidad de alquileres="+resp);
+	    		if (resp>0 ) {
+	    			double promedio = (double)((double)resp/(double)cantidadDias);
+	    			System.out.println("promedio="+promedio);
+	    			return (double)promedio;
+	    		}else if (cantidadDias==1){
+	    			return (double)resp;
+	    		
+	    		}else {
+	    			return 0.0;
+	    		}
+    		}else {
+    			return 0.0;
+    		}
     	} catch ( Exception e ) {
     		System.out.println(e.getMessage());
     		
     		throw new Exception("Ha ocurrido un error");
-    	}
+       	}
     	
     }
     
