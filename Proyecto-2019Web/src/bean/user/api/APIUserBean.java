@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,12 +20,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import bean.business.UserCtrlBeanLocal;
+import exceptions.AuthorizationTokenException;
 import exceptions.ImageException;
+import io.jsonwebtoken.Claims;
 import notificaciones.api.APINotificacionesBean;
 import obj.dto.DtoClient;
 import obj.dto.DtoMovimiento;
 import obj.dto.DtoParm;
 import obj.dto.DtoUsuario;
+import security.JWTManage;
 import obj.dto.DtoAdmin;
 import obj.dto.DtoAlquiler;
 
@@ -56,8 +60,11 @@ public class APIUserBean {
     	
     	try {
     		DtoUsuario a = buissnes.login(username, password);
+        	String token = JWTManage.createJWT(a, 95500000);
+        	
     		resp.put("success", true);
     		resp.put("message", "");
+    		resp.put("auth", token);
     		resp.put("body", a);
     		
     	} catch (Exception e) {
@@ -74,12 +81,19 @@ public class APIUserBean {
 	@Path("/client/abm/{operation}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> createClient(@PathParam("operation") char operation, DtoClient client) {
+    public Map<String, Object> createClient(@HeaderParam("Authorization") String token, @PathParam("operation") char operation, DtoClient client) {
     	
     	Map<String, Object> resp = new HashMap();
     	boolean a = false;
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		a = buissnes.ABMClient(operation, client);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -116,27 +130,34 @@ public class APIUserBean {
 	@Path("/admin/abm/{operation}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> createAdmin(@PathParam("operation") char operation, DtoAdmin admin) throws IOException {
+    public Map<String, Object> createAdmin(@HeaderParam("Authorization") String token, @PathParam("operation") char operation, DtoAdmin admin) throws IOException {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		boolean a = buissnes.ABMAdmin(operation, admin);
     		resp.put("success", true);
     		resp.put("message", "");
     		resp.put("body", a);
+    		
+    		if ( operation != 'A' ) {
+    			notifications.sendNotification("admin", admin.getUsername(), "Usted se ha registrado correctamente.");
+    		} else if ( operation != 'M' ) {
+    			notifications.sendNotification("client", admin.getUsername(), "Sus datos se han actualizado correctamente.");
+    		}
     		
     	} catch (Exception e) {
     		resp.put("success", false);
     		resp.put("message", e.getMessage() + ".");
     		resp.put("body", null);
     	}
-    	
-    	if ( operation != 'A' ) {
-			notifications.sendNotification("admin", admin.getUsername(), "Usted se ha registrado correctamente.");
-		} else if ( operation != 'M' ) {
-			notifications.sendNotification("client", admin.getUsername(), "Sus datos se han actualizado correctamente.");
-		}
     	
     	return resp;
     }
@@ -145,11 +166,18 @@ public class APIUserBean {
 	@Path("/movimiento")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> createMovimiento(DtoMovimiento movimiento) {
+    public Map<String, Object> createMovimiento(@HeaderParam("Authorization") String token, DtoMovimiento movimiento) {
     	    	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		boolean a = buissnes.createMovimiento(movimiento);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -168,11 +196,18 @@ public class APIUserBean {
     @Path("/parametro/abm/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> ABMParametro(@PathParam("operation") char operation, @QueryParam("admin") String admin, DtoParm parm) throws IOException {
+    public Map<String, Object> ABMParametro(@HeaderParam("Authorization") String token, @PathParam("operation") char operation, @QueryParam("admin") String admin, DtoParm parm) throws IOException {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		boolean a = buissnes.ABMParametro(operation, admin, parm);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -195,11 +230,18 @@ public class APIUserBean {
     @Path("/recargar")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> recargarSaldo(@QueryParam("username") String username, @QueryParam("guidpaypal") String guidpaypal, @QueryParam("monto") float monto, @QueryParam("moneda") String moneda) {
+    public Map<String, Object> recargarSaldo(@HeaderParam("Authorization") String token, @QueryParam("username") String username, @QueryParam("guidpaypal") String guidpaypal, @QueryParam("monto") float monto, @QueryParam("moneda") String moneda) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		boolean a = buissnes.recargarSaldo(username, guidpaypal, monto, moneda);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -220,13 +262,20 @@ public class APIUserBean {
     @Path("/recargarSaldo/admin")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> recargarSaldoAdmin(@QueryParam("admin") String admin, @QueryParam("password") String password, @QueryParam("usernameCliente") String usernameCliente, @QueryParam("monto") float monto) {
+    public Map<String, Object> recargarSaldoAdmin(@HeaderParam("Authorization") String token, @QueryParam("admin") String admin, @QueryParam("password") String password, @QueryParam("usernameCliente") String usernameCliente, @QueryParam("monto") float monto) {
     	
     	System.out.println("Recarga saldo");
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		boolean a = buissnes.recargarSaldoAdmin(admin, password, usernameCliente, monto);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -250,11 +299,18 @@ public class APIUserBean {
     @Path("/movimientos")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> obtenerMovimientos(@QueryParam("client") String client) {
+    public Map<String, Object> obtenerMovimientos(@HeaderParam("Authorization") String token, @QueryParam("client") String client) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		if ( client.equals("") || client == null ) {
         		System.out.println("Todos los movimientos");
         	} else {
@@ -279,11 +335,18 @@ public class APIUserBean {
     @Path("/cliente")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> obtenerCliente(@QueryParam("username") String username) {
+    public Map<String, Object> obtenerCliente(@HeaderParam("Authorization") String token, @QueryParam("username") String username) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		DtoClient a = buissnes.obtenerCliente(username);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -302,11 +365,18 @@ public class APIUserBean {
     @Path("/admin")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> obtenerAdmin(@QueryParam("username") String username) {
+    public Map<String, Object> obtenerAdmin(@HeaderParam("Authorization") String token, @QueryParam("username") String username) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		DtoAdmin a = buissnes.obtenerAdmin(username);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -325,13 +395,20 @@ public class APIUserBean {
     @Path("/parametros")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> obtenerParametros() {
+    public Map<String, Object> obtenerParametros(@HeaderParam("Authorization") String token) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	System.out.println("Llega <=============== API");
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		List<DtoParm> a = buissnes.obtenerParametros();
     		resp.put("success", true);
     		resp.put("message", "");
@@ -351,11 +428,18 @@ public class APIUserBean {
     @Path("/parametro")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> obtenerParametro(@QueryParam("key") String key) {
+    public Map<String, Object> obtenerParametro(@HeaderParam("Authorization") String token, @QueryParam("key") String key) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		DtoParm a = buissnes.obtenerParametro(key);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -374,11 +458,18 @@ public class APIUserBean {
     @Path("/tiempodisponible")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> obtenerTiempoDisponible(@QueryParam("username") String username) {
+    public Map<String, Object> obtenerTiempoDisponible(@HeaderParam("Authorization") String token, @QueryParam("username") String username) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		float a = buissnes.obtenerTiempoDisponible(username);
     		resp.put("success", true);
     		resp.put("message", "");

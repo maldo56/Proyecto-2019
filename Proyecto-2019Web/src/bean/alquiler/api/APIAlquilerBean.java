@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,11 +19,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import bean.business.AlquilerCtrlBeanLocal;
+import exceptions.AuthorizationTokenException;
 import exceptions.DateTimeException;
 import exceptions.ImageException;
 import exceptions.MovimientoException;
+import io.jsonwebtoken.Claims;
 import notificaciones.api.APINotificacionesBean;
 import obj.dto.DtoAlquiler;
+import security.JWTManage;
 import servicios.api.APIServiciosBean;
 
 
@@ -52,11 +56,18 @@ public class APIAlquilerBean {
     @Path("/alquiler/{operation}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> alquiler(@PathParam("operation") char operation, DtoAlquiler alquiler) {
+    public Map<String, Object> alquiler(@HeaderParam("Authorization") String token, @PathParam("operation") char operation, DtoAlquiler alquiler) {
     	
     	Map<String, Object> resp = new HashMap();
       
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		DtoAlquiler a = buissnes.alquiler(operation, alquiler);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -95,12 +106,19 @@ public class APIAlquilerBean {
     @Path("/find")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> obtenerAlquiler(@QueryParam("guid") String guid) {
+    public Map<String, Object> obtenerAlquiler(@HeaderParam("Authorization") String token, @QueryParam("guid") String guid) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		DtoAlquiler a = buissnes.obtenerAlquiler(guid);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -119,12 +137,19 @@ public class APIAlquilerBean {
     @Path("/porcliente")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> obtenerAlquileres(@QueryParam("username") String username) {
+    public Map<String, Object> obtenerAlquileres(@HeaderParam("Authorization") String token, @QueryParam("username") String username) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		List<DtoAlquiler> a = buissnes.obtenerAlquileres(username);
     		resp.put("success", true);
     		resp.put("message", "");
@@ -143,12 +168,19 @@ public class APIAlquilerBean {
     @Path("/activoporcliente")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> obtenerAlquilerActivo(@QueryParam("username") String username) {
+    public Map<String, Object> obtenerAlquilerActivo(@HeaderParam("Authorization") String token, @QueryParam("username") String username) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
+    		
     		DtoAlquiler a = buissnes.obtenerAlquilerActivo(username);
     		resp.put("success", true);
     		resp.put("message", "");
