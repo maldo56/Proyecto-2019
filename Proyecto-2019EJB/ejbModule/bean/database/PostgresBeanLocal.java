@@ -32,6 +32,8 @@ public interface PostgresBeanLocal {
 	Boolean createMovimiento(DtoMovimiento movimiento) throws Exception;
 	DtoAlquiler altaAlquiler(DtoAlquiler alquiler) throws Exception;
 	Boolean abArea(char operation, DtoGeometria geometry) throws Exception;
+	Boolean reloadLocation(String scooterGuid) throws Exception;
+	Boolean reloadLocation(DtoLocation location) throws Exception;
 	
 	Boolean recargarSaldoCliente(String username, float monto) throws Exception;
 	

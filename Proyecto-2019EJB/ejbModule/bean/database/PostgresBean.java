@@ -4,7 +4,6 @@ import java.util.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -1036,39 +1035,25 @@ public class PostgresBean implements PostgresBeanLocal {
     		alquiler entity;
     		DtoAlquiler alquiler = new DtoAlquiler();
     		
-    		String query = "select p from alquiler as p where p.cliente.username=:username and p.duration is null and p.movimiento is null order by p.timestamp desc";
+    		String query = "select p from alquiler p "
+		    				+ "where p.cliente.username = :username and p.scooter.isRented "
+		    					+ "order by p.timestamp desc";
     		
     		Query q = em.createQuery(query);
 			q.setParameter("username", username);
     		
-			if (!q.getResultList().isEmpty()) {
-				
 			entity = (obj.entity.alquiler) q.getResultList().get(0);
     		
-    		if(entity.getGuid()!="") alquiler.setGuid(entity.getGuid());
-    		if(entity.getScooter()!=null)alquiler.setGuidscooter(entity.getScooter().getGuid());
-    		if(entity.getPrice()!=-1)alquiler.setPrice(entity.getPrice());
-    		if(entity.getTimestamp()!=null)alquiler.setTimestamp(entity.getTimestamp());
-    		if(entity.getCliente()!=null)alquiler.setCliente(entity.getCliente().getUsername());
-    		if(entity.getDuration()!=null)alquiler.setDuration(entity.getDuration());
     		
-    		try {
-	    		Timestamp datefinal = Timestamp.from(Instant.now());
-	    		Timestamp dateAlquiler = entity.getTimestamp();
-	    		System.out.println("llega");
-	    		long duracion = datefinal.getTime() - dateAlquiler.getTime();
-	    		System.out.println("Duracion: "+String.valueOf(duracion));
-	    		alquiler.setDuration(new Time(duracion));
-    		}catch(Exception e) {
-    			System.out.println("Catch");
-    		}
+    		alquiler.setGuid(entity.getGuid());
+    		alquiler.setGuidscooter(entity.getScooter().getGuid());
+    		alquiler.setPrice(entity.getPrice());
+    		alquiler.setDuration(entity.getDuration());
+    		alquiler.setTimestamp(entity.getTimestamp());
+    		alquiler.setCliente(entity.getCliente().getUsername());
+    		
     		return alquiler;
-			}else {
-				return null;
-			}
-			
     	} catch ( Exception e ) {
-    		e.printStackTrace();
     		throw new Exception("Ha ocurrido un error");
     	}
     	

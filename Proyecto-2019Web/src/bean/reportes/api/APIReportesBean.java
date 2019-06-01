@@ -10,6 +10,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,9 +19,12 @@ import javax.ws.rs.QueryParam;
 
 import bean.business.ReportesCtrlBeanLocal;
 import bean.business.ScooterCtrlBeanLocal;
+import exceptions.AuthorizationTokenException;
+import io.jsonwebtoken.Claims;
 import obj.dto.DtoHistorialTarifa;
 import obj.dto.DtoInfoScooters;
 import obj.dto.DtoRakingUsuarios;
+import security.JWTManage;
 
 @Stateless
 @LocalBean
@@ -43,11 +47,17 @@ public class APIReportesBean {
 	@Path("/infoscooters")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public Map<String, Object> infoScooters() {
+	public Map<String, Object> infoScooters(@HeaderParam("Authorization") String token) {
 
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
     		
     		System.out.println("Llega <=============================== API");
     		DtoInfoScooters a = business.infoScooters();
@@ -68,11 +78,17 @@ public class APIReportesBean {
 	@Path("/ganancias")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public Map<String, Object> ganancias(@QueryParam("inicio") Timestamp inicio, @QueryParam("fin") Timestamp fin) {
+	public Map<String, Object> ganancias(@HeaderParam("Authorization") String token, @QueryParam("inicio") Timestamp inicio, @QueryParam("fin") Timestamp fin) {
 
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
     		
     		float a = business.ganancias(inicio, fin);
     		resp.put("success", true);
@@ -92,11 +108,17 @@ public class APIReportesBean {
 	@Path("/cantalquileres")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public Map<String, Object> cantAlquileres(@QueryParam("inicio") Timestamp inicio, @QueryParam("fin") Timestamp fin) {
+	public Map<String, Object> cantAlquileres(@HeaderParam("Authorization") String token, @QueryParam("inicio") Timestamp inicio, @QueryParam("fin") Timestamp fin) {
 
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
     		
     		int a = business.cantAlquileres(inicio, fin);
     		resp.put("success", true);
@@ -117,11 +139,17 @@ public class APIReportesBean {
 	@Path("/rakingUsuarios")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public Map<String, Object> rakingUsuarios() {
+	public Map<String, Object> rakingUsuarios(@HeaderParam("Authorization") String token) {
 
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
     		
     		List<DtoRakingUsuarios> a = business.rakingUsuarios();
     		resp.put("success", true);
@@ -142,11 +170,17 @@ public class APIReportesBean {
 	@Path("/historialtarifa")
     @Consumes( {"application/json"} )
 	@Produces( {"application/json"} )
-	public Map<String, Object> historialTarifa() {
+	public Map<String, Object> historialTarifa(@HeaderParam("Authorization") String token) {
 
     	Map<String, Object> resp = new HashMap();
     	
     	try {
+    		try {
+    			String auxtoken = token.substring(0, 7);
+    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    		} catch (Exception e) {
+    			throw new AuthorizationTokenException("Autorización fallida");
+    		}
     		
     		System.out.println("Llega <=============================== API");
     		List<DtoHistorialTarifa> a = business.historialTarifa();

@@ -103,16 +103,20 @@ public class APIServiciosBean {
 				session = Sessions.get(x);
 				
 				if ( session.getGuidScooter().equals(scooterGuid) || scooterGuid.isEmpty() ) {
+					
 					if ( session.getSession().isOpen() ) {
-					if ( action.equals("startTravel") ) {
-						message = "{\"action\":\"" + action + "\",\"username\":\"" + username + "\",\"isAlquilado\":" + true + ",\"guidAlquiler\":\"" + guidAlquiler + "\"}";
-					} else {
-						buissnes.reloadLocation(scooterGuid);
-						message = "{\"action\":\"" + action + "\",\"isAlquilado\":" + false + ",\"guidAlquiler\":\" \"}";
+						
+						if ( action.equals("startTravel") ) {
+							message = "{\"action\":\"" + action + ",\"username\":\"" + username + "\",\"isAlquilado\":" + true + ",\"guidAlquiler\":" + guidAlquiler + "}";
+						} else {
+							buissnes.reloadLocation(scooterGuid);
+							
+							message = "{\"action\":\"" + action + ",\"username\":\"" + username + "\",\"isAlquilado\":" + false + ",\"guidAlquiler\":\" \"}";
+						}
+						
+						session.getSession().getBasicRemote().sendText(message);
 					}
 						
-					session.getSession().getBasicRemote().sendText(message);
-					}
 				}
 			}
 			
