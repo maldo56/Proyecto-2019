@@ -53,8 +53,7 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -83,8 +82,7 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -113,8 +111,7 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -146,8 +143,7 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -176,8 +172,7 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -206,8 +201,7 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -236,8 +230,7 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}

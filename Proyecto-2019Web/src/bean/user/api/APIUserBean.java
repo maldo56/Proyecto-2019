@@ -88,8 +88,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -136,8 +135,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -172,8 +170,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -202,8 +199,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -236,8 +232,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -270,8 +265,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -305,8 +299,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -341,8 +334,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -371,8 +363,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -399,12 +390,9 @@ public class APIUserBean {
     	
     	Map<String, Object> resp = new HashMap();
     	
-    	System.out.println("Llega <=============== API");
-    	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -434,8 +422,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -464,8 +451,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			String auxtoken = token.substring(0, 7);
-    			Claims claims = JWTManage.decodeJWT(auxtoken);
+    			JWTManage.decodeJWT(token);
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
