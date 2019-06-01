@@ -69,6 +69,9 @@ public class PostgresBean implements PostgresBeanLocal {
 	@Resource
 	UserTransaction transaction;
 	
+	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/MongoBean!bean.database.mongo.MongoBeanLocal")
+	private MongoBeanLocal mongo;
+	
     public PostgresBean() {
         // TODO Auto-generated constructor stub
     }
@@ -623,6 +626,42 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     }
     
+    public Boolean reloadLocation(DtoLocation location) throws Exception {
+    	
+		try {
+			transaction.begin();
+			em.createNativeQuery("UPDATE scooter p "
+								+ "	SET location = ST_GeomFromText('POINT(" + location.getLat() + " " + location.getLng() + ")', 4326)").executeUpdate();
+			transaction.commit();
+			
+		} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error.");
+    	}
+
+    	return true;
+    }
+
+    public Boolean reloadLocation(String scooterGuid) throws Exception {
+    	
+		try {
+			List<DtoLocation> locations = mongo.ultimosNPuntos(1, scooterGuid);
+			
+			if ( !locations.isEmpty() ) {
+				DtoLocation location = locations.get(0);
+				
+				transaction.begin();
+				em.createNativeQuery("UPDATE scooter p "
+									+ "	SET location = ST_GeomFromText('POINT(" + location.getLat() + " " + location.getLng() + ")', 4326)").executeUpdate();
+				transaction.commit();
+			}
+			
+			
+		} catch ( Exception e ) {
+    		throw new Exception("Ha ocurrido un error.");
+    	}
+
+    	return true;
+    }
     
     //--------------------------------  GET  --------------------------------------------------------------//
     

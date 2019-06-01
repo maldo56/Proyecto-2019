@@ -1,5 +1,6 @@
 package servicios.api;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class APIServiciosBean {
 	static private List<WSScooterSession> Sessions = new ArrayList<WSScooterSession>();
 	
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ServicioCtrlBean!servicios.business.ServicioCtrlBeanLocal")
-	private ServicioCtrlBeanLocal buissnes;
+	static private ServicioCtrlBeanLocal buissnes;
 	
 	
 	@OnOpen
@@ -96,23 +97,27 @@ public class APIServiciosBean {
 		WSScooterSession session;
 		String message = "";
 		
-		for ( int x = 0; x < Sessions.size(); x ++ ) {
-			session = Sessions.get(x);
+		try {
 			
-			if ( session.getGuidScooter().equals(scooterGuid) || scooterGuid.isEmpty() ) {
+			for ( int x = 0; x < Sessions.size(); x ++ ) {
+				session = Sessions.get(x);
 				
-				if ( session.getSession().isOpen() ) {
-					
+				if ( session.getGuidScooter().equals(scooterGuid) || scooterGuid.isEmpty() ) {
+					if ( session.getSession().isOpen() ) {
 					if ( action.equals("startTravel") ) {
 						message = "{\"action\":\"" + action + "\",\"username\":\"" + username + "\",\"isAlquilado\":" + true + ",\"guidAlquiler\":\"" + guidAlquiler + "\"}";
 					} else {
+						buissnes.reloadLocation(scooterGuid);
 						message = "{\"action\":\"" + action + "\",\"isAlquilado\":" + false + ",\"guidAlquiler\":\" \"}";
 					}
-					
+						
 					session.getSession().getBasicRemote().sendText(message);
+					}
 				}
-					
 			}
+			
+		} catch ( Exception e ) {
+			System.out.println(e.getMessage());
 		}
 	}
 	
