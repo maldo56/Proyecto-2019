@@ -22,7 +22,7 @@ public class JWTManage {
 //	private static String SECRET_KEY = "AAAAB3NzaC1yc2EAAAABJQAAAQBWi9+Ye7avkdAfkb7xL8FXsysJGCea8fDt27mvG9JRzhM2jjp4V4023qsvWlphyDEJ1vN3WapRsnhGyvB5PyoNahW8llvchoHs9eKpKsjM8l9H5nm/kbmpCLZ9WKRHvy1rKfCWi0lyfk+7GCubsXfcMSyn0w0YSkuv6GxxUS6QitPbf8EXkpdgDhDnAfyFFDs89s0uGja6fu1zhjVhur/J7Z27lzTbSwJskJJwpLU509V13i+EtsxvrzKfwTxO7JXqZoi3CO3tHy2+JErP91pMTz8uVvY9IPOk+a0HSO/q7nkVdc7CTw2Q7JoYfe2JScn3sp41NlNYsI1JD9mXCIa7 rsa-key-20190530";
 	
 	
-	public static String createJWT(DtoUsuario usuario, long ttlMillis) {
+	public static String createJWT(DtoUsuario usuario) {
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -39,8 +39,8 @@ public class JWTManage {
                 .setSubject(usuario.getUsername())
                 .signWith(signatureAlgorithm, signingKey);
 
-        if (ttlMillis >= 0) {
-            long expMillis = nowMillis + ttlMillis;
+        if (300000 >= 0) {
+            long expMillis = nowMillis + 300000;
             Date exp = new Date(expMillis);
             builder.setExpiration(exp);
         }
@@ -53,6 +53,7 @@ public class JWTManage {
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .parseClaimsJws(jwt).getBody();
+        
         return claims;
     }
 	

@@ -174,11 +174,10 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     		throw new AuthenticationException("Usuario o contraseña incorrecto.");
     	}
     	
-    	
     	DtoMovimiento movimiento = new DtoMovimiento();
     	movimiento.setMoneda("U$S");
     	movimiento.setMount(monto);
-    	movimiento.setPaypalguid("");
+    	movimiento.setPaypalguid("EFECTIVO");
     	movimiento.setUsername(usernameCliente);
     	movimiento.setTimestamp(new Timestamp(System.currentTimeMillis()));
     	

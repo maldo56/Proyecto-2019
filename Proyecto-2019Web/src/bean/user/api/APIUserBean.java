@@ -60,7 +60,7 @@ public class APIUserBean {
     	
     	try {
     		DtoUsuario a = buissnes.login(username, password);
-        	String token = JWTManage.createJWT(a, 95500000);
+        	String token = JWTManage.createJWT(a);
         	
     		resp.put("success", true);
     		resp.put("message", "");
@@ -75,7 +75,6 @@ public class APIUserBean {
  	
     	return resp;
     }
-    
     
     @POST
 	@Path("/client/abm/{operation}")
@@ -258,8 +257,6 @@ public class APIUserBean {
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
     public Map<String, Object> recargarSaldoAdmin(@HeaderParam("Authorization") String token, @QueryParam("admin") String admin, @QueryParam("password") String password, @QueryParam("usernameCliente") String usernameCliente, @QueryParam("monto") float monto) {
-    	
-    	System.out.println("Recarga saldo");
     	
     	Map<String, Object> resp = new HashMap();
     	

@@ -58,7 +58,6 @@ public class APIReportesBean {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
     		
-    		System.out.println("Llega <=============================== API");
     		DtoInfoScooters a = business.infoScooters();
     		resp.put("success", true);
     		resp.put("message", "");
@@ -177,7 +176,6 @@ public class APIReportesBean {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
     		
-    		System.out.println("Llega <=============================== API");
     		List<DtoHistorialTarifa> a = business.historialTarifa();
     		resp.put("success", true);
     		resp.put("message", "");
