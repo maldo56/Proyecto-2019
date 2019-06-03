@@ -4,6 +4,7 @@ import java.util.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -847,7 +848,6 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     }
 
-    
     public List<DtoScooter> allScooters() throws Exception {
     	
     	List<DtoScooter> scooters = new ArrayList<DtoScooter>();
@@ -1035,24 +1035,44 @@ public class PostgresBean implements PostgresBeanLocal {
     		alquiler entity;
     		DtoAlquiler alquiler = new DtoAlquiler();
     		
-    		String query = "select p from alquiler p "
-		    				+ "where p.cliente.username = :username and p.scooter.isRented "
-		    					+ "order by p.timestamp desc";
+    		String query = "select p from alquiler as p "
+    				+ "where p.cliente.username=:username and p.duration is null and p.movimiento is null order by p.timestamp desc";
     		
     		Query q = em.createQuery(query);
-			q.setParameter("username", username);
     		
-			entity = (obj.entity.alquiler) q.getResultList().get(0);
+    		if (!q.getResultList().isEmpty()) {
+
+    			entity = (obj.entity.alquiler) q.getResultList().get(0);
+
+    			if(entity.getGuid()!="") 
+    				alquiler.setGuid(entity.getGuid());
+    			if(entity.getScooter()!=null)
+    				alquiler.setGuidscooter(entity.getScooter().getGuid());
+    			if(entity.getPrice()!=-1)
+    				alquiler.setPrice(entity.getPrice());
+    			if(entity.getTimestamp()!=null)
+    				alquiler.setTimestamp(entity.getTimestamp());
+    			if(entity.getCliente()!=null)
+    				alquiler.setCliente(entity.getCliente().getUsername());
+    			if(entity.getDuration()!=null)
+    				alquiler.setDuration(entity.getDuration());
+    			
+    			try {
+	    			Timestamp datefinal = Timestamp.from(Instant.now());
+	    			Timestamp dateAlquiler = entity.getTimestamp();
+	    			System.out.println("llega");
+	    			long duracion = datefinal.getTime() - dateAlquiler.getTime();
+	    			System.out.println("Duracion: "+String.valueOf(duracion));
+	    			alquiler.setDuration(new Time(duracion));
+    			}catch(Exception e) {
+    				System.out.println("Catch");
+    			}
+    			
+    			return alquiler;
+   			} else {
+    			return null;
+   			}
     		
-    		
-    		alquiler.setGuid(entity.getGuid());
-    		alquiler.setGuidscooter(entity.getScooter().getGuid());
-    		alquiler.setPrice(entity.getPrice());
-    		alquiler.setDuration(entity.getDuration());
-    		alquiler.setTimestamp(entity.getTimestamp());
-    		alquiler.setCliente(entity.getCliente().getUsername());
-    		
-    		return alquiler;
     	} catch ( Exception e ) {
     		throw new Exception("Ha ocurrido un error");
     	}
@@ -1088,14 +1108,20 @@ public class PostgresBean implements PostgresBeanLocal {
     public float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception {
     	
     	try {
-    		
     		String query = "select sum(mount) from movimiento "
-    						+ "where paypalguid != \"\" and timestamp > " + inicio + " and timestamp < " + fin;
-    
+    						+ "where paypalguid != \"\" and timestamp > '"+inicio.toString().substring(0,10)+"' and timestamp < '"+fin.toString().substring(0,10)+"'";
+   
     		Query q = em.createNativeQuery(query);
-    		double resp = (double) q.getResultList().get(0);
+    		
+    		if (!q.getResultList().isEmpty()) {
+                
+            double resp = (double) q.getResultList().get(0);
 
-    		return (float) resp;
+            return (float) resp;
+            }else {
+                return 0;
+            }
+    		
     	} catch ( Exception e ) {
     		System.out.println(e.getMessage());
     		
@@ -1104,17 +1130,33 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     }
     
-    public int reportesCantAlquileres(Timestamp inicio, Timestamp fin) throws Exception {
+    public double reportesCantAlquileres(Timestamp inicio, Timestamp fin) throws Exception {
     	
     	try {
     		
-    		String query = "select sum(guid) from alquiler "
-    						+ "where \"\" and timestamp > " + inicio + " and timestamp < " + fin;
+    		String query = "select count(*) from alquiler "
+    				+ "where  timestamp > '"+inicio.toString().substring(0,10)+"' and timestamp < '"+fin.toString().substring(0,10)+"'";
     
     		Query q = em.createNativeQuery(query);
-    		double resp = (double) q.getResultList().get(0);
-
-    		return (int) resp;
+    		if (!q.getResultList().isEmpty()) {
+                int resp = Integer.parseInt(q.getResultList().get(0).toString());
+                long cantidadDias = fin.getDate() - inicio.getDate();
+                System.out.println("calculated diff="+cantidadDias);
+                System.out.println("cantidad de alquileres="+resp);
+                if (resp>0 ) {
+                    double promedio = (double)((double)resp/(double)cantidadDias);
+                    System.out.println("promedio="+promedio);
+                    return (double)promedio;
+                }else if (cantidadDias==1){
+                    return (double)resp;
+                
+                }else {
+                    return 0.0;
+                }
+            }else {
+                return 0.0;
+            }
+    		
     	} catch ( Exception e ) {
     		System.out.println(e.getMessage());
     		

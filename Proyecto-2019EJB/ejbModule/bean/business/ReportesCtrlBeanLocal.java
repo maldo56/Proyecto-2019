@@ -16,7 +16,7 @@ public interface ReportesCtrlBeanLocal {
 
 	DtoInfoScooters infoScooters() throws Exception;
 	float ganancias(Timestamp inicio, Timestamp fin) throws Exception;
-	int cantAlquileres(Timestamp inicio, Timestamp fin) throws Exception;
+	double cantAlquileres(Timestamp inicio, Timestamp fin) throws Exception;
 	List<DtoRakingUsuarios> rakingUsuarios() throws Exception;
 	List<DtoHistorialTarifa> historialTarifa() throws Exception;
 }

@@ -117,7 +117,7 @@ public class APIReportesBean {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
     		
-    		int a = business.cantAlquileres(inicio, fin);
+    		double a = business.cantAlquileres(inicio, fin);
     		resp.put("success", true);
     		resp.put("message", "");
     		resp.put("body", a);

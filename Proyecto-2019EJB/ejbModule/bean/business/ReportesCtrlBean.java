@@ -39,7 +39,7 @@ public class ReportesCtrlBean implements ReportesCtrlBeanLocal {
     	return database.reporteGanancias(inicio, fin);
     }
     
-    public int cantAlquileres(Timestamp inicio, Timestamp fin) throws Exception {
+    public double cantAlquileres(Timestamp inicio, Timestamp fin) throws Exception {
     	return database.reportesCantAlquileres(inicio, fin);
     }
     
