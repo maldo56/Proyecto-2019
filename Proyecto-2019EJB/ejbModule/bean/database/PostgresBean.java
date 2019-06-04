@@ -130,11 +130,6 @@ public class PostgresBean implements PostgresBeanLocal {
 			
 			if ( operation == 'A' ) {
 				entity = new scooter();
-				
-				Point location = new Point();
-				location.setX(4);
-				location.setY(7);
-				
 				entity.setGuid(guid);
 				
 				em.persist(entity);
@@ -142,7 +137,6 @@ public class PostgresBean implements PostgresBeanLocal {
 				
 				parametro parametroLat = em.find(obj.entity.parametro.class, "scooter-init-lat");
 				parametro parametroLng = em.find(obj.entity.parametro.class, "scooter-init-lng");
-				
 				
 				transaction.begin();
 				
@@ -626,12 +620,13 @@ public class PostgresBean implements PostgresBeanLocal {
     	
     }
     
-    public Boolean reloadLocation(DtoLocation location) throws Exception {
+    public Boolean reloadLocation(String scooterGuid, DtoLocation location) throws Exception {
     	
 		try {
 			transaction.begin();
 			em.createNativeQuery("UPDATE scooter p "
-								+ "	SET location = ST_GeomFromText('POINT(" + location.getLat() + " " + location.getLng() + ")', 4326)").executeUpdate();
+								+ "	SET location = ST_GeomFromText('POINT(" + location.getLat() + " " + location.getLng() + ")', 4326) "
+										+ "WHERE guid = " + scooterGuid).executeUpdate();
 			transaction.commit();
 			
 		} catch ( Exception e ) {
@@ -651,7 +646,8 @@ public class PostgresBean implements PostgresBeanLocal {
 				
 				transaction.begin();
 				em.createNativeQuery("UPDATE scooter p "
-									+ "	SET location = ST_GeomFromText('POINT(" + location.getLat() + " " + location.getLng() + ")', 4326)").executeUpdate();
+									+ "	SET location = ST_GeomFromText('POINT(" + location.getLat() + " " + location.getLng() + ")', 4326) "
+											+ "WHERE guid = " + scooterGuid).executeUpdate();
 				transaction.commit();
 			}
 			
@@ -662,6 +658,8 @@ public class PostgresBean implements PostgresBeanLocal {
 
     	return true;
     }
+    
+    
     
     //--------------------------------  GET  --------------------------------------------------------------//
     
@@ -706,6 +704,7 @@ public class PostgresBean implements PostgresBeanLocal {
     	return movimientos;
     }
     
+   
     public DtoClient obtenerCliente(String username) throws Exception {
     	
     	try {
@@ -951,6 +950,8 @@ public class PostgresBean implements PostgresBeanLocal {
     		return ( entity.getSaldo() / tarifa );
     		
     	} catch( Exception e ) {
+    		System.out.println(e.getMessage());
+    		
     		throw new Exception("Ha ocurrido un error");
     	}
     }

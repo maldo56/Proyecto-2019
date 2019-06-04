@@ -41,7 +41,7 @@ public class AlquilerCtrlBean implements AlquilerCtrlBeanLocal {
 
     		List<DtoLocation> ubicaciones = mongo.obtenerPuntos(alquiler.getGuid());
     		if ( !ubicaciones.isEmpty() ) {
-    			database.reloadLocation(ubicaciones.get(0));
+    			database.reloadLocation(alquiler.getGuidscooter(), ubicaciones.get(0));
     		}
     		
     		return database.terminarAlquiler(alquiler, ubicaciones);
