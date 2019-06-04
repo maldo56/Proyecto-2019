@@ -28,6 +28,10 @@ public class ServicioCtrlBean implements ServicioCtrlBeanLocal {
     	mongo.servicioAddPunto(scooterGuid,alquilerGuid, x, y);
     }
     
+    public void updateBateryLevel(String scooterGuid, double value) throws Exception {
+    	postgres.MScooter("bateryLevel", scooterGuid, Double.toString(value));
+    }
+    
     public void reloadLocation(String guidScooter) throws Exception {
     	postgres.reloadLocation(guidScooter);
     }

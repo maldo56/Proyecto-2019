@@ -1,12 +1,10 @@
 package servicios.api;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -50,12 +48,13 @@ public class APIServiciosBean {
         WSScooterSession obj = new WSScooterSession();
         obj.setGuidScooter(scooterGuid);
         obj.setSession(session);
+        obj.setBateryLevel(100);
         
         Sessions.add(obj);
     }
 	
 	
-//	{guidScooter, isAlquilado, guidAlquiler, Lat,Lng}
+//	{guidScooter, isAlquilado, guidAlquiler, bateryLevel, Lat,Lng}
 	@OnMessage
     public void handleMessage(String message, Session session) throws IOException {
         System.out.println("WebSocket: Nuevo mensaje ==> " + message.toString());
@@ -65,9 +64,9 @@ public class APIServiciosBean {
         String guidAlquiler;
         float latitude;
         float longitude;
+        double bateryLevel;
         
         try {
-        	
         	JsonReader jsonReader = Json.createReader(new StringReader(message));
     		JsonObject object = jsonReader.readObject();
     		
@@ -79,11 +78,19 @@ public class APIServiciosBean {
     		latitude = (float) aux.doubleValue();
     		aux = object.getJsonNumber("Lng");
     		longitude = (float) aux.doubleValue();
+    		aux = object.getJsonNumber("bateryLevel");
+    		bateryLevel = aux.doubleValue();
             	
     		if ( isAlquilado ) {
     			buissnes.addPoint(guidScooter, guidAlquiler, latitude, longitude);
     		}
+    		
+    		WSScooterSession auxSession = Sessions.stream().filter(s -> s.getGuidScooter().equals(guidScooter)).collect(Collectors.toList()).get(0);
             
+    		if ( auxSession != null && auxSession.getBateryLevel() > bateryLevel ) {
+    			buissnes.updateBateryLevel(guidScooter, bateryLevel);
+    		}
+    		
         } catch ( Exception e ) {
         	System.out.println(e.getMessage());
         }
@@ -127,7 +134,13 @@ public class APIServiciosBean {
     @OnClose
     public void close(Session session) {
         System.out.println("Session closed ==>");
-
+        try {
+        	 WSScooterSession auxSession = Sessions.stream().filter(s -> s.getSession() == session).collect(Collectors.toList()).get(0);
+             
+             Sessions.remove(auxSession);
+        } catch ( Exception e ) {
+        	
+        }
     }
  
     @OnError

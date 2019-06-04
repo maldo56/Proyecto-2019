@@ -87,7 +87,9 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			if ( operation != 'A' ) {
+    				JWTManage.decodeJWT(token);
+    			}
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
