@@ -23,6 +23,13 @@ public class JWTManage {
 	
 	
 	public static String createJWT(DtoUsuario usuario) {
+		
+		String type = "";
+		if ( usuario instanceof DtoAdmin ) {
+			type = "admin";
+		} else {
+			type = "client";
+		}
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -36,6 +43,7 @@ public class JWTManage {
         
         JwtBuilder builder = Jwts.builder().setId(uuid.toString())
                 .setIssuedAt(now)
+                .setPayload(type)
                 .setSubject(usuario.getUsername())
                 .signWith(signatureAlgorithm, signingKey);
 

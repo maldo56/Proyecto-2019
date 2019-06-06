@@ -527,7 +527,7 @@ public class PostgresBean implements PostgresBeanLocal {
 				if ( !kml.equals("LINESTRING()") ) {
 					
 					transaction.begin();
-					em.createNativeQuery("UPDATE alquiler p SET recorrido = ST_GeomFromText('" + kml + "', 4326) WHERE guid = \'" + alquiler.getGuid() + "\'").executeUpdate();
+					em.createNativeQuery("UPDATE alquiler p SET recorrido = ST_GeomFromText('" + kml + "', 4326) WHERE guid = '" + alquiler.getGuid() + "'").executeUpdate();
 					transaction.commit();
 				}
 				
@@ -625,7 +625,7 @@ public class PostgresBean implements PostgresBeanLocal {
 			transaction.begin();
 			em.createNativeQuery("UPDATE scooter p "
 								+ "	SET location = ST_GeomFromText('POINT(" + location.getLat() + " " + location.getLng() + ")', 4326) "
-										+ "WHERE guid = " + scooterGuid).executeUpdate();
+										+ "WHERE guid = '" + scooterGuid + "'").executeUpdate();
 			transaction.commit();
 			
 		} catch ( Exception e ) {
@@ -646,7 +646,7 @@ public class PostgresBean implements PostgresBeanLocal {
 				transaction.begin();
 				em.createNativeQuery("UPDATE scooter p "
 									+ "	SET location = ST_GeomFromText('POINT(" + location.getLat() + " " + location.getLng() + ")', 4326) "
-											+ "WHERE guid = " + scooterGuid).executeUpdate();
+											+ "WHERE guid = '" + scooterGuid + "'").executeUpdate();
 				transaction.commit();
 			}
 			
