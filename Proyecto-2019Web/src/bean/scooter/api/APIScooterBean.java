@@ -53,7 +53,9 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			if ( !JWTManage.decodeJWT(token).equals("admin") ) {
+					throw new AuthorizationTokenException("Autorización fallida");
+				}
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -82,7 +84,9 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			if ( !JWTManage.decodeJWT(token).equals("admin") ) {
+					throw new AuthorizationTokenException("Autorización fallida");
+				}
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -111,7 +115,9 @@ public class APIScooterBean {
     	
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			if ( !JWTManage.decodeJWT(token).equals("admin") ) {
+					throw new AuthorizationTokenException("Autorización fallida");
+				}
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}

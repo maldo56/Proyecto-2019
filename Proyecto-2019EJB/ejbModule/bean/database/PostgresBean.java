@@ -76,12 +76,21 @@ public class PostgresBean implements PostgresBeanLocal {
         // TODO Auto-generated constructor stub
     }
     
-    public DtoUsuario login(String username, String password) throws Exception {
+    public DtoUsuario login(String username, String password, String type) throws Exception {
     	
 		DtoUsuario user = null;
 		
 		try {
-			Query q = em.createQuery("select p from usuario p where p.username = :username and p.password = :password");
+			
+			String query = "";
+			
+			if ( type.equals("admin") ) {
+				query = "select p from administrador p where p.username = :username and p.password = :password";
+			} else if ( type.equals("cliente") ) {
+				query = "select p from cliente p where p.username = :username and p.password = :password";
+			}
+			
+			Query q = em.createQuery(query);
 			q.setParameter("username", username);
 			q.setParameter("password", password);
 			

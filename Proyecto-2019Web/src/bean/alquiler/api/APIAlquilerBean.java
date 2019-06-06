@@ -62,7 +62,9 @@ public class APIAlquilerBean {
       
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			if ( !JWTManage.decodeJWT(token).equals("client") ) {
+					throw new AuthorizationTokenException("Autorización fallida");
+				}
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}

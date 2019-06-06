@@ -51,15 +51,15 @@ public class APIUserBean {
     }
     
     @POST
-    @Path("/login")
+    @Path("/login/{type}")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> login(@QueryParam("username") String username, @QueryParam("password") String password) {
+    public Map<String, Object> login(@PathParam("type") String type, @QueryParam("username") String username, @QueryParam("password") String password) {
     	
     	Map<String, Object> resp = new HashMap();
     	
     	try {
-    		DtoUsuario a = buissnes.login(username, password);
+    		DtoUsuario a = buissnes.login(username, password, type);
         	String token = JWTManage.createJWT(a);
         	
     		resp.put("success", true);
@@ -88,7 +88,9 @@ public class APIUserBean {
     	try {
     		try {
     			if ( operation != 'A' ) {
-    				JWTManage.decodeJWT(token);
+    				if ( !JWTManage.decodeJWT(token).equals("admin") ) {
+    					throw new AuthorizationTokenException("Autorización fallida");
+    				} 
     			}
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
@@ -136,7 +138,9 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			if ( !JWTManage.decodeJWT(token).equals("admin") ) {
+					throw new AuthorizationTokenException("Autorización fallida");
+				} 
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -171,7 +175,7 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			JWTManage.decodeJWT(token).equals("admin");
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -200,7 +204,9 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			if ( !JWTManage.decodeJWT(token).equals("admin") ) {
+					throw new AuthorizationTokenException("Autorización fallida");
+				}
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -233,7 +239,9 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			if ( !JWTManage.decodeJWT(token).equals("client") ) {
+					throw new AuthorizationTokenException("Autorización fallida");
+				}
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}
@@ -264,7 +272,9 @@ public class APIUserBean {
     	
     	try {
     		try {
-    			JWTManage.decodeJWT(token);
+    			if ( !JWTManage.decodeJWT(token).equals("admin") ) {
+					throw new AuthorizationTokenException("Autorización fallida");
+				}
     		} catch (Exception e) {
     			throw new AuthorizationTokenException("Autorización fallida");
     		}

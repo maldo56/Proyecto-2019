@@ -22,7 +22,7 @@ import obj.dto.DtoUsuario;
 @Local
 public interface PostgresBeanLocal {
 
-	DtoUsuario login(String username, String password) throws Exception;
+	DtoUsuario login(String username, String password, String type) throws Exception;
 	
 	Boolean ABScooter(char operation, String guid) throws Exception;
 	Boolean MScooter(String campo, String guid, String value) throws Exception;

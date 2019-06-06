@@ -43,8 +43,8 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
         // TODO Auto-generated constructor stub
     }
     
-    public DtoUsuario login(String username, String password) throws Exception {
-    	return database.login(username, password);
+    public DtoUsuario login(String username, String password, String type) throws Exception {
+    	return database.login(username, password, type);
     }
     
     

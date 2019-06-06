@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.validation.Payload;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.binary.Base64;
@@ -27,12 +28,12 @@ public class JWTManage {
 	
 	public static String createJWT(DtoUsuario usuario) {
 		
-//		String type = "";
-//		if ( usuario instanceof DtoAdmin ) {
-//			type = "admin";
-//		} else {
-//			type = "client";
-//		}
+		String type = "";
+		if ( usuario instanceof DtoAdmin ) {
+			type = "admin";
+		} else {
+			type = "client";
+		}
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -46,8 +47,8 @@ public class JWTManage {
         
         JwtBuilder builder = Jwts.builder().setId(uuid.toString())
                 .setIssuedAt(now)
-//                .setPayload(type)
                 .setSubject(usuario.getUsername())
+                .setAudience(type)
                 .signWith(signatureAlgorithm, signingKey);
 
         if (300000 >= 0) {
@@ -59,23 +60,24 @@ public class JWTManage {
         return builder.compact();
     }
 
-	public static void decodeJWT(String jwt) {
+	public static String decodeJWT(String jwt) throws Exception {
 
-//		String[] parts = jwt.split(".");
-//		String payload = StringUtils.newStringUtf8(Base64.decodeBase64(parts[1]));
-//		
-//		
-//		
-//		System.out.println("Payload:  " + payload);
+		String[] parts = jwt.split("\\.");
+        if (parts.length == 2 && jwt.endsWith(".")) {
+            //Tokens with alg='none' have empty String as Signature.
+            parts = new String[]{parts[0], parts[1], ""};
+        }
+        if (parts.length != 3) {
+           throw new Exception("Error token");
+        }
 		
+		String payload = StringUtils.newStringUtf8(Base64.decodeBase64(parts[1]));
 		
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .parseClaimsJws(jwt).getBody();
-
         
-
-//        return claims;
+        return claims.getAudience();
     }
 	
 }

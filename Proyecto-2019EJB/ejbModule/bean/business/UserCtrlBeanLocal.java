@@ -17,7 +17,7 @@ import obj.dto.DtoAdmin;
 @Local
 public interface UserCtrlBeanLocal {
 
-	DtoUsuario login(String username, String password) throws Exception;
+	DtoUsuario login(String username, String password, String type) throws Exception;
 	
 	Boolean ABMClient(char operation, DtoClient client) throws Exception;
 	Boolean ABMAdmin(char operation, DtoAdmin admin) throws Exception;
