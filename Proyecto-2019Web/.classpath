@@ -10,5 +10,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/matia/OneDrive/Escritorio/Proyecto/Cosas/lib/jts-1.8.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
