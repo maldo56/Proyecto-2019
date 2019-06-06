@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
@@ -22,6 +23,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import dto.WSScooterSession;
+import notificaciones.api.APINotificacionesBean;
 import servicios.business.ServicioCtrlBeanLocal;
 
 import javax.websocket.Session;
@@ -38,6 +40,9 @@ public class APIServiciosBean {
 	
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ServicioCtrlBean!servicios.business.ServicioCtrlBeanLocal")
 	static private ServicioCtrlBeanLocal buissnes;
+	
+	@Inject
+	APINotificacionesBean notifications;
 	
 	
 	@OnOpen
@@ -83,6 +88,7 @@ public class APIServiciosBean {
             	
     		if ( isAlquilado ) {
     			buissnes.addPoint(guidScooter, guidAlquiler, latitude, longitude);
+    			notifications.sendLocation(guidScooter, guidAlquiler, latitude, longitude);
     		}
     		
     		WSScooterSession auxSession = Sessions.stream().filter(s -> s.getGuidScooter().equals(guidScooter)).collect(Collectors.toList()).get(0);

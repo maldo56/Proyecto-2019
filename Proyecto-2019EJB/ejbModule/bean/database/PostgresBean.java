@@ -78,7 +78,6 @@ public class PostgresBean implements PostgresBeanLocal {
     
     public DtoUsuario login(String username, String password) throws Exception {
     	
-
 		DtoUsuario user = null;
 		
 		try {

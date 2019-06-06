@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -43,7 +44,7 @@ public class APINotificacionesBean {
 	
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ServicioCtrlBean!servicios.business.ServicioCtrlBeanLocal")
 	private ServicioCtrlBeanLocal buissnes;
-	
+	 
 	
 	@OnOpen
     public void open(@PathParam("rol") String rol, @PathParam("username") String username, Session session, EndpointConfig endpointConfig) {
@@ -58,6 +59,19 @@ public class APINotificacionesBean {
         
         Sessions.add(wss);
     }
+	
+	// {"guidScooter":" + guid + ","guidAlquiler":" + guid + ","latitude": + lat + ,"longitude": + lng }
+	static public void sendLocation(String guidScooter, String guidAlquiler, float latitude, float longitude) throws IOException {
+		
+		String msg = "{\"guidScooter\":\"" + guidScooter + "\",\"guidAlquiler\":\"" + guidAlquiler + "\",\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
+		
+		List<WSSession> sessions = Sessions.stream().filter(s -> s.getRol().equals("admin")).collect(Collectors.toList());
+//		WSSession session;
+		
+		for ( WSSession session : sessions ) {
+			session.getSession().getBasicRemote().sendText(msg);
+		}
+	}
 	
 	static public void sendNotification(String rol, String username, String message) throws IOException {
 		
@@ -106,7 +120,6 @@ public class APINotificacionesBean {
     public void handleMessage(String message, Session session) throws IOException {
         System.out.println("WebSocket: Nuevo mensaje ==> " + message.toString());
 
-        
         
     }
  
