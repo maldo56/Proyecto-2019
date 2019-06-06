@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 
 import bean.database.PostgresBeanLocal;
 import bean.database.mongo.MongoBeanLocal;
+import obj.dto.DtoGeometria;
 
 
 @Stateless
@@ -38,5 +39,9 @@ public class ServicioCtrlBean implements ServicioCtrlBeanLocal {
     
     public String estaAlquilado(String guid) throws Exception {
     	return postgres.scooterEstaAlquilado(guid);
+    }
+    
+    public DtoGeometria obtenerArea() throws Exception {
+    	return postgres.obtenerArea();
     }
 }

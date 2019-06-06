@@ -2,6 +2,8 @@ package servicios.business;
 
 import javax.ejb.Local;
 
+import obj.dto.DtoGeometria;
+
 @Local
 public interface ServicioCtrlBeanLocal {
 
@@ -9,4 +11,5 @@ public interface ServicioCtrlBeanLocal {
 	void reloadLocation(String guidScooter) throws Exception;
 	void updateBateryLevel(String scooterGuid, double value) throws Exception;
 	String estaAlquilado(String guid) throws Exception;
+	DtoGeometria obtenerArea() throws Exception;
 }

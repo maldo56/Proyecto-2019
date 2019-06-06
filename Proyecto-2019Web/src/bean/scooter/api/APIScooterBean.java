@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -19,6 +20,7 @@ import javax.ws.rs.QueryParam;
 import obj.dto.DtoGeometria;
 import obj.dto.DtoScooter;
 import security.JWTManage;
+import servicios.api.APIServiciosBean;
 import bean.business.ScooterCtrlBeanLocal;
 import exceptions.AuthorizationTokenException;
 import io.jsonwebtoken.Claims;
@@ -36,6 +38,9 @@ public class APIScooterBean {
 
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ScooterCtrlBean!bean.business.ScooterCtrlBeanLocal")
 	private ScooterCtrlBeanLocal business;
+	
+	@Inject
+	APIServiciosBean servicios;
 	
 	
     public APIScooterBean() {
@@ -126,6 +131,8 @@ public class APIScooterBean {
     		resp.put("success", true);
     		resp.put("message", "");
     		resp.put("body", a);
+    		
+    		servicios.updateZonaPermitida();
     		
     	} catch (Exception e) {
     		resp.put("success", false);

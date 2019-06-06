@@ -22,6 +22,11 @@ import javax.websocket.OnOpen;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
+
 import dto.WSScooterSession;
 import notificaciones.api.APINotificacionesBean;
 import servicios.business.ServicioCtrlBeanLocal;
@@ -37,6 +42,7 @@ import javax.websocket.Session;
 public class APIServiciosBean {
 
 	static private List<WSScooterSession> Sessions = new ArrayList<WSScooterSession>();
+	static private Polygon zonaPermitida;
 	
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ServicioCtrlBean!servicios.business.ServicioCtrlBeanLocal")
 	static private ServicioCtrlBeanLocal buissnes;
@@ -57,6 +63,20 @@ public class APIServiciosBean {
         
         Sessions.add(obj);
     }
+	
+	
+	public void estaDentroDeLaZonaPermitida() {
+		
+		GeometryFactory geometryFactory = new GeometryFactory();
+		Coordinate coord = new Coordinate(1, 1);
+		Point pt = geometryFactory.createPoint(coord);
+//		boolean accept = hull.contains(pt);
+		
+	}
+	
+	public static void updateZonaPermitida() {
+		
+	}
 	
 	
 //	{guidScooter, isAlquilado, guidAlquiler, bateryLevel, Lat,Lng}
