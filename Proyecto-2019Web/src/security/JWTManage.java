@@ -7,6 +7,9 @@ import java.util.UUID;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -24,12 +27,12 @@ public class JWTManage {
 	
 	public static String createJWT(DtoUsuario usuario) {
 		
-		String type = "";
-		if ( usuario instanceof DtoAdmin ) {
-			type = "admin";
-		} else {
-			type = "client";
-		}
+//		String type = "";
+//		if ( usuario instanceof DtoAdmin ) {
+//			type = "admin";
+//		} else {
+//			type = "client";
+//		}
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -43,7 +46,7 @@ public class JWTManage {
         
         JwtBuilder builder = Jwts.builder().setId(uuid.toString())
                 .setIssuedAt(now)
-                .setPayload(type)
+//                .setPayload(type)
                 .setSubject(usuario.getUsername())
                 .signWith(signatureAlgorithm, signingKey);
 
@@ -56,13 +59,23 @@ public class JWTManage {
         return builder.compact();
     }
 
-	public static Claims decodeJWT(String jwt) {
+	public static void decodeJWT(String jwt) {
 
+//		String[] parts = jwt.split(".");
+//		String payload = StringUtils.newStringUtf8(Base64.decodeBase64(parts[1]));
+//		
+//		
+//		
+//		System.out.println("Payload:  " + payload);
+		
+		
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .parseClaimsJws(jwt).getBody();
+
         
-        return claims;
+
+//        return claims;
     }
 	
 }
