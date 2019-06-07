@@ -132,7 +132,11 @@ public class APIScooterBean {
     		resp.put("message", "");
     		resp.put("body", a);
     		
-    		servicios.updateZonaPermitida();
+    		try {
+    			servicios.updateZonaPermitida();
+    		} catch ( Exception e ) {
+    			
+    		}
     		
     	} catch (Exception e) {
     		resp.put("success", false);

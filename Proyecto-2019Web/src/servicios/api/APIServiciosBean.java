@@ -24,6 +24,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
@@ -65,17 +66,22 @@ public class APIServiciosBean {
     }
 	
 	
-	public void estaDentroDeLaZonaPermitida() {
+	private static boolean estaDentroDeLaZonaPermitida(float latitude, float longitude) {
 		
 		GeometryFactory geometryFactory = new GeometryFactory();
-		Coordinate coord = new Coordinate(1, 1);
+		Coordinate coord = new Coordinate(latitude, longitude);
 		Point pt = geometryFactory.createPoint(coord);
-//		boolean accept = hull.contains(pt);
 		
+		return zonaPermitida.contains(pt);
 	}
 	
-	public static void updateZonaPermitida() {
+	public static void updateZonaPermitida() throws Exception {
 		
+		GeometryFactory geometryFactory = new GeometryFactory();
+		
+		Coordinate[] coords = buissnes.obtenerArea();
+		LinearRing linear = new GeometryFactory().createLinearRing(coords);
+		zonaPermitida = geometryFactory.createPolygon(linear, null);
 	}
 	
 	
@@ -109,6 +115,17 @@ public class APIServiciosBean {
     		if ( isAlquilado ) {
     			buissnes.addPoint(guidScooter, guidAlquiler, latitude, longitude);
     			notifications.sendLocation(guidScooter, guidAlquiler, latitude, longitude);
+    			
+    			if ( !estaDentroDeLaZonaPermitida(latitude, longitude) ) {
+    				
+    				String cliente = buissnes.getCliente(guidAlquiler);
+    				
+    				notifications.sendNotification("client", cliente, "Usted se ha salido del area permitida.");
+    				
+    				sendAction("shutdown", "", "", guidScooter);
+    				
+    			}
+    			
     		}
     		
     		WSScooterSession auxSession = Sessions.stream().filter(s -> s.getGuidScooter().equals(guidScooter)).collect(Collectors.toList()).get(0);

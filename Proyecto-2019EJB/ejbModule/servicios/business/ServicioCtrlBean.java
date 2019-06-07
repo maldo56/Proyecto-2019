@@ -4,8 +4,11 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import com.vividsolutions.jts.geom.Coordinate;
+
 import bean.database.PostgresBeanLocal;
 import bean.database.mongo.MongoBeanLocal;
+import obj.dto.DtoAlquiler;
 import obj.dto.DtoGeometria;
 
 
@@ -41,7 +44,21 @@ public class ServicioCtrlBean implements ServicioCtrlBeanLocal {
     	return postgres.scooterEstaAlquilado(guid);
     }
     
-    public DtoGeometria obtenerArea() throws Exception {
-    	return postgres.obtenerArea();
+    public Coordinate[] obtenerArea() throws Exception {
+    	
+    	DtoGeometria geom = postgres.obtenerArea();
+    	Coordinate[] coords = new Coordinate[geom.getPuntos().size()];
+    	
+    	for ( int x = 0; x < geom.getPuntos().size(); x ++ ) {
+    		coords[x] = new Coordinate(geom.getPuntos().get(0).getLat(), geom.getPuntos().get(0).getLng());
+    	}
+    	
+    	return coords;
+    }
+    
+    public String getCliente(String guidAlquiler) throws Exception {
+    	DtoAlquiler alquiler = postgres.obtenerAlquiler(guidAlquiler);
+    	
+    	return alquiler.getCliente();
     }
 }
