@@ -42,9 +42,6 @@ public class APINotificacionesBean {
 
 	static private List<WSSession> Sessions = new ArrayList<WSSession>();
 	
-	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ServicioCtrlBean!servicios.business.ServicioCtrlBeanLocal")
-	private ServicioCtrlBeanLocal buissnes;
-	 
 	
 	@OnOpen
     public void open(@PathParam("rol") String rol, @PathParam("username") String username, Session session, EndpointConfig endpointConfig) {
