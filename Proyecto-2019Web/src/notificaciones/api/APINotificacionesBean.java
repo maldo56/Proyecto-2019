@@ -40,7 +40,8 @@ import javax.websocket.Session;
 @ServerEndpoint(value = "/notifications/{rol}/{username}", configurator = MyServerEndpointConfigurator.class)
 public class APINotificacionesBean {
 
-	static private List<WSSession> Sessions = new ArrayList<WSSession>();
+	static private List<WSSession> SessionsClientes = new ArrayList<WSSession>();
+	static private List<WSSession> SessionsAdmins = new ArrayList<WSSession>();
 	
 	
 	@OnOpen
@@ -49,12 +50,13 @@ public class APINotificacionesBean {
         
 //        String userAgent = (String) endpointConfig.getUserProperties().get("user-agent");
         
-        System.out.println(username);
-        System.out.println(rol);
+        WSSession wss = new WSSession(username, session);
         
-        WSSession wss = new WSSession(username, rol, session);
-        
-        Sessions.add(wss);
+        if ( rol.equals("client") ) {
+        	SessionsClientes.add(wss);
+        } else if ( rol.equals("admin") ) {
+        	SessionsAdmins.add(wss);
+        }
     }
 	
 	// {"guidScooter":" + guid + ","guidAlquiler":" + guid + ","latitude": + lat + ,"longitude": + lng }
@@ -62,54 +64,71 @@ public class APINotificacionesBean {
 		
 		String msg = "{\"guidScooter\":\"" + guidScooter + "\",\"guidAlquiler\":\"" + guidAlquiler + "\",\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
 		
-		List<WSSession> sessions = Sessions.stream().filter(s -> s.getRol().equals("admin")).collect(Collectors.toList());
+//		List<WSSession> sessions = Sessions.stream().filter(s -> s.getRol().equals("admin")).collect(Collectors.toList());
 //		WSSession session;
 		
-		for ( WSSession session : sessions ) {
-			session.getSession().getBasicRemote().sendText(msg);
+		for ( WSSession session : SessionsAdmins ) {
+			
+			if ( session.getSession().isOpen() )
+				session.getSession().getBasicRemote().sendText(msg);
 		}
 	}
 	
 	static public void sendNotification(String rol, String username, String message) throws IOException {
 		
-		WSSession aux;
-		for (int x = 0; x < Sessions.size(); x++) {
-			aux = Sessions.get(x);
+		if ( rol.equals("admin") ) {
 			
-			System.out.println("Username session: " + aux.getUsername());
-			System.out.println("Username: " + username);
-			
-			System.out.println("Rol session: " + aux.getRol());
-			System.out.println("Rol: " + rol);
-			
-			if ( rol.isEmpty()) {
+			for ( WSSession session : SessionsAdmins ) {
 				if ( username.isEmpty() ) {
-					if ( aux.getSession().isOpen() )
-						aux.getSession().getBasicRemote().sendText(message);
+					if ( session.getSession().isOpen() )
+						session.getSession().getBasicRemote().sendText(message);
 				} else {
-					if ( aux.getUsername().equals(username) ) {
-						if ( aux.getSession().isOpen() )
-							aux.getSession().getBasicRemote().sendText(message);
+					if ( session.getUsername().equals(username) ) {
+						if ( session.getSession().isOpen() )
+							session.getSession().getBasicRemote().sendText(message);
 					}
-				}
-			} else if ( username.isEmpty() ) {
-				if ( aux.getRol().equals(rol) ) {
-					if ( aux.getSession().isOpen() )
-						aux.getSession().getBasicRemote().sendText(message);
-				}
-			} else {
-				if ( aux.getRol().equals(rol) && aux.getUsername().equals(username) ) {
-					if ( aux.getSession().isOpen() )
-						aux.getSession().getBasicRemote().sendText(message);
 				}
 			}
 			
-			if ( aux.getRol().equals(rol) && aux.getUsername().equals(username)) {
-				if ( aux.getSession().isOpen() )
-					aux.getSession().getBasicRemote().sendText(message);
-			} 
-		}
-		
+		} else if ( rol.equals("client") ) {
+			
+			for ( WSSession session : SessionsClientes ) {
+				if ( username.isEmpty() ) {
+					if ( session.getSession().isOpen() )
+						session.getSession().getBasicRemote().sendText(message);
+				} else {
+					if ( session.getUsername().equals(username) ) {
+						if ( session.getSession().isOpen() )
+							session.getSession().getBasicRemote().sendText(message);
+					}
+				}
+			}
+		} else if ( rol.isEmpty() ) {
+			
+			for ( WSSession session : SessionsClientes ) {
+				if ( username.isEmpty() ) {
+					if ( session.getSession().isOpen() )
+						session.getSession().getBasicRemote().sendText(message);
+				} else {
+					if ( session.getUsername().equals(username) ) {
+						if ( session.getSession().isOpen() )
+							session.getSession().getBasicRemote().sendText(message);
+					}
+				}
+			}
+			
+			for ( WSSession session : SessionsAdmins ) {
+				if ( username.isEmpty() ) {
+					if ( session.getSession().isOpen() )
+						session.getSession().getBasicRemote().sendText(message);
+				} else {
+					if ( session.getUsername().equals(username) ) {
+						if ( session.getSession().isOpen() )
+							session.getSession().getBasicRemote().sendText(message);
+					}
+				}
+			}
+		}		
 	}
 	
 	
@@ -123,7 +142,7 @@ public class APINotificacionesBean {
     @OnClose
     public void close(Session session) {
         System.out.println("Session closed ==>");
-        Sessions.remove(session);
+//        Sessions.remove(session);
     }
  
     @OnError

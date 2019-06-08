@@ -46,7 +46,10 @@ public class APIServiciosBean {
 	static private Polygon zonaPermitida;
 	
 	@EJB(mappedName="java:global/Proyecto-2019/Proyecto-2019EJB/ServicioCtrlBean!servicios.business.ServicioCtrlBeanLocal")
-	static private ServicioCtrlBeanLocal buissnes;
+	static private ServicioCtrlBeanLocal buissnesS;
+	
+	@Inject
+	ServicioCtrlBeanLocal buissnes;
 	
 	@Inject
 	APINotificacionesBean notifications;
@@ -68,26 +71,55 @@ public class APIServiciosBean {
 	
 	private static boolean estaDentroDeLaZonaPermitida(float latitude, float longitude) {
 		
+		System.out.println("Entra dentro de la zona permitida ahi");
+		
 		GeometryFactory geometryFactory = new GeometryFactory();
 		Coordinate coord = new Coordinate(latitude, longitude);
 		Point pt = geometryFactory.createPoint(coord);
 		
-		return zonaPermitida.contains(pt);
+		System.out.println("uno antes del resturn");
+		boolean estaDentro = true;
+		
+//		if (zonaPermitida==null) {
+//			try {
+//				updateZonaPermitida();
+//			} catch (Exception e) {
+//				System.out.println(e.getMessage());
+//			}
+//		}
+		
+//		try {
+//			estaDentro = zonaPermitida.contains(pt);//null
+//		} catch ( Exception e ) {
+//			System.out.println(e.getMessage());
+//		}
+//		
+		
+		System.out.println("despues de contains");
+		
+		return estaDentro;
 	}
 	
 	public static void updateZonaPermitida() throws Exception {
 		
 		GeometryFactory geometryFactory = new GeometryFactory();
-		
-		Coordinate[] coords = buissnes.obtenerArea();
-		LinearRing linear = new GeometryFactory().createLinearRing(coords);
-		zonaPermitida = geometryFactory.createPolygon(linear, null);
+				
+		try {
+			Coordinate[] coords = buissnesS.obtenerArea();
+			LinearRing linear = new GeometryFactory().createLinearRing(coords);
+			zonaPermitida = geometryFactory.createPolygon(linear, null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Errorr");
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	
 //	{guidScooter, isAlquilado, guidAlquiler, bateryLevel, Lat,Lng}
 	@OnMessage
-    public void handleMessage(String message, Session session) throws IOException {
+    public void handleMessage(String message, Session session) {
         System.out.println("WebSocket: Nuevo mensaje ==> " + message.toString());
 
         boolean isAlquilado;
@@ -117,6 +149,8 @@ public class APIServiciosBean {
     			notifications.sendLocation(guidScooter, guidAlquiler, latitude, longitude);
     			
     			if ( !estaDentroDeLaZonaPermitida(latitude, longitude) ) {
+    				
+    				System.out.println("Entra zona permitida");
     				
     				String cliente = buissnes.getCliente(guidAlquiler);
     				

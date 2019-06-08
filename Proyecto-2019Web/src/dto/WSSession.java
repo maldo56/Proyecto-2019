@@ -5,19 +5,16 @@ import javax.websocket.Session;
 public class WSSession {
 
 	private String username;
-	private String rol;
 	private Session session;
 	
 	
 	public WSSession() {}
 	
-	public WSSession(String username, String rol, Session session) {
+	public WSSession(String username, Session session) {
 		super();
 		this.username = username;
 		this.session = session;
-		this.rol = rol;
 	}
-	
 	
 
 	public String getUsername() {
@@ -36,12 +33,5 @@ public class WSSession {
 		this.session = session;
 	}
 
-	public String getRol() {
-		return rol;
-	}
-
-	public void setRol(String rol) {
-		this.rol = rol;
-	}
 	
 }
