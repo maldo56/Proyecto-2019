@@ -8,6 +8,8 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -745,6 +747,7 @@ public class PostgresBean implements PostgresBeanLocal {
     		admin.setUsername(username);
     		admin.setEmail(entity.getEmail());
     		admin.setIsSuperuser(entity.getIsSuperuser());
+    		admin.setPassword(entity.getPassword());
     		
     		return admin;
     	} catch ( Exception e ) {
@@ -1117,14 +1120,13 @@ public class PostgresBean implements PostgresBeanLocal {
     public float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception {
     	
     	try {
-    		String query = "select sum(mount) from movimiento "
-    						+ "where paypalguid != \"\" and timestamp > '"+inicio.toString().substring(0,10)+"' and timestamp < '"+fin.toString().substring(0,10)+"'";
+    		String query = "select sum(mount) from movimiento where paypalguid != '' and timestamp > '"+inicio.toString().substring(0,10)+"' and timestamp < '"+fin.toString().substring(0,10)+"'";
    
     		Query q = em.createNativeQuery(query);
     		
     		if (!q.getResultList().isEmpty()) {
                 
-            double resp = (double) q.getResultList().get(0);
+            float resp = (float) q.getResultList().get(0);
 
             return (float) resp;
             }else {
@@ -1149,14 +1151,23 @@ public class PostgresBean implements PostgresBeanLocal {
     		Query q = em.createNativeQuery(query);
     		if (!q.getResultList().isEmpty()) {
                 int resp = Integer.parseInt(q.getResultList().get(0).toString());
-                long cantidadDias = fin.getDate() - inicio.getDate();
-                System.out.println("calculated diff="+cantidadDias);
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+                Date firstDate = inicio;
+                Date secondDate = fin;
+             
+                long diffInMillies = Math.abs(secondDate.getTime() - firstDate.getTime());
+                long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                System.out.print("cuantos dias son : "  +diff);
+                //long cantidadDias = fin.getDate() - inicio.getDate();
+                //System.out.println("calculated diff="+cantidadDias);
                 System.out.println("cantidad de alquileres="+resp);
                 if (resp>0 ) {
-                    double promedio = (double)((double)resp/(double)cantidadDias);
+                    //double promedio = (double)((double)resp/(double)cantidadDias);
+                    double promedio = (double)((double)resp/(double)diff);
                     System.out.println("promedio="+promedio);
                     return (double)promedio;
-                }else if (cantidadDias==1){
+                //}else if (cantidadDias==1){
+                }else if (diff==1){
                     return (double)resp;
                 
                 }else {

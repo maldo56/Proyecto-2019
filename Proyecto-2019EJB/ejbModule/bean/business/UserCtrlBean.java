@@ -170,7 +170,7 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     	
     	DtoAdmin Auxadmin = database.obtenerAdmin(admin);
     	
-    	if ( Auxadmin != null && Auxadmin.getPassword() != password ) {
+    	if ( Auxadmin.equals(null) || Auxadmin.getPassword().compareTo(password) != 0 )  {
     		throw new AuthenticationException("Usuario o contraseña incorrecto.");
     	}
     	
