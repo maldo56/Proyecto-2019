@@ -2,6 +2,7 @@ package obj.entity;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.UUID;
 import java.sql.Date;
 
@@ -53,7 +54,11 @@ public class alquiler {
 	
 
 	public Timestamp getTimestamp() {
-		return timestamp;
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp.getTime());
+		cal.add(Calendar.HOUR, -3);
+		Timestamp t = new Timestamp(cal.getTime().getTime());
+		return t;
 	}
 
 	public void setTimestamp(Timestamp timestamp) {

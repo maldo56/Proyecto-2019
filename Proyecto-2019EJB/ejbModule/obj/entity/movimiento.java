@@ -2,6 +2,7 @@ package obj.entity;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -41,7 +42,11 @@ public class movimiento {
 	
 
 	public Timestamp getTimestamp() {
-		return timestamp;
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp.getTime());
+		cal.add(Calendar.HOUR, -3);
+		Timestamp t = new Timestamp(cal.getTime().getTime());
+		return t;
 	}
 
 	public void setTimestamp(Timestamp timestamp) {
