@@ -495,13 +495,11 @@ public class PostgresBean implements PostgresBeanLocal {
 				scooter.setIsRented(false);
 				
 				try {
-
 					dateInicio = new Time(entity.getTimestamp().getHours(), entity.getTimestamp().getMinutes(), entity.getTimestamp().getSeconds());
-					diferencia = dateFinal.getTime() - dateInicio.getTime();
-
+					diferencia = dateFinal.getTime() - dateInicio.getTime() - 10800000;//10800000 corresponde a 3 horas (diferencia por zona horaria)
 					//cargar monto
 					monto = (diferencia/1000) * ( Float.valueOf(value).floatValue() );
-
+					
 				} catch( Exception e ) {
 					DateTimeException = true;
 				}
