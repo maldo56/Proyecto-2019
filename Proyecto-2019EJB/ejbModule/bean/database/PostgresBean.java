@@ -1101,13 +1101,12 @@ public class PostgresBean implements PostgresBeanLocal {
     									+ "st_transform(areapermitida, 4326)),ST_GeometryFromText('POINT(" + latitude + " " + longitude + ")', 4326)) " + 
     						"FROM public.zona;";
     		
-    		Query q = em.createNativeQuery(query, DtoInfoScooters.class);
+    		Query q = em.createNativeQuery(query, boolean.class);
     		resp = (boolean) q.getResultList().get(0);
-    		
     		
     		return resp;
     	} catch (Exception e) {
-    		return false;
+    		return true;
     	}
     	
     }
