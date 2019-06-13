@@ -61,4 +61,8 @@ public class ServicioCtrlBean implements ServicioCtrlBeanLocal {
     	
     	return alquiler.getCliente();
     }
+    
+    public boolean estaDentroDeLaZonaPermitida(float latitude, float longitude) {
+    	return postgres.estaDentroDeLaZonaPermitida(latitude, longitude);
+    }
 }

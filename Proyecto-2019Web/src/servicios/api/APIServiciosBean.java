@@ -68,38 +68,6 @@ public class APIServiciosBean {
         Sessions.add(obj);
     }
 	
-	
-	private static boolean estaDentroDeLaZonaPermitida(float latitude, float longitude) {
-		
-		System.out.println("Entra dentro de la zona permitida ahi");
-		
-		GeometryFactory geometryFactory = new GeometryFactory();
-		Coordinate coord = new Coordinate(latitude, longitude);
-		Point pt = geometryFactory.createPoint(coord);
-		
-		System.out.println("uno antes del resturn");
-		boolean estaDentro = true;
-		
-//		if (zonaPermitida==null) {
-//			try {
-//				updateZonaPermitida();
-//			} catch (Exception e) {
-//				System.out.println(e.getMessage());
-//			}
-//		}
-		
-//		try {
-//			estaDentro = zonaPermitida.contains(pt);//null
-//		} catch ( Exception e ) {
-//			System.out.println(e.getMessage());
-//		}
-//		
-		
-		System.out.println("despues de contains");
-		
-		return estaDentro;
-	}
-	
 	public static void updateZonaPermitida() throws Exception {
 		
 		GeometryFactory geometryFactory = new GeometryFactory();
@@ -148,7 +116,7 @@ public class APIServiciosBean {
     			buissnes.addPoint(guidScooter, guidAlquiler, latitude, longitude);
     			notifications.sendLocation(guidScooter, guidAlquiler, latitude, longitude);
     			
-    			if ( !estaDentroDeLaZonaPermitida(latitude, longitude) ) {
+    			if ( !buissnes.estaDentroDeLaZonaPermitida(latitude, longitude) ) {
     				
     				System.out.println("Entra zona permitida");
     				

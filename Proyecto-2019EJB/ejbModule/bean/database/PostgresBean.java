@@ -1090,6 +1090,29 @@ public class PostgresBean implements PostgresBeanLocal {
     }
     
     
+    
+    public boolean estaDentroDeLaZonaPermitida(float latitude, float longitude) {
+    	
+    	try {
+    		boolean resp = true;
+    		
+    		String query = "select " + 
+		    				"	sum(case when isavailable = true then 1 else 0 end) as scootersdisponibles," + 
+		    				"	sum(case when isavailable = false then 1 else 0 end) as scootersrotos," + 
+		    				"	sum(case when isrented = true then 1 else 0 end) as scootersenuso" + 
+		    					"	from scooter;";
+    		
+    		Query q = em.createNativeQuery(query, DtoInfoScooters.class);
+    		resp = (boolean) q.getResultList().get(0);
+    		
+    		
+    		return resp;
+    	} catch (Exception e) {
+    		return false;
+    	}
+    	
+    }
+    
     //--------------------------------  REPORTES   --------------------------------------------------------------//
      
     public DtoInfoScooters reporteInfoScooter() throws Exception {
@@ -1200,6 +1223,50 @@ public class PostgresBean implements PostgresBeanLocal {
     		
     		throw new Exception("Ha ocurrido un error");
     	}
+    }
+    
+    public List<DtoMovimiento> reportesMovimientos(Timestamp inicio, Timestamp fin) throws Exception {
+    	
+    	try {
+    		
+    		DtoMovimiento mov;
+    		List<movimiento> movimientos;
+    		List<DtoMovimiento> movs = new ArrayList<DtoMovimiento>();
+    		
+//    		query = "select p from cliente p where p.username = :username and p.password = :password";
+//			Query q = em.createQuery(query);
+//			q.setParameter("username", username);
+    		
+    		String query = "select p from movimiento "
+    				+ "where  timestamp > '"+inicio.toString().substring(0,10)+"' and timestamp < '"+fin.toString().substring(0,10)+"'";
+    
+    		Query q = em.createQuery(query);
+
+    		if (!q.getResultList().isEmpty()) {
+                
+    			movimientos = (List<movimiento>) q.getResultList();
+    			
+    			for( movimiento movimiento : movimientos ) {
+    				mov = new DtoMovimiento();
+    				mov.setUsername(movimiento.getCliente().getUsername());
+    				mov.setPaypalguid(movimiento.getPaypalguid());
+    				mov.setMoneda(movimiento.getMoneda());
+    				mov.setMount(movimiento.getMount());
+    				mov.setTimestamp(movimiento.getTimestamp());
+    				
+    				movs.add(mov);
+    			}
+    			
+            }
+    		
+    		return movs;
+    		
+    	} catch ( Exception e ) {
+    		System.out.println(e.getMessage());
+    		
+    		throw new Exception("Ha ocurrido un error");
+    	}
+    	
     }
     
 }

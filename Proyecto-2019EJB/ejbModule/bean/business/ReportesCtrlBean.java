@@ -11,6 +11,7 @@ import bean.database.PostgresBeanLocal;
 import bean.database.mongo.MongoBeanLocal;
 import obj.dto.DtoHistorialTarifa;
 import obj.dto.DtoInfoScooters;
+import obj.dto.DtoMovimiento;
 import obj.dto.DtoRakingUsuarios;
 
 
@@ -47,7 +48,11 @@ public class ReportesCtrlBean implements ReportesCtrlBeanLocal {
     	return database.reporteRakingUsuarios();
     }
     
-    public List<DtoHistorialTarifa> historialTarifa() throws Exception {
-    	return mongo.historialParametro("tarifa-actual");
+    public List<DtoHistorialTarifa> historialTarifa(Timestamp inicio, Timestamp fin) throws Exception {
+    	return mongo.historialParametro("tarifa-actual", inicio, fin);
+    }
+    
+    public List<DtoMovimiento> reportesMovimientos(Timestamp inicio, Timestamp fin) throws Exception {
+    	return database.reportesMovimientos(inicio, fin);
     }
 }

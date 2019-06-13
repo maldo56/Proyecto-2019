@@ -15,4 +15,5 @@ public interface ServicioCtrlBeanLocal {
 	String estaAlquilado(String guid) throws Exception;
 	Coordinate[] obtenerArea() throws Exception;
 	String getCliente(String guidAlquiler) throws Exception;
+	boolean estaDentroDeLaZonaPermitida(float latitude, float longitude);
 }

@@ -19,6 +19,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 import obj.dto.DtoHistorialTarifa;
 import obj.dto.DtoLocation;
@@ -207,17 +208,17 @@ public class MongoBean implements MongoBeanLocal {
     }
     
     
-    public List<DtoHistorialTarifa> historialParametro(String parmCode) throws Exception {
+    public List<DtoHistorialTarifa> historialParametro(String parmCode, Timestamp inicio, Timestamp fin) throws Exception {
 
     	try {
     		MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
         	MongoDatabase database = mongoClient.getDatabase("Proyecto-2019");
         	MongoCollection<Document> collection = database.getCollection("RegistroParametros");
         	
-        	BasicDBObject inQuery = new BasicDBObject();
-        	inQuery.put("parametro", parmCode);
+        	FindIterable<Document> puntos = collection.find(Filters.and(
+                    Filters.gte("timestamp_field", inicio),
+                    Filters.lte("timestamp_field", fin)));
         	
-        	FindIterable<Document> puntos = collection.find(inQuery);
         	MongoCursor<Document> it = puntos.iterator();
         	
         	List<DtoHistorialTarifa> list = new ArrayList<DtoHistorialTarifa>();

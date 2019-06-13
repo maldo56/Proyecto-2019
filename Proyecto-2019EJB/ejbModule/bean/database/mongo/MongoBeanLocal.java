@@ -1,5 +1,6 @@
 package bean.database.mongo;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -19,5 +20,5 @@ public interface MongoBeanLocal {
 	
 	List<DtoLocation> obtenerPuntos(String alquilerGuid) throws Exception;
 	List<DtoLocation> ultimosNPuntos(int cant, String scooterGuid) throws Exception;
-	List<DtoHistorialTarifa> historialParametro(String parmCode) throws Exception;
+	List<DtoHistorialTarifa> historialParametro(String parmCode, Timestamp inicio, Timestamp fin) throws Exception;
 }

@@ -148,6 +148,10 @@ public class UserCtrlBean implements UserCtrlBeanLocal {
     		return true;
     	} else {
     		
+    		if ( !parm.getCode().equals("tarifa-actual") ) {
+    			return true;
+    		}
+    		
     		return mongo.addRegistroParametros(parm, resp, admin);
     	}
     }

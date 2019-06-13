@@ -53,8 +53,11 @@ public interface PostgresBeanLocal {
 	DtoGeometria obtenerArea() throws Exception;
 	DtoAlquiler obtenerAlquilerActivo(String username) throws Exception;
 	
+	boolean estaDentroDeLaZonaPermitida(float latitude, float longitude);
+	
 	DtoInfoScooters reporteInfoScooter() throws Exception;
 	float reporteGanancias(Timestamp inicio, Timestamp fin) throws Exception;
 	double reportesCantAlquileres(Timestamp inicio, Timestamp fin) throws Exception;
 	List<DtoRakingUsuarios> reporteRakingUsuarios() throws Exception;
+	List<DtoMovimiento> reportesMovimientos(Timestamp inicio, Timestamp fin) throws Exception;
 }

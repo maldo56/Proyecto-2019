@@ -9,6 +9,7 @@ import javax.ws.rs.QueryParam;
 
 import obj.dto.DtoHistorialTarifa;
 import obj.dto.DtoInfoScooters;
+import obj.dto.DtoMovimiento;
 import obj.dto.DtoRakingUsuarios;
 
 @Local
@@ -18,5 +19,6 @@ public interface ReportesCtrlBeanLocal {
 	float ganancias(Timestamp inicio, Timestamp fin) throws Exception;
 	double cantAlquileres(Timestamp inicio, Timestamp fin) throws Exception;
 	List<DtoRakingUsuarios> rakingUsuarios() throws Exception;
-	List<DtoHistorialTarifa> historialTarifa() throws Exception;
+	List<DtoHistorialTarifa> historialTarifa(Timestamp inicio, Timestamp fin) throws Exception;
+	List<DtoMovimiento> reportesMovimientos(Timestamp inicio, Timestamp fin) throws Exception;
 }
