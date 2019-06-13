@@ -1096,11 +1096,10 @@ public class PostgresBean implements PostgresBeanLocal {
     	try {
     		boolean resp = true;
     		
-    		String query = "select " + 
-		    				"	sum(case when isavailable = true then 1 else 0 end) as scootersdisponibles," + 
-		    				"	sum(case when isavailable = false then 1 else 0 end) as scootersrotos," + 
-		    				"	sum(case when isrented = true then 1 else 0 end) as scootersenuso" + 
-		    					"	from scooter;";
+    		String query = "SELECT ST_Contains("
+    								+ "st_union("
+    									+ "st_transform(areapermitida, 4326)),ST_GeometryFromText('POINT(" + latitude + " " + longitude + ")', 4326)) " + 
+    						"FROM public.zona;";
     		
     		Query q = em.createNativeQuery(query, DtoInfoScooters.class);
     		resp = (boolean) q.getResultList().get(0);

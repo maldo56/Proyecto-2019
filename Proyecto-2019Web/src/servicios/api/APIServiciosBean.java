@@ -118,8 +118,6 @@ public class APIServiciosBean {
     			
     			if ( !buissnes.estaDentroDeLaZonaPermitida(latitude, longitude) ) {
     				
-    				System.out.println("Entra zona permitida");
-    				
     				String cliente = buissnes.getCliente(guidAlquiler);
     				
     				notifications.sendNotification("client", cliente, "Usted se ha salido del area permitida.");
