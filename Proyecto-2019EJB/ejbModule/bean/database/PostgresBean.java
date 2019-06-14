@@ -1235,8 +1235,8 @@ public class PostgresBean implements PostgresBeanLocal {
 //			Query q = em.createQuery(query);
 //			q.setParameter("username", username);
     		
-    		String query = "select p from movimiento "
-    				+ "where  timestamp > '"+inicio.toString().substring(0,10)+"' and timestamp < '"+fin.toString().substring(0,10)+"'";
+    		String query = "select p from movimiento p "
+    				+ "where  p.timestamp > '"+inicio.toString().substring(0,10)+"' and p.timestamp < '"+fin.toString().substring(0,10)+"'";
     
     		Query q = em.createQuery(query);
 
