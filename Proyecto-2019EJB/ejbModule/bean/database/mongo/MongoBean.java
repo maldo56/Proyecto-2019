@@ -44,39 +44,7 @@ public class MongoBean implements MongoBeanLocal {
         // TODO Auto-generated constructor stub
     }
     
-    public String add(String user) {
-    	
-    //	MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-//    	
-//    	MongoDatabase database = mongoClient.getDatabase("mydb");
-//    	MongoCollection<Object> collection = database.getCollection("test");
-//    	
-    	
-    	
-    	return "Mongo! " + user;
-    }
-    
-    public Boolean mongo() throws Exception {
-    	
-    	try {
-    		
-    		MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-        	MongoDatabase database = mongoClient.getDatabase("mydb");
-        	MongoCollection<Document> collection = database.getCollection("test");
-        	
-        	
-                Document d = new Document().append("id", "Id")
-                   .append("Campo1", "Algo");
-                   
-                collection.insertOne(d);
-                
-                return true;
-    	} catch ( Exception e ) {
-    		throw new Exception("Ha ocurrido un error");
-    	}
-    }
-    
-
+   
     public void servicioAddPunto(String guid, String alquilerGuid, float x, float y) throws Exception {
     	
     	try {
@@ -211,13 +179,14 @@ public class MongoBean implements MongoBeanLocal {
     public List<DtoHistorialTarifa> historialParametro(String parmCode, Timestamp inicio, Timestamp fin) throws Exception {
 
     	try {
+    		
     		MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
         	MongoDatabase database = mongoClient.getDatabase("Proyecto-2019");
         	MongoCollection<Document> collection = database.getCollection("RegistroParametros");
         	
         	FindIterable<Document> puntos = collection.find(Filters.and(
-                    Filters.gte("timestamp_field", inicio),
-                    Filters.lte("timestamp_field", fin)));
+                    Filters.gte("timestamp", inicio),
+                    Filters.lte("timestamp", fin)));
         	
         	MongoCursor<Document> it = puntos.iterator();
         	

@@ -11,9 +11,6 @@ import obj.dto.DtoParm;
 
 @Local
 public interface MongoBeanLocal {
-
-	String add(String user) throws Exception;
-	Boolean mongo() throws Exception;
 	
 	void servicioAddPunto(String guid, String alquilerGuid, float x, float y) throws Exception;
 	Boolean addRegistroParametros(DtoParm parm, String oldValue, String admin) throws Exception;
