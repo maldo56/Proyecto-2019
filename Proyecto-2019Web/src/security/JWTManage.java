@@ -52,7 +52,7 @@ public class JWTManage {
                 .signWith(signatureAlgorithm, signingKey);
 
         if (300000 >= 0) {
-            long expMillis = nowMillis + 300000;
+            long expMillis = nowMillis + 30000000;
             Date exp = new Date(expMillis);
             builder.setExpiration(exp);
         }
